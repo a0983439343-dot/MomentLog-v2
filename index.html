@@ -81,494 +81,138 @@ import {initializeApp} from "https://www.gstatic.com/firebasejs/12.17.0/firebase
 import {getAuth,signInAnonymously,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
 import {getDatabase,ref,get,set,update,remove,onValue,runTransaction} from "https://www.gstatic.com/firebasejs/12.17.0/firebase-database.js";
 import {getStorage,ref as storageRef,uploadBytes,getDownloadURL,deleteObject} from "https://www.gstatic.com/firebasejs/12.17.0/firebase-storage.js";
-import {getMessaging,getToken,isSupported,onMessage} from "https://www.gstatic.com/firebasejs/12.17.0/firebase-messaging.js";
-import firebaseConfig from "./firebase-config.js";
-
-const VAPID_PUBLIC_KEY="BN4k0ivU8J1bzyVlUncMDqgJnQKpzO33wwOJW4PbKvjGBHhBlc74bo_LmRw6lfsjREcjqH5YUfmCBMegeMMr83c";
-const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getDatabase(app),storage=getStorage(app),$=id=>document.getElementById(id);
-const themes={default:"linear-gradient(135deg,#eef2ff,#f8fafc)",blue:"linear-gradient(135deg,#dbeafe,#eff6ff)",green:"linear-gradient(135deg,#dcfce7,#f0fdf4)",pink:"linear-gradient(135deg,#fce7f3,#fff1f2)",purple:"linear-gradient(135deg,#ede9fe,#f5f3ff)",sunset:"linear-gradient(135deg,#ffedd5,#fef3c7)",dark:"linear-gradient(135deg,#1e293b,#0f172a)"};
-const pad=n=>String(n).padStart(2,"0");
-const taipeiParts=date=>new Intl.DateTimeFormat("zh-TW",{timeZone:"Asia/Taipei",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",second:"2-digit",hourCycle:"h23"}).formatToParts(date).reduce((o,p)=>(o[p.type]=p.value,o),{});
-const dateKey=d=>{const p=taipeiParts(d);return `${p.year}-${p.month}-${p.day}`};
-const hourKey=h=>pad(h),isToday=d=>dateKey(d)===dateKey(new Date());
-const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
-const escapeHtml=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
-const safeFileName=n=>String(n||"file").replace(/[^a-zA-Z0-9._-]/g,"_").slice(0,120);
-const tokenKey=token=>{const bytes=new TextEncoder().encode(token);let s="";bytes.forEach(b=>s+=String.fromCharCode(b));return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");};
-
-let user=null,roomId=localStorage.getItem("momentlog_room")||"",room=null,selectedFile=null,activeHour=null,currentDate=new Date();
-let unsubMeta=null,unsubMembers=null,unsubSettings=null,unsubRecords=null,messagingReady=false;
-
-function toast(m){const t=$("toast");t.textContent=m;t.style.display="block";clearTimeout(window.__t);window.__t=setTimeout(()=>t.style.display="none",2600)}
-function applyTheme(){const t=localStorage.getItem("momentlog_theme")||"default";document.documentElement.style.setProperty("--bg",themes[t]||themes.default);document.querySelectorAll(".themeOpt").forEach(b=>b.classList.toggle("selected",b.dataset.theme===t))}
-function showSetupStatus(m){$("setupStatus").textContent=m}
-function memberPath(uid,id=roomId){return `rooms/${id}/members/${uid}`}
-function recordPath(d,h,uid,id=roomId){return `rooms/${id}/records/${dateKey(d)}/${hourKey(h)}/${uid}`}
-function clearListeners(){[unsubMeta,unsubMembers,unsubSettings,unsubRecords].forEach(fn=>{try{fn?.()}catch{}});unsubMeta=unsubMembers=unsubSettings=unsubRecords=null}
-function friendlyError(e){const c=e?.code||"";if(c.includes("permission-denied"))return"Firebase 權限被拒絕，請檢查 Rules";if(c.includes("storage/unauthorized"))return"Storage 權限被拒絕，請檢查 Storage Rules";if(c.includes("storage/bucket-not-found"))return"Storage 尚未建立";if(c.includes("storage/unknown"))return"Storage 尚未啟用或方案不符合";return e?.message||"未知錯誤"}
-function renderNotify(){const on=room?.myNotification?.enabled===true,b=$("notify");b.textContent=on?"🔔 通知：開啟":"🔕 通知：關閉";b.classList.toggle("active",on)}
-
-async function ensureAuth(){if(auth.currentUser)return auth.currentUser;await signInAnonymously(auth);return auth.currentUser}
-
-async function createRoom(){
-  try{
-    const u=await ensureAuth(),name=$("name").value.trim()||"我",log=$("log").value.trim()||"我們的 Log";let id="";
-    for(let i=0;i<8&&!id;i++){const candidate=crypto.randomUUID().replace(/-/g,"").slice(0,8).toUpperCase();const tx=await runTransaction(ref(db,`rooms/${candidate}/meta`),cur=>cur===null?{roomId:candidate,name:log,ownerUid:u.uid,createdAt:Date.now()}:undefined);if(tx.committed)id=candidate}
-    if(!id)throw new Error("房間碼建立失敗，請再試一次");
-    const now=Date.now();await set(ref(db,memberPath(u.uid,id)),{displayName:name,joinedAt:now,updatedAt:now});
-    localStorage.setItem("momentlog_room",id);localStorage.setItem("momentlog_name",name);roomId=id;currentDate=new Date();connectRoom();toast("房間建立成功");
-  }catch(e){console.error(e);toast("建立房間失敗："+friendlyError(e))}
-}
-
-async function joinRoom(){
-  try{
-    const u=await ensureAuth(),id=$("joinCode").value.trim().toUpperCase();
-    if(!/^[A-Z0-9]{8,12}$/.test(id)){toast("房間碼格式不正確");return}
-    const meta=await get(ref(db,`rooms/${id}/meta`));if(!meta.exists()){toast("找不到這個房間");return}
-    const name=$("name").value.trim()||"朋友",now=Date.now();await set(ref(db,memberPath(u.uid,id)),{displayName:name,joinedAt:now,updatedAt:now});
-    localStorage.setItem("momentlog_room",id);localStorage.setItem("momentlog_name",name);roomId=id;currentDate=new Date();connectRoom();toast("已加入房間");
-  }catch(e){console.error(e);toast("加入房間失敗："+friendlyError(e))}
-}
-
-function connectRoom(){
-  clearListeners();if(!roomId||!user)return;
-  unsubMeta=onValue(ref(db,`rooms/${roomId}/meta`),s=>{if(!s.exists()){toast("房間不存在或你已離開");leaveLocal();return}room=room||{};room.meta=s.val();render()},e=>toast("房間資料讀取失敗："+friendlyError(e)));
-  unsubMembers=onValue(ref(db,`rooms/${roomId}/members`),s=>{room=room||{};room.members=s.val()||{};render()},e=>toast("成員資料讀取失敗："+friendlyError(e)));
-  unsubSettings=onValue(ref(db,`rooms/${roomId}/notificationSettings/${user.uid}`),s=>{room=room||{};room.myNotification=s.val()||{};render()},()=>toast("通知設定讀取失敗"));
-  loadRecordsListener();
-}
-
-function loadRecordsListener(){
-  if(unsubRecords){try{unsubRecords()}catch{}unsubRecords=null}
-  if(!roomId||!user)return;
-  unsubRecords=onValue(ref(db,`rooms/${roomId}/records/${dateKey(currentDate)}`),s=>{room=room||{};room.records=s.val()||{};render()},e=>toast("紀錄讀取失敗："+friendlyError(e)));
-}
-
-function render(){
-  if(!room?.meta)return;
-  $("setup").classList.add("hide");
-  $("room").classList.remove("hide");
-  $("title").textContent=room.meta.name||"MomentLog";
-  $("roomCode").textContent=roomId;
-
-  $("sub").textContent=`${dateKey(currentDate)} · 房間碼 ${roomId}`;
-
-  const p=taipeiParts(new Date());
-  $("clock").textContent=`${p.hour}:${p.minute}:${p.second}`;
-
-  /*
-   * 今天：
-   *   只顯示目前已經到達的整點，例如 22:50 → 00:00 ~ 22:00
-   *
-   * 歷史日期：
-   *   顯示完整一天 00:00 ~ 23:00
-   */
-  const max=isToday(currentDate)?Number(p.hour):23;
-
-  const all=room.records||{};
-  const entries=[];
-  for(let h=0;h<=max;h++){
-    entries.push([h,all[hourKey(h)]||{}]);
-  }
-
-  $("available").textContent=String(entries.length);
-  $("doneCount").textContent=String(entries.reduce((n,[,v])=>n+(v[user.uid]?1:0),0));
-  $("dateLabel").textContent=isToday(currentDate)?"今天":`歷史日期：${dateKey(currentDate)}`;
-
-  $("yesterday").classList.toggle("hide",!isToday(currentDate));
-  $("today").classList.toggle("hide",isToday(currentDate));
-
-  renderMembers();
-  renderTimeline(entries);
-  renderNotify();
-  applyTheme();
-}
-
-function renderMembers(){
-  const members=room.members||{},entries=room.records||{};
-  $("members").innerHTML=Object.entries(members).map(([uid,m])=>{
-    const done=Object.values(entries).some(slot=>slot?.[uid]);
-    return `<div class="member"><span class="memberName">👤 ${escapeHtml(m.displayName||"未命名")}</span><span class="badge ${done?"done":"wait"}">${done?"已完成":"等待中"}</span>`;
-  }).join("")||"<div class='muted'>沒有成員</div>";
-}
-
-function renderTimeline(entries){
-  const p=taipeiParts(new Date());
-
-  $("slots").innerHTML=entries.map(([h,users])=>{
-    const mine=users?.[user.uid]||null;
-    const current=isToday(currentDate)&&h===Number(p.hour);
-    let media="";
-
-    if(mine?.media?.downloadURL){
-      if((mine.media.contentType||"").startsWith("image/")){
-        media=`<div class="media"><img src="${escapeHtml(mine.media.downloadURL)}" alt="圖片"></div>`;
-      }else if((mine.media.contentType||"").startsWith("video/")){
-        media=`<div class="media"><video src="${escapeHtml(mine.media.downloadURL)}" controls playsinline></video></div>`;
-      }
-    }
-
-    return `<div class="slot ${current?"current":""}">
-      <div class="time">${pad(h)}:00</div>
-      <div class="slotBox">
-        <div class="slotTitle">
-          <b>${mine?"📌 已記錄":current?"⏰ 現在":"尚未紀錄"}</b>
-          <span class="muted">${current?"現在":""}</span>
-        </div>
-        ${mine?'<div class="pill done">✅ 你已完成</div>':current?'<div class="pill now">🔔 現在要記錄</div>':""}
-        ${mine?.text?`<div class="caption">${escapeHtml(mine.text)}</div>`:""}
-        ${media}
-        <div style="margin-top:9px">
-          <button class="btn ${mine||current?"primary":""}" data-hour="${h}">
-            ${mine?"編輯紀錄":current?"🔔 記錄現在":"立即紀錄"}
-          </button>
-        </div>
-      </div>
-    </div>`;
-  }).join("");
-
-  document.querySelectorAll("[data-hour]").forEach(b=>b.onclick=()=>openRecord(Number(b.dataset.hour)));
-}
-
-function openRecord(h){
-  activeHour=h;
-  selectedFile=null;
-  const mine=room?.records?.[hourKey(h)]?.[user.uid]||null;
-  $("recordWhen").textContent=`${dateKey(currentDate)} · ${pad(h)}:00`;
-  $("caption").value=mine?.text||"";
-  $("uploadStatus").classList.add("hide");
-  renderPreview(mine?.media?.downloadURL,mine?.media?.contentType);
-  $("recordModal").classList.add("show");
-}
-
-function closeRecord(){
-  if(selectedFile?.previewUrl)URL.revokeObjectURL(selectedFile.previewUrl);
-  $("recordModal").classList.remove("show");
-  selectedFile=null;
-  activeHour=null;
-  $("preview").innerHTML="";
-  $("uploadStatus").classList.add("hide");
-}
-
-function renderPreview(url,type,fileUrl=""){
-  const src=fileUrl||url;
-  if(!src){$("preview").innerHTML="";return}
-  $("preview").innerHTML=(type||"").startsWith("image/")
-    ?`<div class="media"><img src="${escapeHtml(src)}" alt="預覽"></div>`
-    :`<div class="media"><video src="${escapeHtml(src)}" controls playsinline></video></div>`;
-}
-
-function chooseFile(f){
-  if(!f)return;
-  if(!/^(image|video)\//.test(f.type)){toast("只支援圖片或影片");return}
-  if(f.size>250*1024*1024){toast("單檔不能超過 250MB");return}
-  if(selectedFile?.previewUrl)URL.revokeObjectURL(selectedFile.previewUrl);
-  selectedFile={file:f,previewUrl:URL.createObjectURL(f)};
-  renderPreview("",f.type,selectedFile.previewUrl);
-}
-
-function setUploadStatus(t){
-  $("uploadStatus").textContent=t;
-  $("uploadStatus").classList.remove("hide");
-}
-
-async function saveRecord(){
-  if(activeHour===null||!user)return;
-  const path=recordPath(currentDate,activeHour,user.uid);
-  const old=room?.records?.[hourKey(activeHour)]?.[user.uid]||null;
-  let media=old?.media||null,newStoragePath=null;
-
-  try{
-    setUploadStatus(selectedFile?"正在上傳媒體…":"正在儲存紀錄…");
-
-    if(selectedFile){
-      const f=selectedFile.file;
-      newStoragePath=`room-media/${roomId}/${user.uid}/${dateKey(currentDate)}_${pad(activeHour)}/${crypto.randomUUID()}-${safeFileName(f.name)}`;
-      const sr=storageRef(storage,newStoragePath);
-      await uploadBytes(sr,f,{contentType:f.type,customMetadata:{roomId,uid:user.uid}});
-      media={
-        storagePath:newStoragePath,
-        downloadURL:await getDownloadURL(sr),
-        contentType:f.type,
-        name:f.name,
-        size:f.size
-      };
-    }
-
-    const text=$("caption").value.trim(),now=Date.now();
-
-    await set(ref(db,path),{
-      date:dateKey(currentDate),
-      hour:activeHour,
-      text,
-      authorUid:user.uid,
-      authorName:localStorage.getItem("momentlog_name")||"我",
-      savedAt:old?.savedAt||now,
-      updatedAt:now,
-      media
-    });
-
-    if(old?.media?.storagePath&&newStoragePath&&old.media.storagePath!==newStoragePath){
-      deleteObject(storageRef(storage,old.media.storagePath)).catch(console.warn);
-    }
-
-    closeRecord();
-    toast("已同步到雲端");
-  }catch(e){
-    if(newStoragePath)try{await deleteObject(storageRef(storage,newStoragePath))}catch{}
-    console.error(e);
-    setUploadStatus("儲存失敗："+friendlyError(e));
-    toast("儲存失敗："+friendlyError(e));
-  }
-}
-
-async function removeMedia(){
-  if(activeHour===null||!user)return;
-  const old=room?.records?.[hourKey(activeHour)]?.[user.uid]||null;
-
-  if(!old?.media?.storagePath){
-    toast("目前沒有媒體");
-    return;
-  }
-
-  try{
-    setUploadStatus("正在移除媒體…");
-    await set(ref(db,recordPath(currentDate,activeHour,user.uid)),{
-      ...old,
-      media:null,
-      updatedAt:Date.now()
-    });
-
-    try{
-      await deleteObject(storageRef(storage,old.media.storagePath));
-    }catch(e){
-      console.warn(e);
-    }
-
-    selectedFile=null;
-    $("preview").innerHTML="";
-    toast("媒體已移除");
-  }catch(e){
-    console.error(e);
-    setUploadStatus("移除失敗："+friendlyError(e));
-    toast("移除失敗："+friendlyError(e));
-  }
-}
-
-async function toggleNotification(){
-  try{
-    if(room?.myNotification?.enabled===true){
-      await update(ref(db,`rooms/${roomId}/notificationSettings/${user.uid}`),{
-        enabled:false,
-        updatedAt:Date.now()
-      });
-      toast("提醒已關閉");
-      return;
-    }
-
-    if(!(await isSupported())||!("Notification"in window)){
-      toast("這個瀏覽器不支援背景推播");
-      return;
-    }
-
-    if(Notification.permission==="denied"){
-      toast("請到瀏覽器網站設定允許通知");
-      return;
-    }
-
-    if(Notification.permission==="default"&&(await Notification.requestPermission())!=="granted"){
-      toast("沒有允許通知");
-      return;
-    }
-
-    const reg=await navigator.serviceWorker.register("./firebase-messaging-sw.js",{scope:"./"});
-    const messaging=getMessaging(app);
-    const token=await getToken(messaging,{
-      vapidKey:VAPID_PUBLIC_KEY,
-      serviceWorkerRegistration:reg
-    });
-
-    if(!token)throw new Error("無法取得推播 token");
-
-    await set(ref(db,`fcmTokens/${user.uid}/${tokenKey(token)}`),{
-      token,
-      createdAt:Date.now(),
-      updatedAt:Date.now(),
-      userAgent:navigator.userAgent
-    });
-
-    await update(ref(db,`rooms/${roomId}/notificationSettings/${user.uid}`),{
-      enabled:true,
-      timezone:"Asia/Taipei",
-      updatedAt:Date.now()
-    });
-
-    toast("提醒已開啟");
-  }catch(e){
-    console.error(e);
-    toast("通知設定失敗："+friendlyError(e));
-  }
-}
-
-async function initForegroundMessaging(){
-  try{
-    if(messagingReady||!(await isSupported()))return;
-    onMessage(getMessaging(app),p=>toast(p?.notification?.body||p?.data?.body||"該記錄了！"));
-    messagingReady=true;
-  }catch(e){
-    console.warn(e);
-  }
-}
-
-async function invite(){
-  const text=`加入 MomentLog「${room.meta.name}」\n房間碼：${roomId}`;
-  try{
-    await navigator.clipboard.writeText(text);
-    toast("邀請資訊已複製");
-  }catch{
-    prompt("複製邀請資訊",text);
-  }
-}
-
-async function leaveRoom(){
-  if(!confirm("確定要離開這個房間嗎？"))return;
-
-  try{
-    await update(ref(db),{
-      [memberPath(user.uid)]:null,
-      [`rooms/${roomId}/notificationSettings/${user.uid}`]:null
-    });
-    leaveLocal();
-    toast("已離開房間");
-  }catch(e){
-    toast("離開房間失敗："+friendlyError(e));
-  }
-}
-
-function leaveLocal(){
-  clearListeners();
-  room=null;
-  roomId="";
-  localStorage.removeItem("momentlog_room");
-  $("room").classList.add("hide");
-  $("setup").classList.remove("hide");
-}
-
-function showYesterday(){
-  currentDate=addDays(new Date(),-1);
-  loadRecordsListener();
-  render();
-}
-
-function showToday(){
-  currentDate=new Date();
-  loadRecordsListener();
-  render();
-}
-
-function tick(){
-  const now=new Date();
-  const p=taipeiParts(now);
-
-  $("clock").textContent=`${p.hour}:${p.minute}:${p.second}`;
-
-  if(isToday(currentDate)){
-    const next=new Date(now);
-    next.setSeconds(0,0);
-    next.setMinutes(0,0);
-    next.setHours(next.getHours()+1);
-
-    const np=taipeiParts(next);
-    $("next").textContent=`下一個紀錄點 ${np.hour}:00`;
-
-    /*
-     * 時間跨到新的整點時，重新整理時間軸。
-     * 例如 21:59 → 22:00，會自動把 22:00 加進來。
-     */
-    const renderedMax=Number($("available").textContent||0)-1;
-
-    if(renderedMax!==Number(p.hour)){
-      render();
-    }
-  }else{
-    $("next").textContent="正在查看歷史紀錄";
-  }
-}
-
-$("create").onclick=createRoom;
-$("join").onclick=joinRoom;
-$("notify").onclick=toggleNotification;
-$("invite").onclick=invite;
-$("leave").onclick=leaveRoom;
-
-$("now").onclick=()=>{
-  currentDate=new Date();
-  loadRecordsListener();
-  openRecord(Number(taipeiParts(new Date()).hour));
-};
-
-$("yesterday").onclick=showYesterday;
-$("today").onclick=showToday;
-
-$("recordClose").onclick=closeRecord;
-$("cancelRecord").onclick=closeRecord;
-$("saveRecord").onclick=saveRecord;
-$("remove").onclick=removeMedia;
-
-$("photo").onclick=()=>$("photoInput").click();
-$("video").onclick=()=>$("videoInput").click();
-$("album").onclick=()=>$("albumInput").click();
-
-$("photoInput").onchange=e=>{
-  chooseFile(e.target.files?.[0]);
-  e.target.value="";
-};
-
-$("videoInput").onchange=e=>{
-  chooseFile(e.target.files?.[0]);
-  e.target.value="";
-};
-
-$("albumInput").onchange=e=>{
-  chooseFile(e.target.files?.[0]);
-  e.target.value="";
-};
-
-$("theme").onclick=()=>$("themeModal").classList.add("show");
-$("themeClose").onclick=()=>$("themeModal").classList.remove("show");
-
-document.querySelectorAll(".themeOpt").forEach(b=>b.onclick=()=>{
-  localStorage.setItem("momentlog_theme",b.dataset.theme);
-  applyTheme();
-  $("themeModal").classList.remove("show");
-});
-
-$("recordModal").onclick=e=>{
-  if(e.target===$("recordModal"))closeRecord();
-};
-
-$("themeModal").onclick=e=>{
-  if(e.target===$("themeModal"))$("themeModal").classList.remove("show");
-};
-
-window.addEventListener("beforeunload",clearListeners);
-
-applyTheme();
-setInterval(tick,1000);
-
-onAuthStateChanged(auth,u=>{
-  user=u;
-
-  if(u){
-    showSetupStatus("已連線 Firebase");
-    initForegroundMessaging();
-    if(roomId)connectRoom();
-  }else{
-    showSetupStatus("正在登入 Firebase…");
-  }
-});
-
-ensureAuth().catch(e=>showSetupStatus("Firebase 連線失敗："+friendlyError(e)));
-</script>
-</body>
+import {getMessaging,getToken,isSupported,onMessage} from "https://www.gstatic.com/firebasejs/12.17.0/firebase-messaging.js"; 
+import firebaseConfig from "./firebase-config.js"; 
+ 
+const VAPID_PUBLIC_KEY="BN4k0ivU8J1bzyVlUncMDqgJnQKpzO33wwOJW4PbKvjGBHhBlc74bo_LmRw6lfsjREcjqH5YUfmCBMegeMMr83c"; 
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getDatabase(app),storage=getStorage(app),$=id=>document.getElementById(id); 
+const themes={default:"linear-gradient(135deg,#eef2ff,#f8fafc)",blue:"linear-gradient(135deg,#dbeafe,#eff6ff)",green:"linear-gradient(135deg,#dcfce7,#f0fdf4)",pink:"linear-gradient(135deg,#fce7f3,#fff1f2)",purple:"linear-gradient(135deg,#ede9fe,#f5f3ff)",sunset:"linear-gradient(135deg,#ffedd5,#fef3c7)",dark:"linear-gradient(135deg,#1e293b,#0f172a)"}; 
+const pad=n=>String(n).padStart(2,"0"); 
+const taipeiParts=date=>new Intl.DateTimeFormat("zh-TW",{timeZone:"Asia/Taipei",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",second:"2-digit",hourCycle:"h23"}).formatToParts(date).reduce((o,p)=>(o[p.type]=p.value,o),{}); 
+const dateKey=d=>{const p=taipeiParts(d);return `${p.year}-${p.month}-${p.day}`}; 
+const hourKey=h=>pad(h),isToday=d=>dateKey(d)===dateKey(new Date()); 
+const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x}; 
+const escapeHtml=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m])); 
+const safeFileName=n=>String(n||"file").replace(/[^a-zA-Z0-9._-]/g,"_").slice(0,120); 
+const tokenKey=token=>{const bytes=new TextEncoder().encode(token);let s="";bytes.forEach(b=>s+=String.fromCharCode(b));return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");}; 
+ 
+let user=null,roomId=localStorage.getItem("momentlog_room")||"",room=null,selectedFile=null,activeHour=null,currentDate=new Date(); 
+let unsubMeta=null,unsubMembers=null,unsubSettings=null,unsubRecords=null,messagingReady=false; 
+ 
+function toast(m){const t=$("toast");t.textContent=m;t.style.display="block";clearTimeout(window.__t);window.__t=setTimeout(()=>t.style.display="none",2600)} 
+function applyTheme(){const t=localStorage.getItem("momentlog_theme")||"default";document.documentElement.style.setProperty("--bg",themes[t]||themes.default);document.querySelectorAll(".themeOpt").forEach(b=>b.classList.toggle("selected",b.dataset.theme===t))} 
+function showSetupStatus(m){$("setupStatus").textContent=m} 
+function memberPath(uid,id=roomId){return `rooms/${id}/members/${uid}`} 
+function recordPath(d,h,uid,id=roomId){return `rooms/${id}/records/${dateKey(d)}/${hourKey(h)}/${uid}`} 
+function clearListeners(){[unsubMeta,unsubMembers,unsubSettings,unsubRecords].forEach(fn=>{try{fn?.()}catch{}});unsubMeta=unsubMembers=unsubSettings=unsubRecords=null} 
+function friendlyError(e){const c=e?.code||"";if(c.includes("permission-denied"))return"Firebase 權限被拒絕，請檢查 Rules";if(c.includes("storage/unauthorized"))return"Storage 權限被拒絕，請檢查 Storage Rules";if(c.includes("storage/bucket-not-found"))return"Storage 尚未建立";if(c.includes("storage/unknown"))return"Storage 尚未啟用或方案不符合";return e?.message||"未知錯誤"} 
+function renderNotify(){const on=room?.myNotification?.enabled===true,b=$("notify");b.textContent=on?"🔔 通知：開啟":"🔕 通知：關閉";b.classList.toggle("active",on)} 
+ 
+async function ensureAuth(){if(auth.currentUser)return auth.currentUser;await signInAnonymously(auth);return auth.currentUser} 
+ 
+async function createRoom(){ 
+  try{ 
+    const u=await ensureAuth(),name=$("name").value.trim()||"我",log=$("log").value.trim()||"我們的 Log";let id=""; 
+    for(let i=0;i<8&&!id;i++){const candidate=crypto.randomUUID().replace(/-/g,"").slice(0,8).toUpperCase();const tx=await runTransaction(ref(db,`rooms/${candidate}/meta`),cur=>cur===null?{roomId:candidate,name:log,ownerUid:u.uid,createdAt:Date.now()}:undefined);if(tx.committed)id=candidate} 
+    if(!id)throw new Error("房間碼建立失敗，請再試一次"); 
+    const now=Date.now();await set(ref(db,memberPath(u.uid,id)),{displayName:name,joinedAt:now,updatedAt:now}); 
+    localStorage.setItem("momentlog_room",id);localStorage.setItem("momentlog_name",name);roomId=id;currentDate=new Date();connectRoom();toast("房間建立成功"); 
+  }catch(e){console.error(e);toast("建立房間失敗："+friendlyError(e))} 
+} 
+ 
+async function joinRoom(){ 
+  try{ 
+    const u=await ensureAuth(),id=$("joinCode").value.trim().toUpperCase(); 
+    if(!/^[A-Z0-9]{8,12}$/.test(id)){toast("房間碼格式不正確");return} 
+    const meta=await get(ref(db,`rooms/${id}/meta`));if(!meta.exists()){toast("找不到這個房間");return} 
+    const name=$("name").value.trim()||"朋友",now=Date.now();await set(ref(db,memberPath(u.uid,id)),{displayName:name,joinedAt:now,updatedAt:now}); 
+    localStorage.setItem("momentlog_room",id);localStorage.setItem("momentlog_name",name);roomId=id;currentDate=new Date();connectRoom();toast("已加入房間"); 
+  }catch(e){console.error(e);toast("加入房間失敗："+friendlyError(e))} 
+} 
+ 
+function connectRoom(){ 
+  clearListeners();if(!roomId||!user)return; 
+  unsubMeta=onValue(ref(db,`rooms/${roomId}/meta`),s=>{if(!s.exists()){toast("房間不存在或你已離開");leaveLocal();return}room=room||{};room.meta=s.val();render()},e=>toast("房間資料讀取失敗："+friendlyError(e))); 
+  unsubMembers=onValue(ref(db,`rooms/${roomId}/members`),s=>{room=room||{};room.members=s.val()||{};render()},e=>toast("成員資料讀取失敗："+friendlyError(e))); 
+  unsubSettings=onValue(ref(db,`rooms/${roomId}/notificationSettings/${user.uid}`),s=>{room=room||{};room.myNotification=s.val()||{};render()},()=>toast("通知設定讀取失敗")); 
+  loadRecordsListener(); 
+} 
+function loadRecordsListener(){ 
+  if(unsubRecords){try{unsubRecords()}catch{}unsubRecords=null}if(!roomId||!user)return; 
+  unsubRecords=onValue(ref(db,`rooms/${roomId}/records/${dateKey(currentDate)}`),s=>{room=room||{};room.records=s.val()||{};render()},e=>toast("紀錄讀取失敗："+friendlyError(e))); 
+} 
+function render(){ 
+  if(!room?.meta)return;$("setup").classList.add("hide");$("room").classList.remove("hide");$("title").textContent=room.meta.name||"MomentLog";$("roomCode").textContent=roomId; 
+  $("sub").textContent=`${dateKey(currentDate)} · 房間碼 ${roomId}`;const p=taipeiParts(new Date());$("clock").textContent=`${p.hour}:${p.minute}:${p.second}`; 
+  const max=isToday(currentDate)?Math.max(Number(p.hour)-1,-1):23,all=room.records||{},entries=[];for(let h=0;h<=max;h++)entries.push([h,all[hourKey(h)]||{}]); 
+  $("available").textContent=String(entries.length);$("doneCount").textContent=String(entries.reduce((n,[,v])=>n+(v[user.uid]?1:0),0));$("dateLabel").textContent=isToday(currentDate)?"今天":`歷史日期：${dateKey(currentDate)}`; 
+  $("yesterday").classList.toggle("hide",!isToday(currentDate));$("today").classList.toggle("hide",isToday(currentDate));renderMembers();renderTimeline(entries);renderNotify();applyTheme(); 
+} 
+function renderMembers(){ 
+  const members=room.members||{},entries=room.records||{}; 
+  $("members").innerHTML=Object.entries(members).map(([uid,m])=>{const done=Object.values(entries).some(slot=>slot?.[uid]);return `<div class="member"><span class="memberName">👤 ${escapeHtml(m.displayName||"未命名")}</span><span class="badge ${done?"done":"wait"}">${done?"已完成":"等待中"}</span></div>`}).join("")||"<div class='muted'>沒有成員</div>"; 
+} 
+function renderTimeline(entries){ 
+  const p=taipeiParts(new Date()); 
+  $("slots").innerHTML=entries.map(([h,users])=>{ 
+    const mine=users?.[user.uid]||null,current=isToday(currentDate)&&h===Number(p.hour);let media=""; 
+    if(mine?.media?.downloadURL){if((mine.media.contentType||"").startsWith("image/"))media=`<div class="media"><img src="${escapeHtml(mine.media.downloadURL)}" alt="圖片"></div>`;else if((mine.media.contentType||"").startsWith("video/"))media=`<div class="media"><video src="${escapeHtml(mine.media.downloadURL)}" controls playsinline></video></div>`} 
+    return `<div class="slot ${current?"current":""}"><div class="time">${pad(h)}:00</div><div class="slotBox"><div class="slotTitle"><b>${mine?"📌 已記錄":current?"⏰ 現在":"尚未紀錄"}</b><span class="muted">${current?"現在":""}</span></div>${mine?'<div class="pill done">✅ 你已完成</div>':current?'<div class="pill now">🔔 現在要記錄</div>':""}${mine?.text?`<div class="caption">${escapeHtml(mine.text)}</div>`:""}${media}<div style="margin-top:9px"><button class="btn ${mine||current?"primary":""}" data-hour="${h}">${mine?"編輯紀錄":current?"🔔 記錄現在":"立即紀錄"}</button></div></div></div>`; 
+  }).join(""); 
+  document.querySelectorAll("[data-hour]").forEach(b=>b.onclick=()=>openRecord(Number(b.dataset.hour))); 
+} 
+function openRecord(h){activeHour=h;selectedFile=null;const mine=room?.records?.[hourKey(h)]?.[user.uid]||null;$("recordWhen").textContent=`${dateKey(currentDate)} · ${pad(h)}:00`;$("caption").value=mine?.text||"";$("uploadStatus").classList.add("hide");renderPreview(mine?.media?.downloadURL,mine?.media?.contentType);$("recordModal").classList.add("show")} 
+function closeRecord(){if(selectedFile?.previewUrl)URL.revokeObjectURL(selectedFile.previewUrl);$("recordModal").classList.remove("show");selectedFile=null;activeHour=null;$("preview").innerHTML="";$("uploadStatus").classList.add("hide")} 
+function renderPreview(url,type,fileUrl=""){const src=fileUrl||url;if(!src){$("preview").innerHTML="";return}$("preview").innerHTML=(type||"").startsWith("image/")?`<div class="media"><img src="${escapeHtml(src)}" alt="預覽"></div>`:`<div class="media"><video src="${escapeHtml(src)}" controls playsinline></video></div>`} 
+function chooseFile(f){ 
+  if(!f)return;if(!/^(image|video)\//.test(f.type)){toast("只支援圖片或影片");return}if(f.size>250*1024*1024){toast("單檔不能超過 250MB");return} 
+  if(selectedFile?.previewUrl)URL.revokeObjectURL(selectedFile.previewUrl);selectedFile={file:f,previewUrl:URL.createObjectURL(f)};renderPreview("",f.type,selectedFile.previewUrl); 
+} 
+function setUploadStatus(t){$("uploadStatus").textContent=t;$("uploadStatus").classList.remove("hide")} 
+ 
+async function saveRecord(){ 
+  if(activeHour===null||!user)return;const path=recordPath(currentDate,activeHour,user.uid),old=room?.records?.[hourKey(activeHour)]?.[user.uid]||null;let media=old?.media||null,newStoragePath=null; 
+  try{ 
+    setUploadStatus(selectedFile?"正在上傳媒體…":"正在儲存紀錄…"); 
+    if(selectedFile){const f=selectedFile.file;newStoragePath=`room-media/${roomId}/${user.uid}/${dateKey(currentDate)}_${pad(activeHour)}/${crypto.randomUUID()}-${safeFileName(f.name)}`;const sr=storageRef(storage,newStoragePath);await uploadBytes(sr,f,{contentType:f.type,customMetadata:{roomId,uid:user.uid}});media={storagePath:newStoragePath,downloadURL:await getDownloadURL(sr),contentType:f.type,name:f.name,size:f.size}} 
+    const text=$("caption").value.trim(),now=Date.now();await set(ref(db,path),{date:dateKey(currentDate),hour:activeHour,text,authorUid:user.uid,authorName:localStorage.getItem("momentlog_name")||"我",savedAt:old?.savedAt||now,updatedAt:now,media}); 
+    if(old?.media?.storagePath&&newStoragePath&&old.media.storagePath!==newStoragePath)deleteObject(storageRef(storage,old.media.storagePath)).catch(console.warn); 
+    closeRecord();toast("已同步到雲端"); 
+  }catch(e){if(newStoragePath)try{await deleteObject(storageRef(storage,newStoragePath))}catch{}console.error(e);setUploadStatus("儲存失敗："+friendlyError(e));toast("儲存失敗："+friendlyError(e))} 
+} 
+async function removeMedia(){ 
+  if(activeHour===null||!user)return;const old=room?.records?.[hourKey(activeHour)]?.[user.uid]||null;if(!old?.media?.storagePath){toast("目前沒有媒體");return} 
+  try{setUploadStatus("正在移除媒體…");await set(ref(db,recordPath(currentDate,activeHour,user.uid)),{...old,media:null,updatedAt:Date.now()});try{await deleteObject(storageRef(storage,old.media.storagePath))}catch(e){console.warn(e)}selectedFile=null;$("preview").innerHTML="";toast("媒體已移除")}catch(e){console.error(e);setUploadStatus("移除失敗："+friendlyError(e));toast("移除失敗："+friendlyError(e))} 
+} 
+async function toggleNotification(){ 
+  try{ 
+    if(room?.myNotification?.enabled===true){await update(ref(db,`rooms/${roomId}/notificationSettings/${user.uid}`),{enabled:false,updatedAt:Date.now()});toast("提醒已關閉");return} 
+    if(!(await isSupported())||!("Notification"in window)){toast("這個瀏覽器不支援背景推播");return} 
+    if(Notification.permission==="denied"){toast("請到瀏覽器網站設定允許通知");return} 
+    if(Notification.permission==="default"&&(await Notification.requestPermission())!=="granted"){toast("沒有允許通知");return} 
+    const reg=await navigator.serviceWorker.register("./firebase-messaging-sw.js",{scope:"./"}),messaging=getMessaging(app),token=await getToken(messaging,{vapidKey:VAPID_PUBLIC_KEY,serviceWorkerRegistration:reg}); 
+    if(!token)throw new Error("無法取得推播 token");await set(ref(db,`fcmTokens/${user.uid}/${tokenKey(token)}`),{token,createdAt:Date.now(),updatedAt:Date.now(),userAgent:navigator.userAgent}); 
+    await update(ref(db,`rooms/${roomId}/notificationSettings/${user.uid}`),{enabled:true,timezone:"Asia/Taipei",updatedAt:Date.now()});toast("提醒已開啟"); 
+  }catch(e){console.error(e);toast("通知設定失敗："+friendlyError(e))} 
+} 
+async function initForegroundMessaging(){try{if(messagingReady||!(await isSupported()))return;onMessage(getMessaging(app),p=>toast(p?.notification?.body||p?.data?.body||"該記錄了！"));messagingReady=true}catch(e){console.warn(e)}} 
+async function invite(){const text=`加入 MomentLog「${room.meta.name}」\n房間碼：${roomId}`;try{await navigator.clipboard.writeText(text);toast("邀請資訊已複製")}catch{prompt("複製邀請資訊",text)}} 
+async function leaveRoom(){if(!confirm("確定要離開這個房間嗎？"))return;try{await update(ref(db),{[memberPath(user.uid)]:null,[`rooms/${roomId}/notificationSettings/${user.uid}`]:null});leaveLocal();toast("已離開房間")}catch(e){toast("離開房間失敗："+friendlyError(e))}} 
+function leaveLocal(){clearListeners();room=null;roomId="";localStorage.removeItem("momentlog_room");$("room").classList.add("hide");$("setup").classList.remove("hide")} 
+function showYesterday(){currentDate=addDays(new Date(),-1);loadRecordsListener();render()} 
+function showToday(){currentDate=new Date();loadRecordsListener();render()} 
+function tick(){const now=new Date(),p=taipeiParts(now);$("clock").textContent=`${p.hour}:${p.minute}:${p.second}`;if(isToday(currentDate)){const next=new Date(now);next.setSeconds(0,0);next.setMinutes(0,0);next.setHours(next.getHours()+1);const np=taipeiParts(next);$("next").textContent=`下一個紀錄點 ${np.hour}:00`}else $("next").textContent="正在查看歷史紀錄"} 
+ 
+$("create").onclick=createRoom;$("join").onclick=joinRoom;$("notify").onclick=toggleNotification;$("invite").onclick=invite;$("leave").onclick=leaveRoom; 
+$("now").onclick=()=>{currentDate=new Date();loadRecordsListener();openRecord(Number(taipeiParts(new Date()).hour))};$("yesterday").onclick=showYesterday;$("today").onclick=showToday; 
+$("recordClose").onclick=closeRecord;$("cancelRecord").onclick=closeRecord;$("saveRecord").onclick=saveRecord;$("remove").onclick=removeMedia; 
+$("photo").onclick=()=>$("photoInput").click();$("video").onclick=()=>$("videoInput").click();$("album").onclick=()=>$("albumInput").click(); 
+$("photoInput").onchange=e=>{chooseFile(e.target.files?.[0]);e.target.value=""};$("videoInput").onchange=e=>{chooseFile(e.target.files?.[0]);e.target.value=""};$("albumInput").onchange=e=>{chooseFile(e.target.files?.[0]);e.target.value=""}; 
+$("theme").onclick=()=>$("themeModal").classList.add("show");$("themeClose").onclick=()=>$("themeModal").classList.remove("show");document.querySelectorAll(".themeOpt").forEach(b=>b.onclick=()=>{localStorage.setItem("momentlog_theme",b.dataset.theme);applyTheme();$("themeModal").classList.remove("show")}); 
+$("recordModal").onclick=e=>{if(e.target===$("recordModal"))closeRecord()};$("themeModal").onclick=e=>{if(e.target===$("themeModal"))$("themeModal").classList.remove("show")}; 
+window.addEventListener("beforeunload",clearListeners);applyTheme();setInterval(tick,1000); 
+onAuthStateChanged(auth,u=>{user=u;if(u){showSetupStatus("已連線 Firebase");initForegroundMessaging();if(roomId)connectRoom()}else showSetupStatus("正在登入 Firebase…")}); 
+ensureAuth().catch(e=>showSetupStatus("Firebase 連線失敗："+friendlyError(e))); 
+</script> 
+</body> 
 </html>
