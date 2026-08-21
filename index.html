@@ -14,19 +14,12 @@
 html,body{margin:0;min-height:100%;background:#f8fafc}
 body{min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","Microsoft JhengHei",sans-serif;color:var(--text);background:var(--bg);transition:.25s}
 body.dark{--text:#e5e7eb;--muted:#94a3b8;--border:#334155;--card:#172033;background:#0f172a}
-body.dark .btn,body.dark .field input,body.dark .field textarea,body.dark .slotBox,body.dark .member,body.dark .stat,body.dark .modalCard,body.dark .loginStatus,body.dark .status{background:#172033;color:#e5e7eb;border-color:#334155}
-body.dark .setup p,body.dark .muted{color:#94a3b8}
-body.dark .brand small{color:#94a3b8}
-button,input,textarea,select{font:inherit}
-button{cursor:pointer}
-button:disabled{opacity:.55;cursor:not-allowed}
-.hide{display:none!important}
+body.dark .card,body.dark .btn,body.dark .field input,body.dark .field textarea,body.dark .field select,body.dark .slotBox,body.dark .member,body.dark .stat,body.dark .modalCard,body.dark .loginStatus,body.dark .status,body.dark .dateBtn{background:#172033;color:#e5e7eb;border-color:#334155}
+button,input,textarea,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.55;cursor:not-allowed}.hide{display:none!important}
 .app{width:min(1180px,100%);margin:auto;padding:16px 16px 90px}
 .top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
-.brand{display:flex;gap:10px;align-items:center}
-.icon{width:45px;height:45px;border-radius:14px;background:#111827;color:#fff;display:grid;place-items:center;font-size:22px;flex:none}
-.brand h1{margin:0;font-size:21px}
-.brand small,.muted{color:var(--muted)}
+.brand{display:flex;gap:10px;align-items:center}.icon{width:45px;height:45px;border-radius:14px;background:#111827;color:#fff;display:grid;place-items:center;font-size:22px;flex:none}
+.brand h1{margin:0;font-size:21px}.brand small,.muted{color:var(--muted)}
 .actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
 .btn{border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:12px;padding:10px 13px;min-height:40px}
 .btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
@@ -34,121 +27,62 @@ button:disabled{opacity:.55;cursor:not-allowed}
 .btn.active{background:#dcfce7;color:#166534;border-color:#86efac}
 .btn.small{padding:7px 9px;min-height:34px;font-size:12px}
 .card{background:rgba(255,255,255,.96);border-radius:20px;box-shadow:0 14px 38px rgba(15,23,42,.08)}
-body.dark .card{background:rgba(23,32,51,.96)}
-.setup{max-width:560px;margin:6vh auto;padding:28px}
-.setup h2{margin:0 0 8px}
-.setup p{line-height:1.7;color:var(--muted)}
-.field{margin:12px 0}
-.field label{display:block;font-size:13px;font-weight:800;margin-bottom:6px}
+.setup{max-width:560px;margin:6vh auto;padding:28px}.setup h2{margin:0 0 8px}.setup p{line-height:1.7;color:var(--muted)}
+.field{margin:12px 0}.field label{display:block;font-size:13px;font-weight:800;margin-bottom:6px}
 .field input,.field textarea,.field select{width:100%;padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--card);color:var(--text);outline:none}
-.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(79,70,229,.10)}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(79,70,229,.1)}
 .setupActions{display:grid;gap:8px;margin-top:14px}
 .loginStatus,.status{margin-top:10px;padding:10px;border-radius:12px;background:#f8fafc;border:1px solid var(--border);font-size:13px}
 .privacyNote{font-size:12px;color:var(--muted);line-height:1.6;margin-top:8px}
-.hero{padding:18px;margin-bottom:14px}
-.heroRow{display:flex;justify-content:space-between;gap:10px}
-.hero h2{margin:0;font-size:24px}
-.clock{font-size:25px;font-weight:800;text-align:right}
-.next{font-size:12px;color:var(--muted);text-align:right;margin-top:2px}
+.hero{padding:18px;margin-bottom:14px}.heroRow{display:flex;justify-content:space-between;gap:10px}.hero h2{margin:0;font-size:24px}
+.clock{font-size:25px;font-weight:800;text-align:right}.next{font-size:12px;color:var(--muted);text-align:right;margin-top:2px}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:14px}
 .stat{padding:12px;border:1px solid var(--border);border-radius:13px;background:var(--card)}
-.statTitle{font-size:12px;color:var(--muted)}
-.statValue{font-size:18px;font-weight:800;margin-top:4px;word-break:break-word}
-.grid{display:grid;grid-template-columns:290px 1fr;gap:14px}
-.side{padding:15px;position:sticky;top:12px;align-self:start}
-.sideTitle{font-weight:800;margin-bottom:10px}
-.members{display:grid;gap:8px}
+.statTitle{font-size:12px;color:var(--muted)}.statValue{font-size:18px;font-weight:800;margin-top:4px;word-break:break-word}
+.grid{display:grid;grid-template-columns:290px 1fr;gap:14px}.side{padding:15px;position:sticky;top:12px;align-self:start}
+.sideTitle{font-weight:800;margin-bottom:10px}.members{display:grid;gap:8px}
 .member{display:flex;justify-content:space-between;gap:8px;align-items:center;border:1px solid var(--border);border-radius:12px;padding:9px;background:var(--card)}
-.memberLeft{min-width:0;display:flex;align-items:center;gap:8px}
-.memberName{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.memberLeft{min-width:0;display:flex;align-items:center;gap:8px}.memberName{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .memberMeta{display:flex;gap:5px;align-items:center;flex:none}
-.badge{padding:5px 8px;border-radius:999px;font-size:11px;font-weight:800}
-.badge.done{background:#dcfce7;color:#166534}
-.badge.wait{background:#fef3c7;color:#92400e}
-.badge.owner{background:#e0e7ff;color:#3730a3}
-.sideButtons{display:grid;gap:8px;margin-top:14px}
-.roomInfo{margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+.badge{padding:5px 8px;border-radius:999px;font-size:11px;font-weight:800}.badge.done{background:#dcfce7;color:#166534}.badge.wait{background:#fef3c7;color:#92400e}.badge.owner{background:#e0e7ff;color:#3730a3}
+.sideButtons{display:grid;gap:8px;margin-top:14px}.roomInfo{margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
 .roomInfoRow{display:flex;justify-content:space-between;gap:10px;font-size:13px;padding:5px 0}
-.timeline{padding:16px;min-width:0}
-.timelineTop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:12px}
-.timelineHead h3{margin:0}
-.dateTools{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:flex-end}
-.dateTools input{width:145px}
-.dateBtn{min-height:38px;padding:8px 11px;border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:10px}
-.searchBar{display:flex;gap:8px;margin-bottom:12px}
-.searchBar input{flex:1}
-.slots{display:grid;gap:10px}
-.slot{display:grid;grid-template-columns:60px 1fr;gap:8px}
-.time{font-size:12px;font-weight:800;color:var(--muted);text-align:right;padding-top:11px}
-.slotBox{border:1px solid var(--border);border-radius:14px;padding:11px;background:var(--card)}
-.slotTitle{display:flex;justify-content:space-between;gap:8px}
-.pill{display:inline-flex;margin-top:8px;padding:6px 9px;border-radius:9px;font-size:12px;font-weight:800}
-.pill.now{background:#e0e7ff;color:#3730a3}
-.pill.done{background:#dcfce7;color:#166534}
+.timeline{padding:16px;min-width:0}.timelineTop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:12px}
+.timelineHead h3{margin:0}.dateTools{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:flex-end}
+.dateTools input{width:145px}.dateBtn{min-height:38px;padding:8px 11px;border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:10px}
+.searchBar{display:flex;gap:8px;margin-bottom:12px}.searchBar input{flex:1}
+.slots{display:grid;gap:10px}.slot{display:grid;grid-template-columns:60px 1fr;gap:8px}.time{font-size:12px;font-weight:800;color:var(--muted);text-align:right;padding-top:11px}
+.slotBox{border:1px solid var(--border);border-radius:14px;padding:11px;background:var(--card)}.slotTitle{display:flex;justify-content:space-between;gap:8px}
+.pill{display:inline-flex;margin-top:8px;padding:6px 9px;border-radius:9px;font-size:12px;font-weight:800}.pill.done{background:#dcfce7;color:#166534}.pill.recent{background:#e0e7ff;color:#3730a3}
 .caption{margin-top:8px;line-height:1.65;white-space:pre-wrap;word-break:break-word}
-.media{margin-top:9px;border-radius:11px;overflow:hidden;background:#111827;cursor:pointer}
-.media img,.media video{display:block;width:100%;max-height:500px;object-fit:contain}
-.progress{height:8px;border-radius:999px;background:#e5e7eb;overflow:hidden;margin-top:8px}
-.progress>div{height:100%;width:0;background:var(--primary);transition:.2s}
+.media{margin-top:9px;border-radius:11px;overflow:hidden;background:#111827;cursor:pointer}.media img,.media video{display:block;width:100%;max-height:500px;object-fit:contain}
+.progress{height:8px;border-radius:999px;background:#e5e7eb;overflow:hidden;margin-top:8px}.progress>div{height:100%;width:0;background:var(--primary);transition:.2s}
 .empty{padding:28px 10px;text-align:center;color:var(--muted)}
-.searchResults{display:grid;gap:8px}
-.searchResult{border:1px solid var(--border);border-radius:12px;padding:11px;background:var(--card)}
+.searchResults{display:grid;gap:8px}.searchResult{border:1px solid var(--border);border-radius:12px;padding:11px;background:var(--card)}
 .searchResultTop{display:flex;justify-content:space-between;gap:8px}
-.modal{position:fixed;inset:0;background:rgba(15,23,42,.56);display:none;align-items:center;justify-content:center;padding:12px;z-index:1000}
-.modal.show{display:flex}
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.56);display:none;align-items:center;justify-content:center;padding:12px;z-index:1000}.modal.show{display:flex}
 .modalCard{width:min(680px,100%);background:var(--card);color:var(--text);border-radius:20px;padding:17px;max-height:90vh;overflow:auto}
-.modalHead{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.close{width:38px;height:38px;border:1px solid var(--border);border-radius:50%;background:var(--card);color:var(--text)}
-.mediaBtns{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.hidden{display:none}
+.modalHead{display:flex;justify-content:space-between;align-items:center;gap:10px}.close{width:38px;height:38px;border:1px solid var(--border);border-radius:50%;background:var(--card);color:var(--text)}
+.mediaBtns{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.hidden{display:none}
 .modalActions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
-.themeGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.themeOpt{border:2px solid var(--border);background:var(--card);color:var(--text);border-radius:12px;padding:8px;text-align:left}
-.themeOpt.selected{border-color:var(--primary)}
+.themeGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.themeOpt{border:2px solid var(--border);background:var(--card);color:var(--text);border-radius:12px;padding:8px;text-align:left}.themeOpt.selected{border-color:var(--primary)}
 .swatch{height:48px;border-radius:9px;margin-bottom:6px}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:3000;display:none;background:#111827;color:#fff;padding:10px 14px;border-radius:999px;font-size:13px;max-width:calc(100vw - 30px);text-align:center}
-.photoViewer{position:fixed;inset:0;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;z-index:2500;padding:20px}
-.photoViewer.show{display:flex}
+.photoViewer{position:fixed;inset:0;background:rgba(0,0,0,.88);display:none;align-items:center;justify-content:center;z-index:2500;padding:20px}.photoViewer.show{display:flex}
 .photoViewer img,.photoViewer video{max-width:95vw;max-height:90vh;object-fit:contain}
 .bottomNav{position:fixed;left:0;right:0;bottom:0;height:68px;background:rgba(255,255,255,.95);backdrop-filter:blur(18px);border-top:1px solid var(--border);display:none;z-index:900}
 body.dark .bottomNav{background:rgba(15,23,42,.95)}
 .bottomNavInner{height:100%;display:grid;grid-template-columns:repeat(4,1fr)}
-.navBtn{border:0;background:transparent;color:var(--muted);font-size:11px}
-.navBtn strong{display:block;font-size:19px;line-height:1.2}
-.navBtn.active{color:var(--primary)}
-.sectionTitle{font-weight:800;margin:4px 0 10px}
-.divider{height:1px;background:var(--border);margin:14px 0}
-.ownerDanger{margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
-.avatarCircle{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#e0e7ff;color:#3730a3;font-weight:800;font-size:18px}
-.profileRow{display:flex;gap:12px;align-items:center;padding:6px 0 12px}
-.profileText{min-width:0}
-.profileText b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.kickBtn{font-size:11px}
-@media(max-width:940px){
-.stats{grid-template-columns:repeat(2,1fr)}
-.grid{grid-template-columns:1fr}
-.side{position:static}
-}
-@media(max-width:720px){
-.app{padding:10px 10px 84px}
-.top{align-items:flex-start}
-.actions{display:grid;grid-template-columns:1fr 1fr}
-.timelineTop{flex-direction:column}
-.dateTools{justify-content:flex-start}
-.bottomNav{display:block}
-}
-@media(max-width:580px){
-.stats{grid-template-columns:1fr 1fr}
-.heroRow{flex-direction:column}
-.clock,.next{text-align:left}
-.mediaBtns{grid-template-columns:1fr 1fr}
-.themeGrid{grid-template-columns:1fr}
-.slot{grid-template-columns:52px 1fr}
-.modalActions{display:grid;grid-template-columns:1fr 1fr}
-.member{align-items:flex-start}
-}
+.navBtn{border:0;background:transparent;color:var(--muted);font-size:11px}.navBtn strong{display:block;font-size:19px;line-height:1.2}.navBtn.active{color:var(--primary)}
+.sectionTitle{font-weight:800;margin:4px 0 10px}.ownerDanger{margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.profileRow{display:flex;gap:12px;align-items:center;padding:6px 0 12px}.avatarCircle{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#e0e7ff;color:#3730a3;font-weight:800;font-size:18px}
+.profileText{min-width:0}.profileText b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.kickBtn{font-size:11px}
+@media(max-width:940px){.stats{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}.side{position:static}}
+@media(max-width:720px){.app{padding:10px 10px 84px}.top{align-items:flex-start}.actions{display:grid;grid-template-columns:1fr 1fr}.timelineTop{flex-direction:column}.dateTools{justify-content:flex-start}.bottomNav{display:block}}
+@media(max-width:580px){.stats{grid-template-columns:1fr 1fr}.heroRow{flex-direction:column}.clock,.next{text-align:left}.mediaBtns{grid-template-columns:1fr 1fr}.themeGrid{grid-template-columns:1fr}.slot{grid-template-columns:52px 1fr}.modalActions{display:grid;grid-template-columns:1fr 1fr}.member{align-items:flex-start}}
 </style>
 </head>
+
 <body>
 <div class="app">
 
@@ -163,7 +97,7 @@ body.dark .bottomNav{background:rgba(15,23,42,.95)}
 </div>
 
 <div id="loginStatus" class="loginStatus">尚未登入 Google</div>
-<div class="privacyNote">Google 帳號只用來驗證身份。房間成員看到的是你的 MomentLog 自訂暱稱，不會顯示你的 Google Email。</div>
+<div class="privacyNote">Google 帳號只用來驗證身份。房間成員看到的是你的 MomentLog 自訂暱稱，不會把 Google Email 寫進房間成員資料。</div>
 
 <div class="field">
 <label for="name">你的暱稱</label>
@@ -198,7 +132,10 @@ body.dark .bottomNav{background:rgba(15,23,42,.95)}
 <header class="top">
 <div class="brand">
 <div class="icon">⏱️</div>
-<div><h1>MomentLog</h1><small>一起記錄每個時刻</small></div>
+<div>
+<h1>MomentLog</h1>
+<small>一起記錄每個時刻</small>
+</div>
 </div>
 
 <div class="actions">
@@ -264,11 +201,10 @@ body.dark .bottomNav{background:rgba(15,23,42,.95)}
 </div>
 
 <div class="searchBar">
-<input id="searchInput" class="fieldInput" placeholder="搜尋所有歷史紀錄…" autocomplete="off">
+<input id="searchInput" placeholder="搜尋所有歷史紀錄…" autocomplete="off">
 <button id="searchBtn" class="btn">🔍 搜尋</button>
 </div>
 
-<div id="searchResults" class="searchResults hide"></div>
 <div id="slots" class="slots"></div>
 </section>
 
@@ -278,8 +214,12 @@ body.dark .bottomNav{background:rgba(15,23,42,.95)}
 
 <div id="recordModal" class="modal">
 <div class="modalCard">
+
 <div class="modalHead">
-<div><h3>記錄這個時刻</h3><div id="recordWhen" class="muted"></div></div>
+<div>
+<h3>記錄這個時刻</h3>
+<div id="recordWhen" class="muted"></div>
+</div>
 <button id="recordClose" class="close">×</button>
 </div>
 
@@ -300,6 +240,7 @@ body.dark .bottomNav{background:rgba(15,23,42,.95)}
 <input id="albumInput" class="hidden" type="file" accept="image/*,video/*">
 
 <div id="preview"></div>
+
 <div id="uploadProgress" class="status hide">
 <div id="uploadText">準備中…</div>
 <div class="progress"><div id="progressBar"></div></div>
@@ -309,11 +250,13 @@ body.dark .bottomNav{background:rgba(15,23,42,.95)}
 <button id="cancelRecord" class="btn">取消</button>
 <button id="saveRecord" class="btn primary">儲存</button>
 </div>
+
 </div>
 </div>
 
 <div id="profileModal" class="modal">
 <div class="modalCard">
+
 <div class="modalHead">
 <h3>👤 我的帳號</h3>
 <button id="profileClose" class="close">×</button>
@@ -322,8 +265,8 @@ body.dark .bottomNav{background:rgba(15,23,42,.95)}
 <div class="profileRow">
 <div id="profileAvatar" class="avatarCircle">M</div>
 <div class="profileText">
-<b id="profileGoogleName">Google 帳號</b>
-<span id="profileGoogleEmail" class="muted">已登入</span>
+<b>Google 帳號已驗證</b>
+<span class="muted">其他房間成員只會看到你的自訂暱稱</span>
 </div>
 </div>
 
@@ -345,29 +288,41 @@ body.dark .bottomNav{background:rgba(15,23,42,.95)}
 <button id="profileCancel" class="btn">取消</button>
 <button id="profileSave" class="btn primary">儲存</button>
 </div>
+
 </div>
 </div>
 
 <div id="roomSettingsModal" class="modal">
 <div class="modalCard">
+
 <div class="modalHead">
 <h3>⚙️ 房間設定</h3>
 <button id="roomSettingsClose" class="close">×</button>
 </div>
 
 <div class="sectionTitle">房間資訊</div>
-<div class="field"><label>房間名稱</label><input id="roomNameView" disabled></div>
-<div class="field"><label>房間碼</label><input id="roomCodeView" disabled></div>
+
+<div class="field">
+<label for="roomNameInput">房間名稱</label>
+<input id="roomNameInput" maxlength="60">
+</div>
+
+<div class="field">
+<label for="roomCodeView">房間碼</label>
+<input id="roomCodeView" disabled>
+</div>
 
 <div class="modalActions">
-<button id="copyInviteFromSettings" class="btn">🔗 複製邀請連結</button>
+<button id="copyInviteFromSettings" class="btn">🔗 複製邀請</button>
+<button id="saveRoomName" class="btn primary">儲存房間名稱</button>
 </div>
 
 <div id="ownerControls" class="ownerDanger hide">
 <div class="sectionTitle">房主管理</div>
-<p class="muted" style="font-size:13px">房主可以移除其他成員，也可以刪除整個房間。</p>
-<button id="deleteRoom" class="btn danger" style="width:100%">🗑️ 永久刪除房間</button>
+<p class="muted" style="font-size:13px">房主可以移除成員，也可以關閉房間。</p>
+<button id="deleteRoom" class="btn danger" style="width:100%">🗑️ 關閉房間</button>
 </div>
+
 </div>
 </div>
 
@@ -383,19 +338,42 @@ body.dark .bottomNav{background:rgba(15,23,42,.95)}
 
 <div id="themeModal" class="modal">
 <div class="modalCard">
+
 <div class="modalHead">
 <h3>🎨 背景主題</h3>
 <button id="themeClose" class="close">×</button>
 </div>
 
 <div class="themeGrid">
-<button class="themeOpt" data-theme="default"><div class="swatch" style="background:linear-gradient(135deg,#eef2ff,#f8fafc)"></div>🌤️ 預設</button>
-<button class="themeOpt" data-theme="blue"><div class="swatch" style="background:linear-gradient(135deg,#dbeafe,#eff6ff)"></div>🌊 藍色</button>
-<button class="themeOpt" data-theme="green"><div class="swatch" style="background:linear-gradient(135deg,#dcfce7,#f0fdf4)"></div>🌿 綠色</button>
-<button class="themeOpt" data-theme="pink"><div class="swatch" style="background:linear-gradient(135deg,#fce7f3,#fff1f2)"></div>🌸 粉色</button>
-<button class="themeOpt" data-theme="purple"><div class="swatch" style="background:linear-gradient(135deg,#ede9fe,#f5f3ff)"></div>💜 紫色</button>
-<button class="themeOpt" data-theme="sunset"><div class="swatch" style="background:linear-gradient(135deg,#ffedd5,#fef3c7)"></div>🌅 日落</button>
-<button class="themeOpt" data-theme="dark"><div class="swatch" style="background:linear-gradient(135deg,#1e293b,#0f172a)"></div>🌌 黑暗</button>
+
+<button class="themeOpt" data-theme="default">
+<div class="swatch" style="background:linear-gradient(135deg,#eef2ff,#f8fafc)"></div>🌤️ 預設
+</button>
+
+<button class="themeOpt" data-theme="blue">
+<div class="swatch" style="background:linear-gradient(135deg,#dbeafe,#eff6ff)"></div>🌊 藍色
+</button>
+
+<button class="themeOpt" data-theme="green">
+<div class="swatch" style="background:linear-gradient(135deg,#dcfce7,#f0fdf4)"></div>🌿 綠色
+</button>
+
+<button class="themeOpt" data-theme="pink">
+<div class="swatch" style="background:linear-gradient(135deg,#fce7f3,#fff1f2)"></div>🌸 粉色
+</button>
+
+<button class="themeOpt" data-theme="purple">
+<div class="swatch" style="background:linear-gradient(135deg,#ede9fe,#f5f3ff)"></div>💜 紫色
+</button>
+
+<button class="themeOpt" data-theme="sunset">
+<div class="swatch" style="background:linear-gradient(135deg,#ffedd5,#fef3c7)"></div>🌅 日落
+</button>
+
+<button class="themeOpt" data-theme="dark">
+<div class="swatch" style="background:linear-gradient(135deg,#1e293b,#0f172a)"></div>🌌 黑暗
+</button>
+
 </div>
 </div>
 </div>
@@ -433,64 +411,62 @@ const googleProvider=new GoogleAuthProvider();
 const $=id=>document.getElementById(id);
 
 const themes={
-  default:"linear-gradient(135deg,#eef2ff,#f8fafc)",
-  blue:"linear-gradient(135deg,#dbeafe,#eff6ff)",
-  green:"linear-gradient(135deg,#dcfce7,#f0fdf4)",
-  pink:"linear-gradient(135deg,#fce7f3,#fff1f2)",
-  purple:"linear-gradient(135deg,#ede9fe,#f5f3ff)",
-  sunset:"linear-gradient(135deg,#ffedd5,#fef3c7)",
-  dark:"linear-gradient(135deg,#1e293b,#0f172a)"
+default:"linear-gradient(135deg,#eef2ff,#f8fafc)",
+blue:"linear-gradient(135deg,#dbeafe,#eff6ff)",
+green:"linear-gradient(135deg,#dcfce7,#f0fdf4)",
+pink:"linear-gradient(135deg,#fce7f3,#fff1f2)",
+purple:"linear-gradient(135deg,#ede9fe,#f5f3ff)",
+sunset:"linear-gradient(135deg,#ffedd5,#fef3c7)",
+dark:"linear-gradient(135deg,#1e293b,#0f172a)"
 };
 
 const pad=n=>String(n).padStart(2,"0");
 
 const taipeiParts=date=>new Intl.DateTimeFormat("zh-TW",{
-  timeZone:"Asia/Taipei",
-  year:"numeric",
-  month:"2-digit",
-  day:"2-digit",
-  hour:"2-digit",
-  minute:"2-digit",
-  second:"2-digit",
-  hourCycle:"h23"
+timeZone:"Asia/Taipei",
+year:"numeric",
+month:"2-digit",
+day:"2-digit",
+hour:"2-digit",
+minute:"2-digit",
+second:"2-digit",
+hourCycle:"h23"
 }).formatToParts(date).reduce((o,p)=>(o[p.type]=p.value,o),{});
 
 const dateKey=d=>{
-  const p=taipeiParts(d);
-  return `${p.year}-${p.month}-${p.day}`;
+const p=taipeiParts(d);
+return `${p.year}-${p.month}-${p.day}`;
 };
 
 const dateFromKey=k=>{
-  const [y,m,d]=k.split("-").map(Number);
-  return new Date(y,m-1,d,12,0,0);
+const [y,m,d]=k.split("-").map(Number);
+return new Date(Date.UTC(y,m-1,d,4,0,0));
 };
 
 const hourKey=h=>pad(h);
 const isToday=d=>dateKey(d)===dateKey(new Date());
 
 const addDays=(d,n)=>{
-  const x=new Date(d);
-  x.setDate(x.getDate()+n);
-  return x;
+const x=new Date(d);
+x.setUTCDate(x.getUTCDate()+n);
+return x;
 };
 
 const escapeHtml=s=>String(s??"").replace(/[&<>"']/g,m=>({
-  "&":"&amp;",
-  "<":"&lt;",
-  ">":"&gt;",
-  '"':"&quot;",
-  "'":"&#039;"
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#039;"
 }[m]));
 
-const safeFileName=n=>String(n||"file")
-.replace(/[^a-zA-Z0-9._-]/g,"_")
-.slice(0,120);
+const safeFileName=n=>String(n||"file").replace(/[^a-zA-Z0-9._-]/g,"_").slice(0,120);
 
 const tokenKey=token=>{
-  const bytes=new TextEncoder().encode(token);
-  let s="";
-  bytes.forEach(b=>s+=String.fromCharCode(b));
-  return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+const bytes=new TextEncoder().encode(token);
+let s="";
+bytes.forEach(b=>s+=String.fromCharCode(b));
+return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
 };
 
 let user=null;
@@ -502,1306 +478,1408 @@ let currentDate=new Date();
 let currentProfile={displayName:"",notificationMinute:0};
 let messagingReady=false;
 let localReminderTimer=null;
+let localReminderKey="";
 
 let unsubMeta=null;
 let unsubMembers=null;
 let unsubSettings=null;
 let unsubRecords=null;
 
-function toast(m){
-  const t=$("toast");
-  t.textContent=m;
-  t.style.display="block";
-  clearTimeout(window.__t);
-  window.__t=setTimeout(()=>t.style.display="none",2600);
+function toast(message){
+const t=$("toast");
+t.textContent=message;
+t.style.display="block";
+clearTimeout(window.__toastTimer);
+window.__toastTimer=setTimeout(()=>t.style.display="none",2800);
 }
 
 function applyTheme(){
-  const t=localStorage.getItem("momentlog_theme")||"default";
-  document.documentElement.style.setProperty("--bg",themes[t]||themes.default);
-  document.body.classList.toggle("dark",t==="dark");
-  document.querySelectorAll(".themeOpt").forEach(b=>b.classList.toggle("selected",b.dataset.theme===t));
+const theme=localStorage.getItem("momentlog_theme")||"default";
+document.documentElement.style.setProperty("--bg",themes[theme]||themes.default);
+document.body.classList.toggle("dark",theme==="dark");
+document.querySelectorAll(".themeOpt").forEach(btn=>{
+btn.classList.toggle("selected",btn.dataset.theme===theme);
+});
 }
 
-function showSetupStatus(m){
-  $("setupStatus").textContent=m;
+function showSetupStatus(message){
+$("setupStatus").textContent=message;
 }
 
 function memberPath(uid,id=roomId){
-  return `rooms/${id}/members/${uid}`;
+return `rooms/${id}/members/${uid}`;
 }
 
 function recordPath(d,h,uid,id=roomId){
-  return `rooms/${id}/records/${dateKey(d)}/${hourKey(h)}/${uid}`;
+return `rooms/${id}/records/${dateKey(d)}/${hourKey(h)}/${uid}`;
 }
 
 function clearListeners(){
-  [unsubMeta,unsubMembers,unsubSettings,unsubRecords].forEach(fn=>{
-    try{fn?.()}catch{}
-  });
-  unsubMeta=unsubMembers=unsubSettings=unsubRecords=null;
+[unsubMeta,unsubMembers,unsubSettings,unsubRecords].forEach(fn=>{
+try{fn?.()}catch{}
+});
+unsubMeta=null;
+unsubMembers=null;
+unsubSettings=null;
+unsubRecords=null;
 }
 
-function friendlyError(e){
-  const c=e?.code||"";
-  if(c.includes("permission-denied"))return"Firebase 權限被拒絕，請檢查 Rules";
-  if(c.includes("storage/unauthorized"))return"Storage 權限被拒絕，請檢查 Storage Rules";
-  if(c.includes("storage/bucket-not-found"))return"Storage 尚未建立";
-  if(c.includes("storage/unknown"))return"Storage 尚未啟用或方案不符合";
-  if(c.includes("popup-closed-by-user"))return"你關閉了 Google 登入視窗";
-  if(c.includes("popup-blocked"))return"瀏覽器封鎖了 Google 登入視窗";
-  if(c.includes("auth/unauthorized-domain"))return"目前網站網域尚未加入 Firebase 授權網域";
-  return e?.message||"未知錯誤";
+function friendlyError(error){
+const code=error?.code||"";
+if(code.includes("permission-denied")||code==="PERMISSION_DENIED")return"Firebase 權限被拒絕，請檢查 Rules";
+if(code.includes("storage/unauthorized"))return"Storage 權限被拒絕，請檢查 Storage Rules";
+if(code.includes("storage/bucket-not-found"))return"Storage 尚未建立";
+if(code.includes("storage/unknown"))return"Storage 尚未啟用或設定不正確";
+if(code.includes("popup-closed-by-user"))return"你關閉了 Google 登入視窗";
+if(code.includes("popup-blocked"))return"瀏覽器封鎖了 Google 登入視窗";
+if(code.includes("auth/unauthorized-domain"))return"目前網站網域尚未加入 Firebase 授權網域";
+return error?.message||"未知錯誤";
 }
 
 function updateLoginUI(){
-  if(user){
-    $("googleLogin").classList.add("hide");
-    $("googleLogout").classList.remove("hide");
-    $("loginStatus").textContent=currentProfile.displayName
-      ?`已登入 Google · 自訂暱稱：${currentProfile.displayName}`
-      :"已登入 Google · 請設定自訂暱稱";
-  }else{
-    $("googleLogin").classList.remove("hide");
-    $("googleLogout").classList.add("hide");
-    $("loginStatus").textContent="尚未登入 Google";
-  }
+if(user){
+$("googleLogin").classList.add("hide");
+$("googleLogout").classList.remove("hide");
+$("loginStatus").textContent=currentProfile.displayName?`已登入 Google · 自訂暱稱：${currentProfile.displayName}`:"已登入 Google · 請設定自訂暱稱";
+}else{
+$("googleLogin").classList.remove("hide");
+$("googleLogout").classList.add("hide");
+$("loginStatus").textContent="尚未登入 Google";
+}
 }
 
 function setAuthButtons(){
-  const disabled=!user;
-  $("create").disabled=disabled;
-  $("join").disabled=disabled;
+const enabled=!!user;
+$("create").disabled=!enabled;
+$("join").disabled=!enabled;
 }
 
 async function loadUserProfile(){
-  if(!user)return;
+if(!user)return;
 
-  const localName=localStorage.getItem(`momentlog_name_${user.uid}`)||"";
-
-  try{
-    const snap=await get(ref(db,`users/${user.uid}`));
-    if(snap.exists()){
-      currentProfile=snap.val()||{};
-    }
-  }catch(e){
-    console.warn("讀取個人資料失敗",e);
-  }
-
-  if(localName&&!currentProfile.displayName){
-    currentProfile.displayName=localName;
-  }
-
-  if(currentProfile.displayName){
-    $("name").value=currentProfile.displayName;
-  }
-
-  $("profileName").value=currentProfile.displayName||"";
-  $("notifyMinute").value=String(Number(currentProfile.notificationMinute||0));
-
-  updateLoginUI();
-  scheduleLocalReminder();
+try{
+const snap=await get(ref(db,`users/${user.uid}`));
+if(snap.exists())currentProfile=snap.val()||{};
+}catch(error){
+console.warn("讀取個人資料失敗",error);
 }
 
-async function saveProfile(){
-  if(!user)return;
+const savedName=localStorage.getItem(`momentlog_name_${user.uid}`)||"";
+if(savedName&&!currentProfile.displayName)currentProfile.displayName=savedName;
 
-  const name=$("profileName").value.trim();
-
-  if(!name){
-    toast("請輸入暱稱");
-    $("profileName").focus();
-    return;
-  }
-
-  try{
-    const minute=Math.max(0,Math.min(59,Number($("notifyMinute").value)||0));
-
-    await set(ref(db,`users/${user.uid}`),{
-      displayName:name,
-      notificationMinute:minute,
-      updatedAt:Date.now()
-    });
-
-    currentProfile={
-      ...currentProfile,
-      displayName:name,
-      notificationMinute:minute,
-      updatedAt:Date.now()
-    };
-
-    localStorage.setItem(`momentlog_name_${user.uid}`,name);
-    localStorage.setItem("momentlog_name",name);
-
-    $("name").value=name;
-    updateLoginUI();
-
-    if(roomId&&room?.members?.[user.uid]){
-      await update(ref(db,memberPath(user.uid)),{
-        displayName:name,
-        updatedAt:Date.now()
-      });
-    }
-
-    scheduleLocalReminder();
-
-    $("profileModal").classList.remove("show");
-    toast("個人資料已儲存");
-  }catch(e){
-    console.error(e);
-    toast("保存暱稱失敗："+friendlyError(e));
-  }
+$("name").value=currentProfile.displayName||"";
+$("profileName").value=currentProfile.displayName||"";
+$("notifyMinute").value=String(Number(currentProfile.notificationMinute||0));
+updateLoginUI();
 }
 
 async function loginGoogle(){
-  try{
-    await signInWithPopup(auth,googleProvider);
-    toast("Google 登入成功");
-  }catch(e){
-    console.error(e);
-    toast("Google 登入失敗："+friendlyError(e));
-  }
+try{
+await signInWithPopup(auth,googleProvider);
+toast("Google 登入成功");
+}catch(error){
+console.error(error);
+toast("Google 登入失敗："+friendlyError(error));
+}
 }
 
 async function logoutGoogle(){
-  try{
-    clearListeners();
-    room=null;
-    roomId="";
-    currentDate=new Date();
-    localStorage.removeItem("momentlog_room");
-    localStorage.removeItem("momentlog_name");
-    await signOut(auth);
-    stopLocalReminder();
-    toast("已登出 Google");
-  }catch(e){
-    console.error(e);
-    toast("登出失敗："+friendlyError(e));
-  }
+try{
+stopLocalReminder();
+clearListeners();
+room=null;
+roomId="";
+localStorage.removeItem("momentlog_room");
+localStorage.removeItem("momentlog_name");
+await signOut(auth);
+$("room").classList.add("hide");
+$("setup").classList.remove("hide");
+toast("已登出 Google");
+}catch(error){
+console.error(error);
+toast("登出失敗："+friendlyError(error));
+}
 }
 
 async function ensureAuth(){
-  if(auth.currentUser)return auth.currentUser;
-  throw new Error("請先登入 Google 帳號");
+if(auth.currentUser)return auth.currentUser;
+throw new Error("請先登入 Google 帳號");
+}
+
+async function saveDisplayName(name){
+if(!user)throw new Error("尚未登入");
+
+await update(ref(db,`users/${user.uid}`),{
+displayName:name,
+updatedAt:Date.now()
+});
+
+currentProfile={
+...currentProfile,
+displayName:name,
+updatedAt:Date.now()
+};
+
+localStorage.setItem(`momentlog_name_${user.uid}`,name);
+localStorage.setItem("momentlog_name",name);
+$("name").value=name;
 }
 
 async function createRoom(){
-  try{
-    const u=await ensureAuth();
-    const name=$("name").value.trim()||currentProfile.displayName||"";
-    const log=$("log").value.trim();
+try{
+const u=await ensureAuth();
+const name=$("name").value.trim()||currentProfile.displayName||"";
+const log=$("log").value.trim();
 
-    if(!name){
-      toast("請輸入暱稱");
-      $("name").focus();
-      return;
-    }
+if(!name){
+toast("請輸入暱稱");
+$("name").focus();
+return;
+}
 
-    if(!log){
-      toast("請輸入 Log 名稱");
-      $("log").focus();
-      return;
-    }
+if(!log){
+toast("請輸入 Log 名稱");
+$("log").focus();
+return;
+}
 
-    await update(ref(db,`users/${u.uid}`),{
-      displayName:name,
-      updatedAt:Date.now()
-    });
+await saveDisplayName(name);
 
-    currentProfile.displayName=name;
-    localStorage.setItem(`momentlog_name_${u.uid}`,name);
-    localStorage.setItem("momentlog_name",name);
+let id="";
 
-    let id="";
+for(let i=0;i<8&&!id;i++){
+const candidate=crypto.randomUUID().replace(/-/g,"").slice(0,8).toUpperCase();
 
-    for(let i=0;i<8&&!id;i++){
-      const candidate=crypto.randomUUID().replace(/-/g,"").slice(0,8).toUpperCase();
+const tx=await runTransaction(
+ref(db,`rooms/${candidate}/meta`),
+current=>{
+if(current!==null)return;
+return{
+roomId:candidate,
+name:log,
+ownerUid:u.uid,
+createdAt:Date.now()
+};
+}
+);
 
-      const tx=await runTransaction(
-        ref(db,`rooms/${candidate}/meta`),
-        cur=>cur===null
-          ?{
-              roomId:candidate,
-              name:log,
-              ownerUid:u.uid,
-              createdAt:Date.now()
-            }
-          :undefined
-      );
+if(tx.committed)id=candidate;
+}
 
-      if(tx.committed)id=candidate;
-    }
+if(!id)throw new Error("房間碼建立失敗，請再試一次");
 
-    if(!id)throw new Error("房間碼建立失敗，請再試一次");
+await set(ref(db,memberPath(u.uid,id)),{
+displayName:name,
+joinedAt:Date.now(),
+updatedAt:Date.now()
+});
 
-    const now=Date.now();
+localStorage.setItem("momentlog_room",id);
+roomId=id;
+currentDate=new Date();
+connectRoom();
+toast("房間建立成功");
 
-    await set(ref(db,memberPath(u.uid,id)),{
-      displayName:name,
-      joinedAt:now,
-      updatedAt:now
-    });
-
-    localStorage.setItem("momentlog_room",id);
-    roomId=id;
-    currentDate=new Date();
-
-    clearSearch();
-    connectRoom();
-    toast("房間建立成功");
-  }catch(e){
-    console.error(e);
-    toast("建立房間失敗："+friendlyError(e));
-  }
+}catch(error){
+console.error("createRoom error:",error);
+toast("建立房間失敗："+friendlyError(error));
+}
 }
 
 async function joinRoom(){
-  try{
-    const u=await ensureAuth();
-    const name=$("name").value.trim()||currentProfile.displayName||"";
-    const id=$("joinCode").value.trim().toUpperCase();
+try{
+const u=await ensureAuth();
+const name=$("name").value.trim()||currentProfile.displayName||"";
+const id=$("joinCode").value.trim().toUpperCase();
 
-    if(!name){
-      toast("請輸入暱稱");
-      $("name").focus();
-      return;
-    }
+if(!name){
+toast("請輸入暱稱");
+$("name").focus();
+return;
+}
 
-    if(!/^[A-Z0-9]{8,12}$/.test(id)){
-      toast("房間碼格式不正確");
-      return;
-    }
+if(!/^[A-Z0-9]{8,12}$/.test(id)){
+toast("房間碼格式不正確");
+return;
+}
 
-    const meta=await get(ref(db,`rooms/${id}/meta`));
+const metaSnap=await get(ref(db,`rooms/${id}/meta`));
 
-    if(!meta.exists()){
-      toast("找不到這個房間");
-      return;
-    }
+if(!metaSnap.exists()){
+toast("找不到這個房間");
+return;
+}
 
-    await update(ref(db,`users/${u.uid}`),{
-      displayName:name,
-      updatedAt:Date.now()
-    });
+await saveDisplayName(name);
 
-    currentProfile.displayName=name;
-    localStorage.setItem(`momentlog_name_${u.uid}`,name);
-    localStorage.setItem("momentlog_name",name);
+await set(ref(db,memberPath(u.uid,id)),{
+displayName:name,
+joinedAt:Date.now(),
+updatedAt:Date.now()
+});
 
-    await set(ref(db,memberPath(u.uid,id)),{
-      displayName:name,
-      joinedAt:Date.now(),
-      updatedAt:Date.now()
-    });
+roomId=id;
+currentDate=new Date();
 
-    localStorage.setItem("momentlog_room",id);
-    roomId=id;
-    currentDate=new Date();
+localStorage.setItem("momentlog_room",id);
 
-    clearSearch();
-    connectRoom();
-    toast("已加入房間");
-  }catch(e){
-    console.error(e);
-    toast("加入房間失敗："+friendlyError(e));
-  }
+connectRoom();
+
+toast("已加入房間");
+
+}catch(error){
+console.error("joinRoom error:",error);
+toast("加入房間失敗："+friendlyError(error));
+}
 }
 
 function connectRoom(){
-  clearListeners();
+clearListeners();
+if(!roomId||!user)return;
 
-  if(!roomId||!user)return;
+unsubMeta=onValue(
+ref(db,`rooms/${roomId}/meta`),
+snapshot=>{
+if(!snapshot.exists()){
+toast("房間不存在或已關閉");
+leaveLocal();
+return;
+}
+room=room||{};
+room.meta=snapshot.val();
+render();
+},
+error=>{
+console.error("Meta listener error:",error);
+toast("房間資料讀取失敗："+friendlyError(error));
+}
+);
 
-  unsubMeta=onValue(
-    ref(db,`rooms/${roomId}/meta`),
-    s=>{
-      if(!s.exists()){
-        toast("房間不存在或已被刪除");
-        leaveLocal();
-        return;
-      }
+unsubMembers=onValue(
+ref(db,`rooms/${roomId}/members`),
+snapshot=>{
+room=room||{};
+room.members=snapshot.val()||{};
 
-      room=room||{};
-      room.meta=s.val();
-      render();
-    },
-    e=>toast("房間資料讀取失敗："+friendlyError(e))
-  );
+if(!room.members[user.uid]){
+clearListeners();
+toast("你已不在這個房間");
+leaveLocal();
+return;
+}
 
-  unsubMembers=onValue(
-    ref(db,`rooms/${roomId}/members`),
-    s=>{
-      room=room||{};
-      room.members=s.val()||{};
+render();
+loadRecordsListener();
+},
+error=>{
+console.error("Members listener error:",error);
+toast("成員資料讀取失敗："+friendlyError(error));
+}
+);
 
-      if(user&&!room.members[user.uid]&&room.meta?.ownerUid!==user.uid){
-        toast("你已被移出房間");
-        leaveLocal();
-        return;
-      }
-
-      render();
-    },
-    e=>toast("成員資料讀取失敗："+friendlyError(e))
-  );
-
-  unsubSettings=onValue(
-    ref(db,`rooms/${roomId}/notificationSettings/${user.uid}`),
-    s=>{
-      room=room||{};
-      room.myNotification=s.val()||{};
-      renderNotify();
-      scheduleLocalReminder();
-    },
-    ()=>toast("通知設定讀取失敗")
-  );
-
-  loadRecordsListener();
+unsubSettings=onValue(
+ref(db,`rooms/${roomId}/notificationSettings/${user.uid}`),
+snapshot=>{
+room=room||{};
+room.myNotification=snapshot.val()||{};
+renderNotify();
+scheduleLocalReminder();
+},
+error=>{
+console.warn("Notification settings listener error:",error);
+}
+);
 }
 
 function loadRecordsListener(){
-  if(unsubRecords){
-    try{unsubRecords()}catch{}
-    unsubRecords=null;
-  }
-
-  if(!roomId||!user)return;
-
-  unsubRecords=onValue(
-    ref(db,`rooms/${roomId}/records/${dateKey(currentDate)}`),
-    s=>{
-      room=room||{};
-      room.records=s.val()||{};
-      render();
-    },
-    e=>toast("紀錄讀取失敗："+friendlyError(e))
-  );
+if(unsubRecords){
+try{unsubRecords()}catch{}
+unsubRecords=null;
 }
 
-function render(){
-  if(!room?.meta||!user)return;
+if(!roomId||!user||!room?.members?.[user.uid])return;
 
-  $("setup").classList.add("hide");
-  $("room").classList.remove("hide");
+const targetDate=dateKey(currentDate);
 
-  $("title").textContent=room.meta.name||"MomentLog";
-  $("roomCode").textContent=roomId;
-  $("roomNameView").value=room.meta.name||"";
-  $("roomCodeView").value=roomId;
-
-  $("sub").textContent=`${dateKey(currentDate)} · 房間碼 ${roomId}`;
-
-  const p=taipeiParts(new Date());
-  $("clock").textContent=`${p.hour}:${p.minute}:${p.second}`;
-
-  const max=isToday(currentDate)
-    ?Math.max(Number(p.hour)-1,-1)
-    :23;
-
-  const all=room.records||{};
-  const entries=[];
-
-  for(let h=0;h<=max;h++){
-    entries.push([h,all[hourKey(h)]||{}]);
-  }
-
-  const totalRecords=countDayRecords(all);
-  const myDone=Object.values(all).filter(v=>v?.[user.uid]).length;
-  const available=entries.length;
-
-  $("available").textContent=String(available);
-  $("doneCount").textContent=String(myDone);
-  $("recordCount").textContent=String(totalRecords);
-  $("doneTitle").textContent=isToday(currentDate)?"本日已完成":"當日已完成";
-
-  const memberCount=Math.max(Object.keys(room.members||{}).length,1);
-  const rate=available>0?Math.round((myDone/available)*100):0;
-  $("completionRate").textContent=`${Math.min(rate,100)}%`;
-
-  $("datePicker").value=dateKey(currentDate);
-  $("datePicker").max=dateKey(new Date());
-
-  $("dateLabel").textContent=isToday(currentDate)
-    ?"今天"
-    :`歷史日期：${dateKey(currentDate)}`;
-
-  $("yesterday").classList.toggle("hide",!isToday(currentDate));
-  $("today").classList.toggle("hide",isToday(currentDate));
-
-  renderOwner();
-  renderMembers();
-  renderTimeline(entries);
-  renderNotify();
-  applyTheme();
-  updateLoginUI();
-
-  void memberCount;
+unsubRecords=onValue(
+ref(db,`rooms/${roomId}/records/${targetDate}`),
+snapshot=>{
+room=room||{};
+room.records=snapshot.val()||{};
+render();
+},
+error=>{
+console.error("Records listener error:",error,`rooms/${roomId}/records/${targetDate}`);
+toast("紀錄讀取失敗："+friendlyError(error));
+}
+);
 }
 
 function countDayRecords(records){
-  return Object.values(records||{}).reduce((n,slot)=>{
-    return n+Object.keys(slot||{}).length;
-  },0);
+return Object.values(records||{}).reduce((total,slot)=>{
+return total+Object.keys(slot||{}).length;
+},0);
 }
 
-function renderOwner(){
-  const ownerUid=room?.meta?.ownerUid;
-  const owner=room?.members?.[ownerUid];
+function isOwner(){
+return !!user&&room?.meta?.ownerUid===user.uid;
+}
 
-  $("ownerName").textContent=owner?.displayName||"房主";
+function render(){
+if(!room?.meta||!user)return;
 
-  if(user&&ownerUid===user.uid){
-    $("ownerControls").classList.remove("hide");
-  }else{
-    $("ownerControls").classList.add("hide");
-  }
+$("setup").classList.add("hide");
+$("room").classList.remove("hide");
+
+$("title").textContent=room.meta.name||"MomentLog";
+$("roomCode").textContent=roomId;
+$("roomNameInput").value=room.meta.name||"";
+$("roomCodeView").value=roomId;
+$("sub").textContent=`${dateKey(currentDate)} · 房間碼 ${roomId}`;
+
+const now=new Date();
+const parts=taipeiParts(now);
+$("clock").textContent=`${parts.hour}:${parts.minute}:${parts.second}`;
+
+const max=isToday(currentDate)?Math.max(Number(parts.hour)-1,-1):23;
+const all=room.records||{};
+const entries=[];
+
+for(let h=0;h<=max;h++){
+entries.push([h,all[hourKey(h)]||{}]);
+}
+
+const available=entries.length;
+const mineCompleted=Object.values(all).filter(slot=>!!slot?.[user.uid]).length;
+const totalRecords=countDayRecords(all);
+const completionRate=available>0?Math.min(100,Math.round(mineCompleted/available*100)):0;
+
+$("available").textContent=String(available);
+$("doneCount").textContent=String(mineCompleted);
+$("recordCount").textContent=String(totalRecords);
+$("completionRate").textContent=`${completionRate}%`;
+$("doneTitle").textContent=isToday(currentDate)?"本日已完成":"當日已完成";
+$("datePicker").value=dateKey(currentDate);
+$("datePicker").max=dateKey(new Date());
+$("dateLabel").textContent=isToday(currentDate)?"今天":`歷史日期：${dateKey(currentDate)}`;
+
+$("yesterday").classList.toggle("hide",!isToday(currentDate));
+$("today").classList.toggle("hide",isToday(currentDate));
+
+const owner=room?.members?.[room?.meta?.ownerUid];
+$("ownerName").textContent=owner?.displayName||"房主";
+
+$("ownerControls").classList.toggle("hide",!isOwner());
+
+renderMembers();
+renderTimeline(entries);
+renderNotify();
+updateLoginUI();
+applyTheme();
 }
 
 function renderMembers(){
-  const members=room.members||{};
-  const ownerUid=room?.meta?.ownerUid;
-  const entries=room.records||{};
+const members=room?.members||{};
+const entries=room?.records||{};
+const ownerUid=room?.meta?.ownerUid;
 
-  const html=Object.entries(members).map(([uid,m])=>{
-    const done=Object.values(entries).some(slot=>slot?.[uid]);
-    const owner=uid===ownerUid;
+const html=Object.entries(members).map(([uid,member])=>{
+const done=Object.values(entries).some(slot=>!!slot?.[uid]);
+const owner=uid===ownerUid;
 
-    const kick=ownerUid===user.uid&&!owner&&uid!==user.uid
-      ?`<button class="btn small danger kickBtn" data-kick="${escapeHtml(uid)}">移除</button>`
-      :"";
+const kick=isOwner()&&!owner&&uid!==user.uid
+?`<button class="btn small danger kickBtn" data-kick="${escapeHtml(uid)}">移除</button>`
+:"";
 
-    return `<div class="member">
-      <div class="memberLeft">
-        <span>👤</span>
-        <span class="memberName">${escapeHtml(m.displayName||"未命名")}</span>
-      </div>
-      <div class="memberMeta">
-        ${owner?'<span class="badge owner">房主</span>':''}
-        <span class="badge ${done?"done":"wait"}">${done?"已完成":"等待中"}</span>
-        ${kick}
-      </div>
-    </div>`;
-  }).join("");
+return `<div class="member">
+<div class="memberLeft">
+<span>👤</span>
+<span class="memberName">${escapeHtml(member.displayName||"未命名")}</span>
+</div>
+<div class="memberMeta">
+${owner?'<span class="badge owner">房主</span>':""}
+<span class="badge ${done?"done":"wait"}">${done?"已完成":"等待中"}</span>
+${kick}
+</div>
+</div>`;
+}).join("");
 
-  $("members").innerHTML=html||"<div class='muted'>沒有成員</div>";
+$("members").innerHTML=html||"<div class='muted'>沒有成員</div>";
 
-  document.querySelectorAll("[data-kick]").forEach(btn=>{
-    btn.onclick=()=>kickMember(btn.dataset.kick);
-  });
+document.querySelectorAll("[data-kick]").forEach(button=>{
+button.onclick=()=>kickMember(button.dataset.kick);
+});
 }
 
 async function kickMember(uid){
-  if(!user||room?.meta?.ownerUid!==user.uid)return;
-  if(uid===user.uid)return;
+if(!isOwner()||uid===user.uid)return;
 
-  const member=room?.members?.[uid];
-  const name=member?.displayName||"這位成員";
+const name=room?.members?.[uid]?.displayName||"這位成員";
 
-  if(!confirm(`確定要移除「${name}」嗎？`))return;
+if(!confirm(`確定要移除「${name}」嗎？`))return;
 
-  try{
-    await remove(ref(db,memberPath(uid)));
-    await remove(ref(db,`rooms/${roomId}/notificationSettings/${uid}`));
-    toast("成員已移除");
-  }catch(e){
-    console.error(e);
-    toast("移除成員失敗："+friendlyError(e));
-  }
+try{
+await remove(ref(db,memberPath(uid)));
+try{
+await remove(ref(db,`rooms/${roomId}/notificationSettings/${uid}`));
+}catch(error){
+console.warn("通知設定刪除失敗",error);
+}
+toast("成員已移除");
+}catch(error){
+console.error(error);
+toast("移除成員失敗："+friendlyError(error));
+}
 }
 
 function renderTimeline(entries){
-  const p=taipeiParts(new Date());
-  const currentHour=Number(p.hour);
+const now=taipeiParts(new Date());
+const currentHour=Number(now.hour);
 
-  $("slots").innerHTML=entries.length
-    ?entries.map(([h,users])=>{
-      const mine=users?.[user.uid]||null;
+$("slots").innerHTML=entries.length?entries.map(([h,users])=>{
+const mine=users?.[user.uid]||null;
+const recent=isToday(currentDate)&&h===currentHour-1&&currentHour>0;
+let media="";
 
-      let media="";
+if(mine?.media?.downloadURL){
+const type=mine.media.contentType||"";
 
-      if(mine?.media?.downloadURL){
-        if((mine.media.contentType||"").startsWith("image/")){
-          media=`<div class="media" data-view-image="${escapeHtml(mine.media.downloadURL)}">
-            <img src="${escapeHtml(mine.media.downloadURL)}" alt="圖片">
-          </div>`;
-        }else if((mine.media.contentType||"").startsWith("video/")){
-          media=`<div class="media" data-view-video="${escapeHtml(mine.media.downloadURL)}">
-            <video src="${escapeHtml(mine.media.downloadURL)}" controls playsinline></video>
-          </div>`;
-        }
-      }
-
-      const isVisibleCurrent=isToday(currentDate)&&h===currentHour-1&&currentHour>0;
-
-      return `<div class="slot">
-        <div class="time">${pad(h)}:00</div>
-        <div class="slotBox">
-          <div class="slotTitle">
-            <b>${mine?"📌 已記錄":isVisibleCurrent?"最近時段":"尚未紀錄"}</b>
-            <span class="muted">${isVisibleCurrent?"剛剛到時段":""}</span>
-          </div>
-          ${mine?'<div class="pill done">✅ 你已完成</div>':""}
-          ${mine?.text?`<div class="caption">${escapeHtml(mine.text)}</div>`:""}
-          ${media}
-          <div style="margin-top:9px">
-            <button class="btn ${mine?"primary":""}" data-hour="${h}">
-              ${mine?"編輯紀錄":"立即紀錄"}
-            </button>
-          </div>
-        </div>
-      </div>`;
-    }).join("")
-    :'<div class="empty">今天還沒有已到的整點時段。<br>可以使用「記錄現在」建立目前紀錄。</div>';
-
-  document.querySelectorAll("[data-hour]").forEach(b=>{
-    b.onclick=()=>openRecord(Number(b.dataset.hour));
-  });
-
-  document.querySelectorAll("[data-view-image]").forEach(el=>{
-    el.onclick=()=>openViewer("image",el.dataset.viewImage);
-  });
-
-  document.querySelectorAll("[data-view-video]").forEach(el=>{
-    el.onclick=e=>{
-      if(e.target?.tagName==="VIDEO")return;
-      openViewer("video",el.dataset.viewVideo);
-    };
-  });
+if(type.startsWith("image/")){
+media=`<div class="media" data-image="${escapeHtml(mine.media.downloadURL)}"><img src="${escapeHtml(mine.media.downloadURL)}" alt="圖片" loading="lazy"></div>`;
+}else if(type.startsWith("video/")){
+media=`<div class="media" data-video="${escapeHtml(mine.media.downloadURL)}"><video src="${escapeHtml(mine.media.downloadURL)}" controls playsinline preload="metadata"></video></div>`;
+}
 }
 
-function openRecord(h){
-  if(!user)return;
+return `<div class="slot">
+<div class="time">${pad(h)}:00</div>
+<div class="slotBox">
 
-  activeHour=h;
-  selectedFile=null;
+<div class="slotTitle">
+<b>${mine?"📌 已記錄":recent?"🕘 最近到達":"尚未紀錄"}</b>
+<span class="muted">${recent?"最近時段":""}</span>
+</div>
 
-  const mine=room?.records?.[hourKey(h)]?.[user.uid]||null;
+${mine?'<div class="pill done">✅ 你已完成</div>':""}
+${recent&&!mine?'<div class="pill recent">⏱️ 可以補記</div>':""}
+${mine?.text?`<div class="caption">${escapeHtml(mine.text)}</div>`:""}
+${media}
 
-  $("recordWhen").textContent=`${dateKey(currentDate)} · ${pad(h)}:00`;
-  $("caption").value=mine?.text||"";
-  $("uploadProgress").classList.add("hide");
-  $("progressBar").style.width="0%";
+<div style="margin-top:9px">
+<button class="btn ${mine?"primary":""}" data-hour="${h}">
+${mine?"編輯紀錄":"立即紀錄"}
+</button>
+</div>
 
-  renderPreview(
-    mine?.media?.downloadURL,
-    mine?.media?.contentType
-  );
+</div>
+</div>`;
+}).join(""):`<div class="empty">今天還沒有已到的整點時段。<br>可以使用「記錄現在」建立目前紀錄。</div>`;
 
-  $("recordModal").classList.add("show");
+document.querySelectorAll("[data-hour]").forEach(button=>{
+button.onclick=()=>openRecord(Number(button.dataset.hour));
+});
+
+document.querySelectorAll("[data-image]").forEach(element=>{
+element.onclick=()=>openViewer("image",element.dataset.image);
+});
+
+document.querySelectorAll("[data-video]").forEach(element=>{
+element.onclick=event=>{
+if(event.target?.tagName==="VIDEO")return;
+openViewer("video",element.dataset.video);
+};
+});
+}
+
+function openRecord(hour){
+if(!user||!roomId||!room?.members?.[user.uid]){
+toast("請先加入房間");
+return;
+}
+
+activeHour=hour;
+selectedFile=null;
+
+const mine=room?.records?.[hourKey(hour)]?.[user.uid]||null;
+
+$("recordWhen").textContent=`${dateKey(currentDate)} · ${pad(hour)}:00`;
+$("caption").value=mine?.text||"";
+$("uploadProgress").classList.add("hide");
+$("progressBar").style.width="0%";
+
+renderPreview(mine?.media?.downloadURL,mine?.media?.contentType);
+$("recordModal").classList.add("show");
 }
 
 function closeRecord(){
-  if(selectedFile?.previewUrl){
-    URL.revokeObjectURL(selectedFile.previewUrl);
-  }
-
-  $("recordModal").classList.remove("show");
-  selectedFile=null;
-  activeHour=null;
-  $("preview").innerHTML="";
-  $("uploadProgress").classList.add("hide");
-  $("progressBar").style.width="0%";
+if(selectedFile?.previewUrl)URL.revokeObjectURL(selectedFile.previewUrl);
+$("recordModal").classList.remove("show");
+selectedFile=null;
+activeHour=null;
+$("preview").innerHTML="";
+$("uploadProgress").classList.add("hide");
+$("progressBar").style.width="0%";
 }
 
 function renderPreview(url,type,fileUrl=""){
-  const src=fileUrl||url;
-
-  if(!src){
-    $("preview").innerHTML="";
-    return;
-  }
-
-  if((type||"").startsWith("image/")){
-    $("preview").innerHTML=`<div class="media"><img src="${escapeHtml(src)}" alt="預覽"></div>`;
-  }else{
-    $("preview").innerHTML=`<div class="media"><video src="${escapeHtml(src)}" controls playsinline></video></div>`;
-  }
+const src=fileUrl||url;
+if(!src){
+$("preview").innerHTML="";
+return;
 }
 
-function chooseFile(f){
-  if(!f)return;
+if((type||"").startsWith("image/")){
+$("preview").innerHTML=`<div class="media"><img src="${escapeHtml(src)}" alt="預覽"></div>`;
+}else{
+$("preview").innerHTML=`<div class="media"><video src="${escapeHtml(src)}" controls playsinline></video></div>`;
+}
+}
 
-  if(!/^(image|video)\//.test(f.type)){
-    toast("只支援圖片或影片");
-    return;
-  }
+function chooseFile(file){
+if(!file)return;
 
-  if(f.size>250*1024*1024){
-    toast("單檔不能超過 250MB");
-    return;
-  }
+if(!/^(image|video)\//.test(file.type)){
+toast("只支援圖片或影片");
+return;
+}
 
-  if(selectedFile?.previewUrl){
-    URL.revokeObjectURL(selectedFile.previewUrl);
-  }
+if(file.size>250*1024*1024){
+toast("單檔不能超過 250MB");
+return;
+}
 
-  selectedFile={
-    file:f,
-    previewUrl:URL.createObjectURL(f)
-  };
+if(selectedFile?.previewUrl)URL.revokeObjectURL(selectedFile.previewUrl);
 
-  renderPreview("",f.type,selectedFile.previewUrl);
+selectedFile={
+file,
+previewUrl:URL.createObjectURL(file)
+};
+
+renderPreview("",file.type,selectedFile.previewUrl);
 }
 
 async function prepareImage(file){
-  if(!file.type.startsWith("image/"))return file;
-  if(file.size<=4*1024*1024)return file;
+if(!file.type.startsWith("image/"))return file;
+if(file.size<=4*1024*1024)return file;
 
-  return new Promise(resolve=>{
-    const img=new Image();
-    const url=URL.createObjectURL(file);
+return new Promise(resolve=>{
+const image=new Image();
+const url=URL.createObjectURL(file);
 
-    img.onload=()=>{
-      URL.revokeObjectURL(url);
+image.onload=()=>{
+URL.revokeObjectURL(url);
 
-      const maxSide=1920;
-      const scale=Math.min(1,maxSide/Math.max(img.width,img.height));
-      const canvas=document.createElement("canvas");
+const maxSide=1920;
+const scale=Math.min(1,maxSide/Math.max(image.width,image.height));
+const canvas=document.createElement("canvas");
 
-      canvas.width=Math.max(1,Math.round(img.width*scale));
-      canvas.height=Math.max(1,Math.round(img.height*scale));
+canvas.width=Math.max(1,Math.round(image.width*scale));
+canvas.height=Math.max(1,Math.round(image.height*scale));
 
-      const ctx=canvas.getContext("2d");
-      ctx.drawImage(img,0,0,canvas.width,canvas.height);
+const context=canvas.getContext("2d");
+context.drawImage(image,0,0,canvas.width,canvas.height);
 
-      canvas.toBlob(
-        blob=>{
-          if(!blob){
-            resolve(file);
-            return;
-          }
+canvas.toBlob(blob=>{
+if(!blob){
+resolve(file);
+return;
+}
 
-          resolve(new File(
-            [blob],
-            file.name.replace(/\.[^.]+$/,"")+".jpg",
-            {type:"image/jpeg"}
-          ));
-        },
-        "image/jpeg",
-        .82
-      );
-    };
+resolve(new File(
+[blob],
+file.name.replace(/\.[^.]+$/,"")+".jpg",
+{type:"image/jpeg"}
+));
+},"image/jpeg",.82);
+};
 
-    img.onerror=()=>{
-      URL.revokeObjectURL(url);
-      resolve(file);
-    };
+image.onerror=()=>{
+URL.revokeObjectURL(url);
+resolve(file);
+};
 
-    img.src=url;
-  });
+image.src=url;
+});
 }
 
 async function uploadFileWithProgress(file,path,metadata){
-  return new Promise(async(resolve,reject)=>{
-    try{
-      const task=uploadBytesResumable(
-        storageRef(storage,path),
-        file,
-        metadata
-      );
+return new Promise((resolve,reject)=>{
+let task;
 
-      task.on(
-        "state_changed",
-        snapshot=>{
-          const percent=snapshot.totalBytes
-            ?Math.round(snapshot.bytesTransferred/snapshot.totalBytes*100)
-            :0;
+try{
+task=uploadBytesResumable(storageRef(storage,path),file,metadata);
+}catch(error){
+reject(error);
+return;
+}
 
-          $("uploadProgress").classList.remove("hide");
-          $("uploadText").textContent=`正在上傳媒體… ${percent}%`;
-          $("progressBar").style.width=`${percent}%`;
-        },
-        reject,
-        async()=>{
-          try{
-            const url=await getDownloadURL(task.snapshot.ref);
-            resolve({
-              ref:task.snapshot.ref,
-              url
-            });
-          }catch(e){
-            reject(e);
-          }
-        }
-      );
-    }catch(e){
-      reject(e);
-    }
-  });
+task.on(
+"state_changed",
+snapshot=>{
+const percent=snapshot.totalBytes?Math.round(snapshot.bytesTransferred/snapshot.totalBytes*100):0;
+
+$("uploadProgress").classList.remove("hide");
+$("uploadText").textContent=`正在上傳媒體… ${percent}%`;
+$("progressBar").style.width=`${percent}%`;
+},
+error=>{
+reject(error);
+},
+async()=>{
+try{
+const url=await getDownloadURL(task.snapshot.ref);
+resolve({ref:task.snapshot.ref,url});
+}catch(error){
+reject(error);
+}
+}
+);
+});
 }
 
 async function saveRecord(){
-  if(activeHour===null||!user)return;
+if(activeHour===null||!user||!roomId||!room?.members?.[user.uid])return;
 
-  const path=recordPath(currentDate,activeHour,user.uid);
-  const old=room?.records?.[hourKey(activeHour)]?.[user.uid]||null;
+const path=recordPath(currentDate,activeHour,user.uid);
+const old=room?.records?.[hourKey(activeHour)]?.[user.uid]||null;
 
-  let media=old?.media||null;
-  let newStoragePath=null;
+let media=old?.media||null;
+let newStoragePath=null;
 
-  try{
-    $("saveRecord").disabled=true;
-    $("uploadProgress").classList.remove("hide");
-    $("uploadText").textContent=selectedFile?"準備上傳…":"正在儲存紀錄…";
+try{
+$("saveRecord").disabled=true;
+$("uploadProgress").classList.remove("hide");
+$("uploadText").textContent=selectedFile?"準備上傳…":"正在儲存紀錄…";
 
-    if(selectedFile){
-      const file=await prepareImage(selectedFile.file);
+if(selectedFile){
+const file=await prepareImage(selectedFile.file);
 
-      if(file.size>250*1024*1024){
-        throw new Error("單檔不能超過 250MB");
-      }
+if(file.size>250*1024*1024){
+throw new Error("單檔不能超過 250MB");
+}
 
-      newStoragePath=
-        `room-media/${roomId}/${user.uid}/`+
-        `${dateKey(currentDate)}_${pad(activeHour)}/`+
-        `${crypto.randomUUID()}-${safeFileName(file.name)}`;
+newStoragePath=`room-media/${roomId}/${user.uid}/${dateKey(currentDate)}_${pad(activeHour)}/${crypto.randomUUID()}-${safeFileName(file.name)}`;
 
-      const uploaded=await uploadFileWithProgress(
-        file,
-        newStoragePath,
-        {
-          contentType:file.type,
-          customMetadata:{
-            roomId,
-            uid:user.uid
-          }
-        }
-      );
+const uploaded=await uploadFileWithProgress(
+file,
+newStoragePath,
+{
+contentType:file.type,
+customMetadata:{roomId,uid:user.uid}
+}
+);
 
-      media={
-        storagePath:newStoragePath,
-        downloadURL:uploaded.url,
-        contentType:file.type,
-        name:file.name,
-        size:file.size
-      };
-    }
+media={
+storagePath:newStoragePath,
+downloadURL:uploaded.url,
+contentType:file.type,
+name:file.name,
+size:file.size
+};
+}
 
-    const text=$("caption").value.trim();
-    const now=Date.now();
+const text=$("caption").value.trim();
+const now=Date.now();
 
-    await set(ref(db,path),{
-      date:dateKey(currentDate),
-      hour:activeHour,
-      text,
-      authorUid:user.uid,
-      authorName:currentProfile.displayName||"未命名",
-      savedAt:old?.savedAt||now,
-      updatedAt:now,
-      media
-    });
+await set(ref(db,path),{
+date:dateKey(currentDate),
+hour:activeHour,
+text,
+authorUid:user.uid,
+authorName:currentProfile.displayName||"未命名",
+savedAt:old?.savedAt||now,
+updatedAt:now,
+media
+});
 
-    if(
-      old?.media?.storagePath&&
-      newStoragePath&&
-      old.media.storagePath!==newStoragePath
-    ){
-      deleteObject(storageRef(storage,old.media.storagePath)).catch(console.warn);
-    }
+if(old?.media?.storagePath&&newStoragePath&&old.media.storagePath!==newStoragePath){
+deleteObject(storageRef(storage,old.media.storagePath)).catch(console.warn);
+}
 
-    closeRecord();
-    toast("已同步到雲端");
-  }catch(e){
-    if(newStoragePath){
-      try{
-        await deleteObject(storageRef(storage,newStoragePath));
-      }catch{}
-    }
+closeRecord();
+toast("已同步到雲端");
 
-    console.error(e);
-    $("uploadProgress").classList.remove("hide");
-    $("uploadText").textContent="儲存失敗："+friendlyError(e);
-    toast("儲存失敗："+friendlyError(e));
-  }finally{
-    $("saveRecord").disabled=false;
-  }
+}catch(error){
+
+if(newStoragePath){
+try{
+await deleteObject(storageRef(storage,newStoragePath));
+}catch{}
+}
+
+console.error("saveRecord error:",error);
+
+$("uploadProgress").classList.remove("hide");
+$("uploadText").textContent="儲存失敗："+friendlyError(error);
+toast("儲存失敗："+friendlyError(error));
+
+}finally{
+$("saveRecord").disabled=false;
+}
 }
 
 async function removeMedia(){
-  if(activeHour===null||!user)return;
+if(activeHour===null||!user)return;
 
-  const old=room?.records?.[hourKey(activeHour)]?.[user.uid]||null;
+const old=room?.records?.[hourKey(activeHour)]?.[user.uid]||null;
 
-  if(!old?.media?.storagePath){
-    toast("目前沒有媒體");
-    return;
-  }
+if(!old?.media?.storagePath){
+toast("目前沒有媒體");
+return;
+}
 
-  try{
-    await set(
-      ref(db,recordPath(currentDate,activeHour,user.uid)),
-      {
-        ...old,
-        media:null,
-        updatedAt:Date.now()
-      }
-    );
+try{
+await set(
+ref(db,recordPath(currentDate,activeHour,user.uid)),
+{
+...old,
+media:null,
+updatedAt:Date.now()
+}
+);
 
-    try{
-      await deleteObject(
-        storageRef(storage,old.media.storagePath)
-      );
-    }catch(e){
-      console.warn(e);
-    }
+try{
+await deleteObject(storageRef(storage,old.media.storagePath));
+}catch(error){
+console.warn("Storage delete failed:",error);
+}
 
-    selectedFile=null;
-    $("preview").innerHTML="";
-    toast("媒體已移除");
-  }catch(e){
-    console.error(e);
-    toast("移除失敗："+friendlyError(e));
-  }
+selectedFile=null;
+$("preview").innerHTML="";
+toast("媒體已移除");
+
+}catch(error){
+console.error(error);
+toast("移除失敗："+friendlyError(error));
+}
 }
 
 function renderNotify(){
-  const on=room?.myNotification?.enabled===true;
-  const b=$("notify");
+const enabled=room?.myNotification?.enabled===true;
+const button=$("notify");
 
-  b.textContent=on
-    ?"🔔 通知：開啟"
-    :"🔕 通知：關閉";
-
-  b.classList.toggle("active",on);
-
-  $("notifyMinute").value=String(
-    Number(room?.myNotification?.minute??currentProfile.notificationMinute??0)
-  );
+button.textContent=enabled?"🔔 通知：開啟":"🔕 通知：關閉";
+button.classList.toggle("active",enabled);
 }
 
 async function toggleNotification(){
-  try{
-    if(room?.myNotification?.enabled===true){
-      await update(
-        ref(db,`rooms/${roomId}/notificationSettings/${user.uid}`),
-        {
-          enabled:false,
-          minute:Number(currentProfile.notificationMinute||0),
-          timezone:"Asia/Taipei",
-          updatedAt:Date.now()
-        }
-      );
+if(!user||!roomId){
+toast("請先加入房間");
+return;
+}
 
-      toast("提醒已關閉");
-      scheduleLocalReminder();
-      return;
-    }
+try{
 
-    if(!("Notification"in window)){
-      toast("這個瀏覽器不支援通知");
-      return;
-    }
+if(room?.myNotification?.enabled===true){
 
-    if(Notification.permission==="denied"){
-      toast("請到瀏覽器網站設定允許通知");
-      return;
-    }
+await update(
+ref(db,`rooms/${roomId}/notificationSettings/${user.uid}`),
+{
+enabled:false,
+minute:Number(room.myNotification.minute||0),
+timezone:"Asia/Taipei",
+updatedAt:Date.now()
+}
+);
 
-    if(
-      Notification.permission==="default"&&
-      (await Notification.requestPermission())!=="granted"
-    ){
-      toast("沒有允許通知");
-      return;
-    }
+stopLocalReminder();
+toast("提醒已關閉");
+return;
+}
 
-    if(!(await isSupported())){
-      toast("這個瀏覽器不支援背景推播");
-      return;
-    }
+if(!("Notification"in window)){
+toast("這個瀏覽器不支援通知");
+return;
+}
 
-    const minute=Number(currentProfile.notificationMinute||0);
+if(Notification.permission==="denied"){
+toast("請到瀏覽器網站設定允許通知");
+return;
+}
 
-    const reg=await navigator.serviceWorker.register(
-      "./firebase-messaging-sw.js",
-      {scope:"./"}
-    );
+if(Notification.permission==="default"){
+const permission=await Notification.requestPermission();
+if(permission!=="granted"){
+toast("沒有允許通知");
+return;
+}
+}
 
-    const messaging=getMessaging(app);
+const supported=await isSupported();
 
-    const token=await getToken(
-      messaging,
-      {
-        vapidKey:VAPID_PUBLIC_KEY,
-        serviceWorkerRegistration:reg
-      }
-    );
+if(!supported){
+toast("這個瀏覽器不支援 Firebase 推播");
+return;
+}
 
-    if(!token){
-      throw new Error("無法取得推播 token");
-    }
+const minute=Number(currentProfile.notificationMinute||0);
 
-    await set(
-      ref(db,`fcmTokens/${user.uid}/${tokenKey(token)}`),
-      {
-        token,
-        createdAt:Date.now(),
-        updatedAt:Date.now(),
-        userAgent:navigator.userAgent
-      }
-    );
+const registration=await navigator.serviceWorker.register(
+"./firebase-messaging-sw.js",
+{scope:"./"}
+);
 
-    await update(
-      ref(db,`rooms/${roomId}/notificationSettings/${user.uid}`),
-      {
-        enabled:true,
-        minute,
-        timezone:"Asia/Taipei",
-        updatedAt:Date.now()
-      }
-    );
+const messaging=getMessaging(app);
 
-    toast("提醒已開啟");
-    scheduleLocalReminder();
-  }catch(e){
-    console.error(e);
-    toast("通知設定失敗："+friendlyError(e));
-  }
+const token=await getToken(
+messaging,
+{
+vapidKey:VAPID_PUBLIC_KEY,
+serviceWorkerRegistration:registration
+}
+);
+
+if(!token){
+throw new Error("無法取得推播 token");
+}
+
+await set(
+ref(db,`fcmTokens/${user.uid}/${tokenKey(token)}`),
+{
+token,
+createdAt:Date.now(),
+updatedAt:Date.now()
+}
+);
+
+await update(
+ref(db,`rooms/${roomId}/notificationSettings/${user.uid}`),
+{
+enabled:true,
+minute,
+timezone:"Asia/Taipei",
+updatedAt:Date.now()
+}
+);
+
+toast("提醒已開啟");
+scheduleLocalReminder();
+
+}catch(error){
+console.error(error);
+toast("通知設定失敗："+friendlyError(error));
+}
 }
 
 async function initForegroundMessaging(){
-  try{
-    if(messagingReady||!(await isSupported()))return;
+try{
+if(messagingReady||!(await isSupported()))return;
 
-    onMessage(
-      getMessaging(app),
-      p=>toast(
-        p?.notification?.body||
-        p?.data?.body||
-        "該記錄了！"
-      )
-    );
-
-    messagingReady=true;
-  }catch(e){
-    console.warn(e);
-  }
+onMessage(
+getMessaging(app),
+payload=>{
+toast(
+payload?.notification?.body||
+payload?.data?.body||
+"該記錄了！"
+);
 }
+);
 
-function scheduleLocalReminder(){
-  stopLocalReminder();
-
-  if(
-    !room?.myNotification?.enabled||
-    !("Notification"in window)||
-    Notification.permission!=="granted"
-  ){
-    return;
-  }
-
-  localReminderTimer=setInterval(()=>{
-    const now=new Date();
-    const p=taipeiParts(now);
-    const minute=Number(room.myNotification.minute||0);
-
-    if(Number(p.minute)===minute&&Number(p.second)===0){
-      new Notification("MomentLog",{
-        body:`${p.hour}:00 該記錄這一刻了！`,
-        icon:"./icon-192.png"
-      });
-    }
-  },1000);
+messagingReady=true;
+}catch(error){
+console.warn("Foreground messaging:",error);
+}
 }
 
 function stopLocalReminder(){
-  if(localReminderTimer){
-    clearInterval(localReminderTimer);
-    localReminderTimer=null;
-  }
+if(localReminderTimer){
+clearInterval(localReminderTimer);
+localReminderTimer=null;
+}
+localReminderKey="";
+}
+
+function scheduleLocalReminder(){
+stopLocalReminder();
+
+if(
+!room?.myNotification?.enabled||
+!("Notification"in window)||
+Notification.permission!=="granted"
+){
+return;
+}
+
+const lead=Math.max(
+0,
+Math.min(
+10,
+Number(room.myNotification.minute||0)
+)
+);
+
+localReminderTimer=setInterval(()=>{
+const now=new Date();
+const parts=taipeiParts(now);
+const hour=Number(parts.hour);
+const minute=Number(parts.minute);
+const second=Number(parts.second);
+
+let shouldNotify=false;
+
+if(lead===0){
+shouldNotify=minute===0&&second===0;
+}else{
+const target=(60-lead)%60;
+shouldNotify=minute===target&&second===0;
+}
+
+if(!shouldNotify)return;
+
+const key=`${dateKey(now)}-${hour}-${minute}-${lead}`;
+
+if(localReminderKey===key)return;
+
+localReminderKey=key;
+
+new Notification(
+"MomentLog",
+{
+body:lead===0?`${pad(hour)}:00 該記錄這一刻了！`:`${pad(hour)}:00 即將到達，還有 ${lead} 分鐘！`,
+icon:"./icon-192.png"
+}
+);
+
+},1000);
 }
 
 function invite(){
-  if(!roomId)return;
+if(!roomId)return;
 
-  const url=
-    `${location.origin}${location.pathname}`+
-    `?room=${encodeURIComponent(roomId)}`;
+const url=`${location.origin}${location.pathname}?room=${encodeURIComponent(roomId)}`;
 
-  const text=
-    `加入 MomentLog「${room?.meta?.name||"我的房間"}」\n`+
-    `房間碼：${roomId}\n`+
-    `加入連結：${url}`;
+const text=`加入 MomentLog「${room?.meta?.name||"我的房間"}」\n房間碼：${roomId}\n加入連結：${url}`;
 
-  navigator.clipboard.writeText(text)
-    .then(()=>toast("邀請連結已複製"))
-    .catch(()=>prompt("複製邀請資訊",text));
+navigator.clipboard.writeText(text).then(()=>{
+toast("邀請資訊已複製");
+}).catch(()=>{
+prompt("複製邀請資訊",text);
+});
 }
 
 async function leaveRoom(){
-  if(!confirm("確定要離開這個房間嗎？"))return;
 
-  try{
-    await remove(ref(db,memberPath(user.uid)));
-    await remove(
-      ref(db,`rooms/${roomId}/notificationSettings/${user.uid}`)
-    );
-
-    leaveLocal();
-    toast("已離開房間");
-  }catch(e){
-    console.error(e);
-    toast("離開房間失敗："+friendlyError(e));
-  }
+if(!user||!roomId){
+toast("目前沒有加入房間");
+return;
 }
 
-async function deleteRoom(){
-  if(!user||room?.meta?.ownerUid!==user.uid)return;
-
-  if(
-    !confirm(
-      "確定要永久刪除整個房間嗎？\n\n"+
-      "房間資料與成員紀錄將無法恢復。"
-    )
-  )return;
-
-  if(
-    !confirm("再次確認：真的要刪除「"+(room?.meta?.name||roomId)+"」嗎？")
-  )return;
-
-  try{
-    await remove(ref(db,`rooms/${roomId}`));
-    room=null;
-    roomId="";
-    localStorage.removeItem("momentlog_room");
-    $("roomSettingsModal").classList.remove("show");
-    $("room").classList.add("hide");
-    $("setup").classList.remove("hide");
-    toast("房間已刪除");
-  }catch(e){
-    console.error(e);
-    toast("刪除房間失敗："+friendlyError(e));
-  }
+if(isOwner()){
+toast("你是房主，不能直接離開；請先關閉房間");
+return;
 }
 
-function leaveLocal(){
-  clearListeners();
-  room=null;
-  roomId="";
-  localStorage.removeItem("momentlog_room");
-  $("room").classList.add("hide");
-  $("setup").classList.remove("hide");
-  clearSearch();
+if(!confirm("確定要離開這個房間嗎？"))return;
+
+const oldRoomId=roomId;
+
+try{
+
+clearListeners();
+
+await remove(
+ref(db,`rooms/${oldRoomId}/members/${user.uid}`)
+);
+
+try{
+await remove(
+ref(db,`rooms/${oldRoomId}/notificationSettings/${user.uid}`)
+);
+}catch(error){
+console.warn("通知設定清除失敗:",error);
 }
 
-function showYesterday(){
-  currentDate=addDays(new Date(),-1);
-  loadRecordsListener();
-  render();
+stopLocalReminder();
+
+room=null;
+roomId="";
+currentDate=new Date();
+
+localStorage.removeItem("momentlog_room");
+
+$("room").classList.add("hide");
+$("setup").classList.remove("hide");
+
+toast("已離開房間");
+
+}catch(error){
+
+console.error("leaveRoom error:",error);
+toast("離開房間失敗："+friendlyError(error));
+
 }
 
-function showToday(){
-  currentDate=new Date();
-  loadRecordsListener();
-  render();
 }
 
-function changeDate(offset){
-  const next=addDays(currentDate,offset);
-  const today=dateFromKey(dateKey(new Date()));
+async function closeRoom(){
 
-  if(next>today){
-    return;
-  }
+if(!isOwner())return;
 
-  currentDate=next;
-  loadRecordsListener();
-  render();
-  clearSearch();
+if(!confirm("確定要關閉這個房間嗎？\n\n其他成員將無法繼續使用這個房間。"))return;
+
+const oldRoomId=roomId;
+
+try{
+
+await remove(
+ref(db,`rooms/${oldRoomId}/meta`)
+);
+
+clearListeners();
+stopLocalReminder();
+
+room=null;
+roomId="";
+
+localStorage.removeItem("momentlog_room");
+
+$("roomSettingsModal").classList.remove("show");
+$("room").classList.add("hide");
+$("setup").classList.remove("hide");
+
+toast("房間已關閉");
+
+}catch(error){
+
+console.error("closeRoom error:",error);
+toast("關閉房間失敗："+friendlyError(error));
+
 }
 
-function setDateFromPicker(){
-  const value=$("datePicker").value;
-  if(!value)return;
-
-  const selected=dateFromKey(value);
-  const today=dateFromKey(dateKey(new Date()));
-
-  if(selected>today){
-    $("datePicker").value=dateKey(new Date());
-    return;
-  }
-
-  currentDate=selected;
-  loadRecordsListener();
-  render();
-  clearSearch();
 }
 
-function clearSearch(){
-  $("searchResults").innerHTML="";
-  $("searchResults").classList.add("hide");
-  $("searchInput").value="";
+async function saveRoomName(){
+
+if(!isOwner()){
+toast("只有房主可以修改房間名稱");
+return;
 }
 
-async function searchAllRecords(){
-  const q=$("searchInput").value.trim().toLowerCase();
+const name=$("roomNameInput").value.trim();
 
-  if(!q){
-    toast("請輸入搜尋內容");
-    return;
-  }
-
-  if(!roomId||!user)return;
-
-  try{
-    $("searchBtn").disabled=true;
-    $("searchBtn").textContent="搜尋中…";
-
-    const snap=await get(
-      ref(db,`rooms/${roomId}/records`)
-    );
-
-    const data=snap.val()||{};
-    const results=[];
-
-    for(const [date,day] of Object.entries(data)){
-      for(const [hour,slot] of Object.entries(day||{})){
-        for(const [uid,record] of Object.entries(slot||{})){
-          const text=String(record?.text||"").toLowerCase();
-          const name=String(record?.authorName||"").toLowerCase();
-          const dateText=date.toLowerCase();
-
-          if(
-            text.includes(q)||
-            name.includes(q)||
-            dateText.includes(q)
-          ){
-            results.push({
-              date,
-              hour:Number(hour),
-              uid,
-              record:record||{}
-            });
-          }
-        }
-      }
-    }
-
-    results.sort((a,b)=>{
-      return `${b.date} ${pad(b.hour)}`
-        .localeCompare(`${a.date} ${pad(a.hour)}`);
-    });
-
-    renderSearchResults(results,q);
-    $("searchModal").classList.add("show");
-  }catch(e){
-    console.error(e);
-    toast("搜尋失敗："+friendlyError(e));
-  }finally{
-    $("searchBtn").disabled=false;
-    $("searchBtn").textContent="🔍 搜尋";
-  }
+if(!name){
+toast("房間名稱不能為空");
+return;
 }
 
-function renderSearchResults(results,q){
-  if(!results.length){
-    $("searchModalResults").innerHTML=
-      `<div class="empty">找不到包含「${escapeHtml(q)}」的紀錄。</div>`;
-    return;
-  }
+try{
 
-  $("searchModalResults").innerHTML=results.map(item=>{
-    const r=item.record||{};
+await update(
+ref(db,`rooms/${roomId}/meta`),
+{
+name,
+updatedAt:Date.now()
+}
+);
 
-    return `<div class="searchResult">
-      <div class="searchResultTop">
-        <b>${escapeHtml(item.date)} · ${pad(item.hour)}:00</b>
-        <span class="muted">${escapeHtml(r.authorName||"未命名")}</span>
-      </div>
-      ${r.text?`<div class="caption">${escapeHtml(r.text)}</div>`:"<div class='muted' style='margin-top:6px'>沒有文字內容</div>"}
-      <div style="margin-top:9px">
-        <button class="btn small" data-search-date="${item.date}" data-search-hour="${item.hour}">查看</button>
-      </div>
-    </div>`;
-  }).join("");
+$("roomSettingsModal").classList.remove("show");
+toast("房間名稱已更新");
 
-  document.querySelectorAll("[data-search-date]").forEach(btn=>{
-    btn.onclick=()=>{
-      currentDate=dateFromKey(btn.dataset.searchDate);
-      loadRecordsListener();
-      render();
-      $("searchModal").classList.remove("show");
-    };
-  });
+}catch(error){
+console.error(error);
+toast("修改房間名稱失敗："+friendlyError(error));
+}
+
+}
+
+async function saveProfile(){
+
+if(!user)return;
+
+const name=$("profileName").value.trim();
+
+if(!name){
+toast("請輸入暱稱");
+$("profileName").focus();
+return;
+}
+
+try{
+
+const minute=Math.max(
+0,
+Math.min(
+10,
+Number($("notifyMinute").value)||0
+)
+);
+
+await saveDisplayName(name);
+
+await update(
+ref(db,`users/${user.uid}`),
+{
+notificationMinute:minute,
+updatedAt:Date.now()
+}
+);
+
+currentProfile={
+...currentProfile,
+displayName:name,
+notificationMinute:minute,
+updatedAt:Date.now()
+};
+
+if(roomId&&room?.members?.[user.uid]){
+await update(
+ref(db,memberPath(user.uid)),
+{
+displayName:name,
+updatedAt:Date.now()
+}
+);
+}
+
+if(room?.myNotification){
+await update(
+ref(db,`rooms/${roomId}/notificationSettings/${user.uid}`),
+{
+minute,
+updatedAt:Date.now()
+}
+);
+}
+
+$("profileModal").classList.remove("show");
+toast("個人資料已儲存");
+
+}catch(error){
+console.error(error);
+toast("保存個人資料失敗："+friendlyError(error));
+}
+
 }
 
 function openProfile(){
-  $("profileName").value=currentProfile.displayName||"";
-  $("notifyMinute").value=String(
-    Number(currentProfile.notificationMinute||0)
-  );
 
-  $("profileGoogleName").textContent=user?.displayName||"Google 帳號";
-  $("profileGoogleEmail").textContent=user?.email||"已登入";
-  $("profileAvatar").textContent=
-    String(currentProfile.displayName||user?.displayName||"M")
-      .trim()
-      .charAt(0)
-      .toUpperCase()||"M";
+$("profileName").value=currentProfile.displayName||"";
+$("notifyMinute").value=String(Number(currentProfile.notificationMinute||0));
 
-  $("profileModal").classList.add("show");
+$("profileAvatar").textContent=
+String(currentProfile.displayName||"M")
+.trim()
+.charAt(0)
+.toUpperCase()||"M";
+
+$("profileModal").classList.add("show");
 }
 
 function openRoomSettings(){
-  $("roomNameView").value=room?.meta?.name||"";
-  $("roomCodeView").value=roomId;
-  $("ownerControls").classList.toggle(
-    "hide",
-    room?.meta?.ownerUid!==user?.uid
-  );
-  $("roomSettingsModal").classList.add("show");
+
+$("roomNameInput").value=room?.meta?.name||"";
+$("roomCodeView").value=roomId;
+$("ownerControls").classList.toggle("hide",!isOwner());
+$("roomSettingsModal").classList.add("show");
+
 }
 
 function openViewer(type,url){
-  if(type==="image"){
-    $("viewerContent").innerHTML=
-      `<img src="${escapeHtml(url)}" alt="圖片">`;
-  }else{
-    $("viewerContent").innerHTML=
-      `<video src="${escapeHtml(url)}" controls autoplay playsinline></video>`;
-  }
 
-  $("photoViewer").classList.add("show");
+if(type==="image"){
+$("viewerContent").innerHTML=`<img src="${escapeHtml(url)}" alt="圖片">`;
+}else{
+$("viewerContent").innerHTML=`<video src="${escapeHtml(url)}" controls autoplay playsinline></video>`;
+}
+
+$("photoViewer").classList.add("show");
+}
+
+function searchResultsTemplate(results,query){
+
+if(!results.length){
+return `<div class="empty">找不到包含「${escapeHtml(query)}」的紀錄。</div>`;
+}
+
+return results.map(item=>{
+const record=item.record||{};
+
+return `<div class="searchResult">
+
+<div class="searchResultTop">
+<b>${escapeHtml(item.date)} · ${pad(item.hour)}:00</b>
+<span class="muted">${escapeHtml(record.authorName||"未命名")}</span>
+</div>
+
+${record.text?`<div class="caption">${escapeHtml(record.text)}</div>`:"<div class='muted' style='margin-top:6px'>沒有文字內容</div>"}
+
+<div style="margin-top:9px">
+<button class="btn small" data-search-date="${item.date}" data-search-hour="${item.hour}">查看</button>
+</div>
+
+</div>`;
+}).join("");
+}
+
+async function searchAllRecords(){
+
+const query=$("searchInput").value.trim().toLowerCase();
+
+if(!query){
+toast("請輸入搜尋內容");
+return;
+}
+
+if(!roomId||!user||!room?.members?.[user.uid]){
+toast("請先加入房間");
+return;
+}
+
+try{
+
+$("searchBtn").disabled=true;
+$("searchBtn").textContent="搜尋中…";
+
+const snapshot=await get(
+ref(db,`rooms/${roomId}/records`)
+);
+
+const data=snapshot.val()||{};
+const results=[];
+
+for(const [date,day] of Object.entries(data)){
+for(const [hour,slot] of Object.entries(day||{})){
+for(const [uid,record] of Object.entries(slot||{})){
+
+const text=String(record?.text||"").toLowerCase();
+const author=String(record?.authorName||"").toLowerCase();
+
+if(
+text.includes(query)||
+author.includes(query)||
+date.includes(query)
+){
+results.push({
+date,
+hour:Number(hour),
+uid,
+record:record||{}
+});
+}
+
+}
+}
+}
+
+results.sort((a,b)=>{
+return `${b.date} ${pad(b.hour)}`.localeCompare(`${a.date} ${pad(a.hour)}`);
+});
+
+$("searchModalResults").innerHTML=searchResultsTemplate(results,query);
+$("searchModal").classList.add("show");
+
+document.querySelectorAll("[data-search-date]").forEach(button=>{
+button.onclick=()=>{
+currentDate=dateFromKey(button.dataset.searchDate);
+loadRecordsListener();
+render();
+$("searchModal").classList.remove("show");
+};
+});
+
+}catch(error){
+
+console.error("search error:",error);
+toast("搜尋失敗："+friendlyError(error));
+
+}finally{
+
+$("searchBtn").disabled=false;
+$("searchBtn").textContent="🔍 搜尋";
+
+}
+
+}
+
+function showYesterday(){
+
+if(!roomId||!user)return;
+
+currentDate=addDays(new Date(),-1);
+loadRecordsListener();
+render();
+
+}
+
+function showToday(){
+
+if(!roomId||!user)return;
+
+currentDate=new Date();
+loadRecordsListener();
+render();
+
+}
+
+function changeDate(offset){
+
+if(!roomId||!user)return;
+
+const next=addDays(currentDate,offset);
+const today=dateFromKey(dateKey(new Date()));
+
+if(next>today)return;
+
+currentDate=next;
+loadRecordsListener();
+render();
+
+}
+
+function setDateFromPicker(){
+
+if(!roomId||!user)return;
+
+const value=$("datePicker").value;
+if(!value)return;
+
+const selected=dateFromKey(value);
+const today=dateFromKey(dateKey(new Date()));
+
+if(selected>today){
+$("datePicker").value=dateKey(new Date());
+return;
+}
+
+currentDate=selected;
+loadRecordsListener();
+render();
+
 }
 
 function tick(){
-  const now=new Date();
-  const p=taipeiParts(now);
 
-  if($("clock")){
-    $("clock").textContent=
-      `${p.hour}:${p.minute}:${p.second}`;
-  }
+const now=new Date();
+const parts=taipeiParts(now);
 
-  if(isToday(currentDate)){
-    const next=new Date(now);
-    next.setSeconds(0,0);
-    next.setMinutes(0,0);
-    next.setHours(next.getHours()+1);
+$("clock").textContent=`${parts.hour}:${parts.minute}:${parts.second}`;
 
-    const np=taipeiParts(next);
+if(isToday(currentDate)){
 
-    $("next").textContent=
-      `下一個紀錄點 ${np.hour}:00`;
+const next=new Date(now);
+next.setSeconds(0,0);
+next.setMinutes(0,0);
+next.setHours(next.getHours()+1);
 
-    const visibleMax=Math.max(Number(p.hour)-1,-1);
-    const visibleCount=visibleMax+1;
-    const currentCount=Number($("available")?.textContent||0);
+const nextParts=taipeiParts(next);
 
-    if(currentCount!==visibleCount&&room){
-      render();
-    }
+$("next").textContent=`下一個紀錄點 ${nextParts.hour}:00`;
 
-    if(
-      room?.myNotification?.enabled&&
-      Number(room.myNotification.minute||0)===Number(p.minute)&&
-      Number(p.second)===1
-    ){
-      scheduleLocalReminder();
-    }
-  }else{
-    $("next").textContent="正在查看歷史紀錄";
-  }
+const visibleMax=Math.max(Number(parts.hour)-1,-1);
+const expected=visibleMax+1;
+const actual=Number($("available").textContent||0);
+
+if(room&&expected!==actual){
+render();
+}
+
+}else{
+
+$("next").textContent="正在查看歷史紀錄";
+
+}
+
 }
 
 $("googleLogin").onclick=loginGoogle;
@@ -1809,17 +1887,19 @@ $("googleLogout").onclick=logoutGoogle;
 $("create").onclick=createRoom;
 $("join").onclick=joinRoom;
 $("notify").onclick=toggleNotification;
-$("invite").onclick=invite;
-$("leave").onclick=leaveRoom;
+$("theme").onclick=()=>$("themeModal").classList.add("show");
 $("profile").onclick=openProfile;
+$("invite").onclick=invite;
 $("roomSettings").onclick=openRoomSettings;
-$("deleteRoom").onclick=deleteRoom;
-$("copyInviteFromSettings").onclick=invite;
-
+$("leave").onclick=leaveRoom;
 $("now").onclick=()=>{
-  currentDate=new Date();
-  loadRecordsListener();
-  openRecord(Number(taipeiParts(new Date()).hour));
+
+currentDate=new Date();
+loadRecordsListener();
+
+const currentHour=Number(taipeiParts(new Date()).hour);
+openRecord(currentHour);
+
 };
 
 $("yesterday").onclick=showYesterday;
@@ -1828,8 +1908,9 @@ $("prevDate").onclick=()=>changeDate(-1);
 $("nextDate").onclick=()=>changeDate(1);
 $("datePicker").onchange=setDateFromPicker;
 $("searchBtn").onclick=searchAllRecords;
-$("searchInput").addEventListener("keydown",e=>{
-  if(e.key==="Enter")searchAllRecords();
+
+$("searchInput").addEventListener("keydown",event=>{
+if(event.key==="Enter")searchAllRecords();
 });
 
 $("recordClose").onclick=closeRecord;
@@ -1841,144 +1922,153 @@ $("photo").onclick=()=>$("photoInput").click();
 $("video").onclick=()=>$("videoInput").click();
 $("album").onclick=()=>$("albumInput").click();
 
-$("photoInput").onchange=e=>{
-  chooseFile(e.target.files?.[0]);
-  e.target.value="";
+$("photoInput").onchange=event=>{
+chooseFile(event.target.files?.[0]);
+event.target.value="";
 };
 
-$("videoInput").onchange=e=>{
-  chooseFile(e.target.files?.[0]);
-  e.target.value="";
+$("videoInput").onchange=event=>{
+chooseFile(event.target.files?.[0]);
+event.target.value="";
 };
 
-$("albumInput").onchange=e=>{
-  chooseFile(e.target.files?.[0]);
-  e.target.value="";
+$("albumInput").onchange=event=>{
+chooseFile(event.target.files?.[0]);
+event.target.value="";
 };
-
-$("theme").onclick=()=>$("themeModal").classList.add("show");
-$("themeClose").onclick=()=>$("themeModal").classList.remove("show");
-
-document.querySelectorAll(".themeOpt").forEach(b=>{
-  b.onclick=()=>{
-    localStorage.setItem("momentlog_theme",b.dataset.theme);
-    applyTheme();
-    $("themeModal").classList.remove("show");
-  };
-});
 
 $("profileClose").onclick=()=>$("profileModal").classList.remove("show");
 $("profileCancel").onclick=()=>$("profileModal").classList.remove("show");
 $("profileSave").onclick=saveProfile;
 
 $("roomSettingsClose").onclick=()=>$("roomSettingsModal").classList.remove("show");
+$("saveRoomName").onclick=saveRoomName;
+$("deleteRoom").onclick=closeRoom;
+$("copyInviteFromSettings").onclick=invite;
+
 $("searchClose").onclick=()=>$("searchModal").classList.remove("show");
+$("themeClose").onclick=()=>$("themeModal").classList.remove("show");
 
-$("photoViewer").onclick=e=>{
-  if(e.target===$("photoViewer")){
-    $("photoViewer").classList.remove("show");
-    $("viewerContent").innerHTML="";
-  }
+$("recordModal").onclick=event=>{
+if(event.target===$("recordModal"))closeRecord();
 };
 
-$("recordModal").onclick=e=>{
-  if(e.target===$("recordModal"))closeRecord();
+$("profileModal").onclick=event=>{
+if(event.target===$("profileModal"))$("profileModal").classList.remove("show");
 };
 
-$("profileModal").onclick=e=>{
-  if(e.target===$("profileModal")){
-    $("profileModal").classList.remove("show");
-  }
+$("roomSettingsModal").onclick=event=>{
+if(event.target===$("roomSettingsModal"))$("roomSettingsModal").classList.remove("show");
 };
 
-$("roomSettingsModal").onclick=e=>{
-  if(e.target===$("roomSettingsModal")){
-    $("roomSettingsModal").classList.remove("show");
-  }
+$("searchModal").onclick=event=>{
+if(event.target===$("searchModal"))$("searchModal").classList.remove("show");
 };
 
-$("searchModal").onclick=e=>{
-  if(e.target===$("searchModal")){
-    $("searchModal").classList.remove("show");
-  }
+$("themeModal").onclick=event=>{
+if(event.target===$("themeModal"))$("themeModal").classList.remove("show");
 };
 
-$("themeModal").onclick=e=>{
-  if(e.target===$("themeModal")){
-    $("themeModal").classList.remove("show");
-  }
+$("photoViewer").onclick=event=>{
+if(event.target===$("photoViewer")){
+$("photoViewer").classList.remove("show");
+$("viewerContent").innerHTML="";
+}
 };
 
-$("name").addEventListener("input",()=>{
-  if(user){
-    currentProfile.displayName=$("name").value.trim();
-    updateLoginUI();
-  }
+document.querySelectorAll(".themeOpt").forEach(button=>{
+button.onclick=()=>{
+localStorage.setItem("momentlog_theme",button.dataset.theme);
+applyTheme();
+$("themeModal").classList.remove("show");
+};
 });
 
-document.querySelectorAll(".navBtn[data-target]").forEach(btn=>{
-  btn.onclick=()=>{
-    document.getElementById(btn.dataset.target)?.scrollIntoView({
-      behavior:"smooth",
-      block:"start"
-    });
+document.querySelectorAll(".navBtn[data-target]").forEach(button=>{
+button.onclick=()=>{
+document.getElementById(button.dataset.target)?.scrollIntoView({
+behavior:"smooth",
+block:"start"
+});
 
-    document.querySelectorAll(".navBtn[data-target]")
-      .forEach(x=>x.classList.toggle("active",x===btn));
-  };
+document.querySelectorAll(".navBtn[data-target]").forEach(x=>{
+x.classList.toggle("active",x===button);
+});
+};
 });
 
 $("mobileRecord").onclick=()=>{
-  $("now").click();
+$("now").click();
 };
 
 $("mobileProfile").onclick=openProfile;
 
-window.addEventListener("beforeunload",clearListeners);
+$("name").addEventListener("input",()=>{
+if(user){
+currentProfile.displayName=$("name").value.trim();
+updateLoginUI();
+}
+});
+
+window.addEventListener("beforeunload",()=>{
+clearListeners();
+stopLocalReminder();
+});
+
+applyTheme();
+setInterval(tick,1000);
 
 const params=new URLSearchParams(location.search);
 const inviteRoom=params.get("room");
 
 if(inviteRoom){
-  $("joinCode").value=inviteRoom.toUpperCase();
+$("joinCode").value=inviteRoom.toUpperCase();
 }
 
-applyTheme();
-setInterval(tick,1000);
+onAuthStateChanged(auth,async currentUser=>{
 
-onAuthStateChanged(auth,async u=>{
-  user=u;
-  setAuthButtons();
+user=currentUser;
+setAuthButtons();
 
-  if(u){
-    showSetupStatus("正在讀取帳號資料…");
+if(currentUser){
 
-    await loadUserProfile();
+showSetupStatus("正在讀取帳號資料…");
 
-    updateLoginUI();
+await loadUserProfile();
 
-    showSetupStatus("已連線 Firebase");
+updateLoginUI();
 
-    initForegroundMessaging();
+showSetupStatus("已連線 Firebase");
 
-    const savedRoom=localStorage.getItem("momentlog_room");
+initForegroundMessaging();
 
-    if(savedRoom){
-      roomId=savedRoom;
-      connectRoom();
-    }
-  }else{
-    stopLocalReminder();
-    clearListeners();
-    room=null;
-    roomId="";
-    setAuthButtons();
-    updateLoginUI();
-    showSetupStatus("請先登入 Google 帳號");
-    $("room").classList.add("hide");
-    $("setup").classList.remove("hide");
-  }
+const savedRoom=localStorage.getItem("momentlog_room");
+
+if(savedRoom){
+roomId=savedRoom;
+connectRoom();
+}
+
+}else{
+
+stopLocalReminder();
+clearListeners();
+
+room=null;
+roomId="";
+
+setAuthButtons();
+updateLoginUI();
+
+showSetupStatus("請先登入 Google 帳號");
+
+$("room").classList.add("hide");
+$("setup").classList.remove("hide");
+
+}
+
 });
 </script>
+
 </body>
 </html>
