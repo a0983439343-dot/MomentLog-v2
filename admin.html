@@ -1,0 +1,1097 @@
+<!doctype html>
+<html lang="zh-Hant" translate="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<meta name="google" content="notranslate">
+<title>MomentLog Admin</title>
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent
+}
+
+:root{
+  --bg:#f5f7fb;
+  --card:#fff;
+  --text:#172033;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+  --primary:#4f46e5;
+  --sidebar:#111827;
+  --sidebarText:#cbd5e1;
+  --green:#16a34a;
+  --red:#dc2626;
+  --yellow:#ca8a04
+}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  background:var(--bg)
+}
+
+body{
+  min-height:100vh;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","Microsoft JhengHei",sans-serif;
+  color:var(--text)
+}
+
+button,input,select{
+  font:inherit
+}
+
+button{
+  cursor:pointer
+}
+
+button:disabled{
+  cursor:not-allowed;
+  opacity:.55
+}
+
+.hide{
+  display:none!important
+}
+
+.loginScreen{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px
+}
+
+.loginCard{
+  width:min(430px,100%);
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:22px;
+  padding:30px;
+  box-shadow:0 18px 50px rgba(15,23,42,.08);
+  text-align:center
+}
+
+.loginIcon{
+  width:60px;
+  height:60px;
+  border-radius:18px;
+  background:#111827;
+  color:#fff;
+  display:grid;
+  place-items:center;
+  margin:0 auto 15px;
+  font-size:28px
+}
+
+.loginCard h1{
+  margin:0;
+  font-size:26px
+}
+
+.loginCard p{
+  color:var(--muted);
+  line-height:1.7;
+  margin:8px 0 20px
+}
+
+.loginButton{
+  width:100%;
+  border:0;
+  border-radius:12px;
+  padding:13px 16px;
+  background:#111827;
+  color:#fff;
+  font-weight:700
+}
+
+.loginError{
+  display:none;
+  margin-top:12px;
+  padding:11px 13px;
+  border-radius:10px;
+  background:#fef2f2;
+  border:1px solid #fecaca;
+  color:#b91c1c;
+  text-align:left;
+  font-size:13px;
+  line-height:1.5
+}
+
+.app{
+  min-height:100vh;
+  display:flex
+}
+
+.sidebar{
+  width:250px;
+  background:var(--sidebar);
+  color:#fff;
+  padding:18px 14px;
+  flex:none;
+  position:fixed;
+  inset:0 auto 0 0;
+  overflow:auto
+}
+
+.logo{
+  padding:5px 10px 20px;
+  font-size:22px;
+  font-weight:900
+}
+
+.logo small{
+  display:block;
+  color:#94a3b8;
+  font-size:11px;
+  font-weight:500;
+  margin-top:3px
+}
+
+.adminInfo{
+  padding:11px 10px;
+  margin-bottom:14px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.04);
+  border-radius:12px;
+  font-size:12px;
+  color:#cbd5e1
+}
+
+.adminName{
+  color:#fff;
+  font-weight:800;
+  margin-bottom:3px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap
+}
+
+.nav{
+  display:grid;
+  gap:4px
+}
+
+.nav button{
+  width:100%;
+  text-align:left;
+  border:0;
+  background:transparent;
+  color:var(--sidebarText);
+  padding:11px 12px;
+  border-radius:10px;
+  font-size:14px
+}
+
+.nav button:hover,
+.nav button.active{
+  background:#253047;
+  color:#fff
+}
+
+.logoutBtn{
+  margin-top:20px;
+  width:100%;
+  border:1px solid rgba(255,255,255,.12);
+  color:#cbd5e1;
+  background:transparent;
+  border-radius:10px;
+  padding:10px
+}
+
+.main{
+  margin-left:250px;
+  width:calc(100% - 250px);
+  padding:25px;
+  max-width:1600px
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:22px
+}
+
+.pageTitle{
+  margin:0;
+  font-size:28px
+}
+
+.status{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:13px;
+  color:var(--muted)
+}
+
+.statusDot{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:var(--green)
+}
+
+.page{
+  display:none
+}
+
+.page.active{
+  display:block
+}
+
+.statsGrid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:14px
+}
+
+.statCard{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:19px;
+  box-shadow:0 5px 20px rgba(15,23,42,.04)
+}
+
+.statLabel{
+  color:var(--muted);
+  font-size:13px
+}
+
+.statNumber{
+  margin-top:7px;
+  font-size:31px;
+  font-weight:900
+}
+
+.contentGrid{
+  display:grid;
+  grid-template-columns:1.15fr .85fr;
+  gap:16px;
+  margin-top:16px
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:17px;
+  box-shadow:0 5px 20px rgba(15,23,42,.04)
+}
+
+.cardHeader{
+  padding:16px 18px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px
+}
+
+.cardHeader h2{
+  margin:0;
+  font-size:17px
+}
+
+.cardBody{
+  padding:0
+}
+
+.activityItem{
+  padding:13px 18px;
+  border-bottom:1px solid #f0f2f5;
+  display:flex;
+  gap:11px
+}
+
+.activityItem:last-child{
+  border-bottom:0
+}
+
+.activityDot{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:var(--green);
+  margin-top:6px;
+  flex:none
+}
+
+.activityText{
+  line-height:1.5;
+  font-size:14px
+}
+
+.activityTime{
+  margin-top:2px;
+  font-size:11px;
+  color:var(--muted)
+}
+
+.tableCard{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:17px;
+  overflow:hidden
+}
+
+.toolbar{
+  padding:14px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap
+}
+
+.search{
+  flex:1;
+  min-width:220px;
+  border:1px solid #d7dde7;
+  padding:11px 13px;
+  border-radius:10px;
+  outline:none;
+  background:#fff
+}
+
+.search:focus{
+  border-color:#818cf8;
+  box-shadow:0 0 0 3px rgba(99,102,241,.1)
+}
+
+.tableWrap{
+  overflow:auto
+}
+
+table{
+  width:100%;
+  min-width:700px;
+  border-collapse:collapse
+}
+
+th,td{
+  padding:13px 15px;
+  border-bottom:1px solid #eef0f4;
+  text-align:left;
+  font-size:13px;
+  vertical-align:top
+}
+
+th{
+  background:#f9fafb;
+  color:#6b7280;
+  font-weight:700;
+  position:sticky;
+  top:0;
+  z-index:1
+}
+
+td code{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:11px;
+  color:#475569
+}
+
+.badge{
+  display:inline-block;
+  padding:4px 8px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:800;
+  white-space:nowrap
+}
+
+.badge.green{
+  background:#dcfce7;
+  color:#166534
+}
+
+.badge.blue{
+  background:#e0e7ff;
+  color:#3730a3
+}
+
+.badge.gray{
+  background:#f1f5f9;
+  color:#475569
+}
+
+.empty{
+  text-align:center;
+  color:#9ca3af;
+  padding:40px 15px
+}
+
+.detailGrid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px
+}
+
+.detailLine{
+  padding:11px 14px;
+  border-bottom:1px solid #eef0f4;
+  display:flex;
+  justify-content:space-between;
+  gap:15px
+}
+
+.detailLine:last-child{
+  border-bottom:0
+}
+
+.detailLabel{
+  color:var(--muted)
+}
+
+.detailValue{
+  font-weight:700;
+  text-align:right;
+  word-break:break-word
+}
+
+@media(max-width:1050px){
+  .statsGrid{
+    grid-template-columns:repeat(2,minmax(0,1fr))
+  }
+
+  .contentGrid{
+    grid-template-columns:1fr
+  }
+}
+
+@media(max-width:760px){
+  .sidebar{
+    position:static;
+    width:100%;
+    min-height:auto
+  }
+
+  .app{
+    display:block
+  }
+
+  .main{
+    margin-left:0;
+    width:100%;
+    padding:16px
+  }
+
+  .statsGrid{
+    grid-template-columns:1fr 1fr
+  }
+
+  .topbar{
+    align-items:flex-start
+  }
+
+  .pageTitle{
+    font-size:24px
+  }
+}
+
+@media(max-width:480px){
+  .statsGrid{
+    grid-template-columns:1fr
+  }
+
+  .detailGrid{
+    grid-template-columns:1fr
+  }
+
+  .main{
+    padding:12px
+  }
+}
+</style>
+</head>
+<body>
+
+<section id="loginScreen" class="loginScreen">
+  <div class="loginCard">
+    <div class="loginIcon">🛠️</div>
+    <h1>MomentLog Admin</h1>
+    <p>
+      MomentLog 管理後台
+      <br>
+      只有管理員可以進入。
+    </p>
+    <button id="googleLogin" class="loginButton">使用 Google 登入</button>
+    <div id="loginError" class="loginError"></div>
+  </div>
+</section>
+
+<div id="adminApp" class="app hide">
+
+  <aside class="sidebar">
+    <div class="logo">
+      MomentLog
+      <small>Admin Dashboard</small>
+    </div>
+
+    <div class="adminInfo">
+      <div id="adminName" class="adminName">管理員</div>
+      <div id="adminEmail"></div>
+    </div>
+
+    <nav class="nav">
+      <button class="active" data-page="dashboard">📊 總覽</button>
+      <button data-page="users">👤 使用者</button>
+      <button data-page="rooms">🏠 房間</button>
+      <button data-page="records">📝 紀錄</button>
+      <button data-page="activity">📡 活動監控</button>
+      <button data-page="errors">🚨 錯誤監控</button>
+    </nav>
+
+    <button id="logout" class="logoutBtn">登出管理後台</button>
+  </aside>
+
+  <main class="main">
+
+    <div class="topbar">
+      <h1 id="pageTitle" class="pageTitle">總覽</h1>
+      <div class="status">
+        <span class="statusDot"></span>
+        Firebase 即時連線
+      </div>
+    </div>
+
+    <section id="page-dashboard" class="page active">
+
+      <div class="statsGrid">
+        <div class="statCard">
+          <div class="statLabel">使用者</div>
+          <div id="statUsers" class="statNumber">0</div>
+        </div>
+
+        <div class="statCard">
+          <div class="statLabel">房間</div>
+          <div id="statRooms" class="statNumber">0</div>
+        </div>
+
+        <div class="statCard">
+          <div class="statLabel">總紀錄</div>
+          <div id="statRecords" class="statNumber">0</div>
+        </div>
+
+        <div class="statCard">
+          <div class="statLabel">今日紀錄</div>
+          <div id="statToday" class="statNumber">0</div>
+        </div>
+      </div>
+
+      <div class="contentGrid">
+        <div class="card">
+          <div class="cardHeader">
+            <h2>最近活動</h2>
+          </div>
+          <div id="dashboardActivity" class="cardBody">
+            <div class="empty">尚未有活動紀錄</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="cardHeader">
+            <h2>系統資訊</h2>
+          </div>
+          <div class="cardBody">
+            <div class="detailLine">
+              <span class="detailLabel">Firebase 專案</span>
+              <span id="firebaseProject" class="detailValue">—</span>
+            </div>
+            <div class="detailLine">
+              <span class="detailLabel">管理員 UID</span>
+              <span id="firebaseAdminUid" class="detailValue">—</span>
+            </div>
+            <div class="detailLine">
+              <span class="detailLabel">認證狀態</span>
+              <span id="authStatus" class="detailValue">—</span>
+            </div>
+            <div class="detailLine">
+              <span class="detailLabel">資料庫</span>
+              <span id="databaseStatus" class="detailValue">讀取中…</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <section id="page-users" class="page">
+      <div class="tableCard">
+        <div class="toolbar">
+          <input id="userSearch" class="search" placeholder="搜尋 Google 名稱、Email、UID">
+        </div>
+        <div class="tableWrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Google 名稱</th>
+                <th>Email</th>
+                <th>UID</th>
+                <th>更新時間</th>
+                <th>狀態</th>
+              </tr>
+            </thead>
+            <tbody id="usersBody">
+              <tr>
+                <td colspan="5"><div class="empty">尚未有資料</div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="page-rooms" class="page">
+      <div class="tableCard">
+        <div class="toolbar">
+          <input id="roomSearch" class="search" placeholder="搜尋房間名稱、房間 ID、房主 UID">
+        </div>
+        <div class="tableWrap">
+          <table>
+            <thead>
+              <tr>
+                <th>房間名稱</th>
+                <th>房間 ID</th>
+                <th>房主 UID</th>
+                <th>成員數</th>
+                <th>建立時間</th>
+              </tr>
+            </thead>
+            <tbody id="roomsBody">
+              <tr>
+                <td colspan="5"><div class="empty">尚未有資料</div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="page-records" class="page">
+      <div class="tableCard">
+        <div class="toolbar">
+          <input id="recordSearch" class="search" placeholder="搜尋紀錄文字、房間 ID、使用者 UID">
+        </div>
+        <div class="tableWrap">
+          <table>
+            <thead>
+              <tr>
+                <th>日期</th>
+                <th>時間</th>
+                <th>房間</th>
+                <th>作者</th>
+                <th>內容</th>
+              </tr>
+            </thead>
+            <tbody id="recordsBody">
+              <tr>
+                <td colspan="5"><div class="empty">尚未有資料</div></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="page-activity" class="page">
+      <div class="card">
+        <div class="cardHeader">
+          <h2>即時活動</h2>
+        </div>
+        <div id="activityBody" class="cardBody">
+          <div class="empty">
+            目前 index.html 尚未寫入活動日誌。
+            <br>
+            後續可以加入登入、加入房間、離開房間、建立紀錄等事件。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="page-errors" class="page">
+      <div class="card">
+        <div class="cardHeader">
+          <h2>系統錯誤</h2>
+        </div>
+        <div id="errorsBody" class="cardBody">
+          <div class="empty">
+            目前 index.html 尚未寫入錯誤日誌。
+            <br>
+            後續可以把 Firebase 錯誤自動送到這裡。
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script type="module">
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.17.0/firebase-app.js";
+
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
+
+import {
+  getDatabase,
+  ref,
+  onValue
+} from "https://www.gstatic.com/firebasejs/12.17.0/firebase-database.js";
+
+import firebaseConfig from "./firebase-config.js";
+
+const ADMIN_UIDS = [
+  "nJdwA4Heqrbtqdt1atbiOsVi7r" // 替換為你的完整UID，如果截圖不完整，請自己補齊。
+];
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+const googleProvider = new GoogleAuthProvider();
+
+const $ = id => document.getElementById(id);
+
+let allUsers = [];
+let allRooms = [];
+let allRecords = [];
+
+function esc(value){
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function formatTime(value){
+  if(value === null || value === undefined || value === ""){
+    return "—";
+  }
+
+  const number = Number(value);
+
+  if(!Number.isFinite(number)){
+    return esc(String(value));
+  }
+
+  return new Intl.DateTimeFormat("zh-TW", {
+    timeZone: "Asia/Taipei",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hourCycle: "h23"
+  }).format(new Date(number));
+}
+
+$("googleLogin").onclick = async () => {
+  $("loginError").style.display = "none";
+
+  try{
+    await signInWithPopup(auth, googleProvider);
+  }catch(error){
+    console.error("admin login:", error);
+    $("loginError").textContent = error?.message || "Google 登入失敗";
+    $("loginError").style.display = "block";
+  }
+};
+
+$("logout").onclick = async () => {
+  await signOut(auth);
+};
+
+const pageNames = {
+  dashboard: "總覽",
+  users: "使用者",
+  rooms: "房間",
+  records: "紀錄",
+  activity: "活動監控",
+  errors: "錯誤監控"
+};
+
+document.querySelectorAll(".nav button").forEach(button => {
+  button.onclick = () => {
+    document.querySelectorAll(".nav button").forEach(item => item.classList.remove("active"));
+    document.querySelectorAll(".page").forEach(page => page.classList.remove("active"));
+
+    button.classList.add("active");
+
+    const page = button.dataset.page;
+
+    $(`page-${page}`).classList.add("active");
+    $("pageTitle").textContent = pageNames[page] || page;
+  };
+});
+
+onAuthStateChanged(auth, user => {
+  if(!user){
+    $("loginScreen").style.display = "flex";
+    $("adminApp").classList.add("hide");
+    return;
+  }
+
+  if(!ADMIN_UIDS.includes(user.uid)){
+    $("loginScreen").style.display = "flex";
+    $("adminApp").classList.add("hide");
+
+    $("loginError").textContent = "這個 Google 帳號沒有管理員權限。\nUID：" + user.uid;
+    $("loginError").style.display = "block";
+
+    signOut(auth);
+    return;
+  }
+
+  $("loginScreen").style.display = "none";
+  $("adminApp").classList.remove("hide");
+
+  $("adminName").textContent = user.displayName || "管理員";
+  $("adminEmail").textContent = user.email || user.uid;
+  $("firebaseProject").textContent = firebaseConfig.projectId || "—";
+  $("firebaseAdminUid").textContent = user.uid;
+
+  $("authStatus").textContent = "已驗證";
+  $("authStatus").style.color = "#16a34a";
+
+  loadRealtimeData();
+});
+
+function loadRealtimeData(){
+  onValue(
+    ref(db, "users"),
+    snapshot => {
+      const data = snapshot.val() || {};
+
+      allUsers = Object.entries(data).map(([uid, value]) => ({
+        uid,
+        ...(value || {})
+      }));
+
+      $("statUsers").textContent = allUsers.length;
+      renderUsers();
+    },
+    error => {
+      console.error("users:", error);
+    }
+  );
+
+  onValue(
+    ref(db, "rooms"),
+    snapshot => {
+      const data = snapshot.val() || {};
+
+      allRooms = [];
+      allRecords = [];
+
+      for(const [roomId, room] of Object.entries(data)){
+        const meta = room?.meta || {};
+        const members = room?.members || {};
+
+        allRooms.push({
+          roomId,
+          name: meta.name || "未命名",
+          ownerUid: meta.ownerUid || "",
+          createdAt: meta.createdAt || 0,
+          updatedAt: meta.updatedAt || 0,
+          memberCount: Object.keys(members).length
+        });
+
+        const records = room?.records || {};
+
+        for(const [date, hours] of Object.entries(records)){
+          for(const [hour, users] of Object.entries(hours || {})){
+            for(const [uid, record] of Object.entries(users || {})){
+              allRecords.push({
+                roomId,
+                date,
+                hour,
+                uid,
+                ...(record || {})
+              });
+            }
+          }
+        }
+      }
+
+      $("statRooms").textContent = allRooms.length;
+      $("statRecords").textContent = allRecords.length;
+
+      const today = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Taipei"
+      }).format(new Date());
+
+      $("statToday").textContent = allRecords.filter(record => record.date === today).length;
+
+      renderRooms();
+      renderRecords();
+      renderDashboardActivity();
+
+      $("databaseStatus").textContent = "正常";
+      $("databaseStatus").style.color = "#16a34a";
+    },
+    error => {
+      console.error("rooms:", error);
+      $("databaseStatus").textContent = "讀取失敗";
+      $("databaseStatus").style.color = "#dc2626";
+    }
+  );
+}
+
+function renderUsers(){
+  const keyword = ($("userSearch").value || "").trim().toLowerCase();
+
+  const rows = allUsers
+    .filter(user => {
+      const text = [user.displayName, user.email, user.uid].join(" ").toLowerCase();
+      return text.includes(keyword);
+    })
+    .sort((a, b) => String(a.displayName || "").localeCompare(String(b.displayName || ""), "zh-Hant"));
+
+  if(!rows.length){
+    $("usersBody").innerHTML = `
+      <tr>
+        <td colspan="5"><div class="empty">沒有符合的使用者</div></td>
+      </tr>
+    `;
+    return;
+  }
+
+  $("usersBody").innerHTML = rows.map(user => `
+    <tr>
+      <td>${esc(user.displayName || "未設定")}</td>
+      <td>${esc(user.email || "—")}</td>
+      <td><code>${esc(user.uid)}</code></td>
+      <td>${formatTime(user.updatedAt)}</td>
+      <td><span class="badge green">已建立</span></td>
+    </tr>
+  `).join("");
+}
+
+function renderRooms(){
+  const keyword = ($("roomSearch").value || "").trim().toLowerCase();
+
+  const rows = allRooms
+    .filter(room => {
+      const text = [room.name, room.roomId, room.ownerUid].join(" ").toLowerCase();
+      return text.includes(keyword);
+    })
+    .sort((a, b) => Number(b.createdAt || 0) - Number(a.createdAt || 0));
+
+  if(!rows.length){
+    $("roomsBody").innerHTML = `
+      <tr>
+        <td colspan="5"><div class="empty">沒有符合的房間</div></td>
+      </tr>
+    `;
+    return;
+  }
+
+  $("roomsBody").innerHTML = rows.map(room => `
+    <tr>
+      <td><strong>${esc(room.name)}</strong></td>
+      <td><code>${esc(room.roomId)}</code></td>
+      <td><code>${esc(room.ownerUid || "—")}</code></td>
+      <td>${room.memberCount}</td>
+      <td>${formatTime(room.createdAt)}</td>
+    </tr>
+  `).join("");
+}
+
+function renderRecords(){
+  const keyword = ($("recordSearch").value || "").trim().toLowerCase();
+
+  const rows = allRecords
+    .filter(record => {
+      const text = [record.text, record.roomId, record.uid, record.authorName, record.date, record.hour]
+        .join(" ")
+        .toLowerCase();
+      return text.includes(keyword);
+    })
+    .sort((a, b) => Number(b.updatedAt || b.savedAt || 0) - Number(a.updatedAt || a.savedAt || 0))
+    .slice(0, 500);
+
+  if(!rows.length){
+    $("recordsBody").innerHTML = `
+      <tr>
+        <td colspan="5"><div class="empty">沒有符合的紀錄</div></td>
+      </tr>
+    `;
+    return;
+  }
+
+  $("recordsBody").innerHTML = rows.map(record => `
+    <tr>
+      <td>${esc(record.date || "—")}</td>
+      <td>${esc(String(record.hour ?? ""))}:00</td>
+      <td><code>${esc(record.roomId)}</code></td>
+      <td>${esc(record.authorName || record.uid || "—")}</td>
+      <td>${esc(record.text || "（沒有文字）")}</td>
+    </tr>
+  `).join("");
+}
+
+function renderDashboardActivity(){
+  const activity = [];
+
+  allRecords
+    .slice()
+    .sort((a, b) => Number(b.updatedAt || b.savedAt || 0) - Number(a.updatedAt || a.savedAt || 0))
+    .slice(0, 12)
+    .forEach(record => {
+      activity.push({
+        text: `📝 ${record.authorName || record.uid} 在房間 ${record.roomId} 新增紀錄`,
+        time: record.updatedAt || record.savedAt || 0
+      });
+    });
+
+  allRooms
+    .slice()
+    .sort((a, b) => Number(b.createdAt || 0) - Number(a.createdAt || 0))
+    .slice(0, 8)
+    .forEach(room => {
+      activity.push({
+        text: `🏠 建立房間「${room.name}」`,
+        time: room.createdAt || 0
+      });
+    });
+
+  activity.sort((a, b) => Number(b.time || 0) - Number(a.time || 0));
+
+  const limited = activity.slice(0, 12);
+
+  if(!limited.length){
+    $("dashboardActivity").innerHTML = `<div class="empty">目前沒有活動</div>`;
+    return;
+  }
+
+  $("dashboardActivity").innerHTML = limited.map(item => `
+    <div class="activityItem">
+      <div class="activityDot"></div>
+      <div>
+        <div class="activityText">${esc(item.text)}</div>
+        <div class="activityTime">${formatTime(item.time)}</div>
+      </div>
+    </div>
+  `).join("");
+}
+
+$("userSearch").addEventListener("input", renderUsers);
+$("roomSearch").addEventListener("input", renderRooms);
+$("recordSearch").addEventListener("input", renderRecords);
+</script>
+
+</body>
+</html>
