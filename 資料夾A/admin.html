@@ -6,7 +6,6 @@
 <meta name="theme-color" content="#111827">
 <meta name="google" content="notranslate">
 <title>MomentLog Admin</title>
-
 <style>
 *{
   box-sizing:border-box;
@@ -27,8 +26,7 @@
   --yellow:#ca8a04
 }
 
-html,
-body{
+html,body{
   margin:0;
   min-height:100%;
   background:var(--bg)
@@ -36,19 +34,11 @@ body{
 
 body{
   min-height:100vh;
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    "Noto Sans TC",
-    "Microsoft JhengHei",
-    sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","Microsoft JhengHei",sans-serif;
   color:var(--text)
 }
 
-button,
-input,
-select{
+button,input,select{
   font:inherit
 }
 
@@ -64,11 +54,6 @@ button:disabled{
 .hide{
   display:none!important
 }
-
-
-/* ==============================
-   LOGIN
-============================== */
 
 .loginScreen{
   min-height:100vh;
@@ -133,11 +118,6 @@ button:disabled{
   font-size:13px;
   line-height:1.5
 }
-
-
-/* ==============================
-   APP
-============================== */
 
 .app{
   min-height:100vh;
@@ -255,11 +235,6 @@ button:disabled{
   background:var(--green)
 }
 
-
-/* ==============================
-   PAGE
-============================== */
-
 .page{
   display:none
 }
@@ -268,15 +243,9 @@ button:disabled{
   display:block
 }
 
-
-/* ==============================
-   DASHBOARD
-============================== */
-
 .statsGrid{
   display:grid;
-  grid-template-columns:
-    repeat(4,minmax(0,1fr));
+  grid-template-columns:repeat(4,minmax(0,1fr));
   gap:14px
 }
 
@@ -301,9 +270,7 @@ button:disabled{
 
 .contentGrid{
   display:grid;
-  grid-template-columns:
-    1.15fr
-    .85fr;
+  grid-template-columns:1.15fr .85fr;
   gap:16px;
   margin-top:16px
 }
@@ -364,11 +331,6 @@ button:disabled{
   color:var(--muted)
 }
 
-
-/* ==============================
-   TABLES
-============================== */
-
 .tableCard{
   background:var(--card);
   border:1px solid var(--border);
@@ -409,8 +371,7 @@ table{
   border-collapse:collapse
 }
 
-th,
-td{
+th,td{
   padding:13px 15px;
   border-bottom:1px solid #eef0f4;
   text-align:left;
@@ -428,12 +389,7 @@ th{
 }
 
 td code{
-  font-family:
-    ui-monospace,
-    SFMono-Regular,
-    Menlo,
-    Consolas,
-    monospace;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   font-size:11px;
   color:#475569
 }
@@ -468,15 +424,9 @@ td code{
   padding:40px 15px
 }
 
-
-/* ==============================
-   DETAIL
-============================== */
-
 .detailGrid{
   display:grid;
-  grid-template-columns:
-    repeat(2,minmax(0,1fr));
+  grid-template-columns:repeat(2,minmax(0,1fr));
   gap:14px
 }
 
@@ -502,15 +452,9 @@ td code{
   word-break:break-word
 }
 
-
-/* ==============================
-   RESPONSIVE
-============================== */
-
 @media(max-width:1050px){
   .statsGrid{
-    grid-template-columns:
-      repeat(2,minmax(0,1fr))
+    grid-template-columns:repeat(2,minmax(0,1fr))
   }
 
   .contentGrid{
@@ -563,345 +507,126 @@ td code{
 }
 </style>
 </head>
-
 <body>
 
-<!-- 登入畫面 -->
 <section id="loginScreen" class="loginScreen">
-
   <div class="loginCard">
-
-    <div class="loginIcon">
-      🛠️
-    </div>
-
+    <div class="loginIcon">🛠️</div>
     <h1>MomentLog Admin</h1>
-
     <p>
       MomentLog 管理後台
       <br>
       只有管理員可以進入。
     </p>
-
-    <button
-      id="googleLogin"
-      class="loginButton"
-    >
-      使用 Google 登入
-    </button>
-
-    <div
-      id="loginError"
-      class="loginError"
-    ></div>
-
+    <button id="googleLogin" class="loginButton">使用 Google 登入</button>
+    <div id="loginError" class="loginError"></div>
   </div>
-
 </section>
 
-
-<!-- 後台 -->
-<div
-  id="adminApp"
-  class="app hide"
->
+<div id="adminApp" class="app hide">
 
   <aside class="sidebar">
-
     <div class="logo">
       MomentLog
       <small>Admin Dashboard</small>
     </div>
 
     <div class="adminInfo">
-
-      <div
-        id="adminName"
-        class="adminName"
-      >
-        管理員
-      </div>
-
+      <div id="adminName" class="adminName">管理員</div>
       <div id="adminEmail"></div>
-
     </div>
 
-
     <nav class="nav">
-
-      <button
-        class="active"
-        data-page="dashboard"
-      >
-        📊 總覽
-      </button>
-
-      <button data-page="users">
-        👤 使用者
-      </button>
-
-      <button data-page="rooms">
-        🏠 房間
-      </button>
-
-      <button data-page="records">
-        📝 紀錄
-      </button>
-
-      <button data-page="activity">
-        📡 活動監控
-      </button>
-
-      <button data-page="errors">
-        🚨 錯誤監控
-      </button>
-
+      <button class="active" data-page="dashboard">📊 總覽</button>
+      <button data-page="users">👤 使用者</button>
+      <button data-page="rooms">🏠 房間</button>
+      <button data-page="records">📝 紀錄</button>
+      <button data-page="activity">📡 活動監控</button>
+      <button data-page="errors">🚨 錯誤監控</button>
     </nav>
 
-
-    <button
-      id="logout"
-      class="logoutBtn"
-    >
-      登出管理後台
-    </button>
-
+    <button id="logout" class="logoutBtn">登出管理後台</button>
   </aside>
-
 
   <main class="main">
 
     <div class="topbar">
-
-      <h1
-        id="pageTitle"
-        class="pageTitle"
-      >
-        總覽
-      </h1>
-
+      <h1 id="pageTitle" class="pageTitle">總覽</h1>
       <div class="status">
-
         <span class="statusDot"></span>
-
         Firebase 即時連線
-
       </div>
-
     </div>
 
-
-    <!-- ==========================
-         DASHBOARD
-    =========================== -->
-
-    <section
-      id="page-dashboard"
-      class="page active"
-    >
+    <section id="page-dashboard" class="page active">
 
       <div class="statsGrid">
-
         <div class="statCard">
-
-          <div class="statLabel">
-            使用者
-          </div>
-
-          <div
-            id="statUsers"
-            class="statNumber"
-          >
-            0
-          </div>
-
+          <div class="statLabel">使用者</div>
+          <div id="statUsers" class="statNumber">0</div>
         </div>
 
-
         <div class="statCard">
-
-          <div class="statLabel">
-            房間
-          </div>
-
-          <div
-            id="statRooms"
-            class="statNumber"
-          >
-            0
-          </div>
-
+          <div class="statLabel">房間</div>
+          <div id="statRooms" class="statNumber">0</div>
         </div>
 
-
         <div class="statCard">
-
-          <div class="statLabel">
-            總紀錄
-          </div>
-
-          <div
-            id="statRecords"
-            class="statNumber"
-          >
-            0
-          </div>
-
+          <div class="statLabel">總紀錄</div>
+          <div id="statRecords" class="statNumber">0</div>
         </div>
 
-
         <div class="statCard">
-
-          <div class="statLabel">
-            今日紀錄
-          </div>
-
-          <div
-            id="statToday"
-            class="statNumber"
-          >
-            0
-          </div>
-
+          <div class="statLabel">今日紀錄</div>
+          <div id="statToday" class="statNumber">0</div>
         </div>
-
       </div>
 
-
       <div class="contentGrid">
-
         <div class="card">
-
           <div class="cardHeader">
-
-            <h2>
-              最近活動
-            </h2>
-
+            <h2>最近活動</h2>
           </div>
-
-          <div
-            id="dashboardActivity"
-            class="cardBody"
-          >
-
-            <div class="empty">
-              尚未有活動紀錄
-            </div>
-
+          <div id="dashboardActivity" class="cardBody">
+            <div class="empty">尚未有活動紀錄</div>
           </div>
-
         </div>
 
-
         <div class="card">
-
           <div class="cardHeader">
-
-            <h2>
-              系統資訊
-            </h2>
-
+            <h2>系統資訊</h2>
           </div>
-
           <div class="cardBody">
-
             <div class="detailLine">
-
-              <span class="detailLabel">
-                Firebase 專案
-              </span>
-
-              <span
-                id="firebaseProject"
-                class="detailValue"
-              >
-                —
-              </span>
-
+              <span class="detailLabel">Firebase 專案</span>
+              <span id="firebaseProject" class="detailValue">—</span>
             </div>
-
             <div class="detailLine">
-
-              <span class="detailLabel">
-                管理員 UID
-              </span>
-
-              <span
-                id="firebaseAdminUid"
-                class="detailValue"
-              >
-                —
-              </span>
-
+              <span class="detailLabel">管理員 UID</span>
+              <span id="firebaseAdminUid" class="detailValue">—</span>
             </div>
-
             <div class="detailLine">
-
-              <span class="detailLabel">
-                認證狀態
-              </span>
-
-              <span
-                id="authStatus"
-                class="detailValue"
-              >
-                —
-              </span>
-
+              <span class="detailLabel">認證狀態</span>
+              <span id="authStatus" class="detailValue">—</span>
             </div>
-
             <div class="detailLine">
-
-              <span class="detailLabel">
-                資料庫
-              </span>
-
-              <span
-                id="databaseStatus"
-                class="detailValue"
-              >
-                讀取中…
-              </span>
-
+              <span class="detailLabel">資料庫</span>
+              <span id="databaseStatus" class="detailValue">讀取中…</span>
             </div>
-
           </div>
-
         </div>
-
       </div>
 
     </section>
 
-
-    <!-- ==========================
-         USERS
-    =========================== -->
-
-    <section
-      id="page-users"
-      class="page"
-    >
-
+    <section id="page-users" class="page">
       <div class="tableCard">
-
         <div class="toolbar">
-
-          <input
-            id="userSearch"
-            class="search"
-            placeholder="搜尋 Google 名稱、Email、UID"
-          >
-
+          <input id="userSearch" class="search" placeholder="搜尋 Google 名稱、Email、UID">
         </div>
-
         <div class="tableWrap">
-
           <table>
-
             <thead>
-
               <tr>
                 <th>Google 名稱</th>
                 <th>Email</th>
@@ -909,57 +634,25 @@ td code{
                 <th>更新時間</th>
                 <th>狀態</th>
               </tr>
-
             </thead>
-
             <tbody id="usersBody">
-
               <tr>
-                <td colspan="5">
-                  <div class="empty">
-                    尚未有資料
-                  </div>
-                </td>
+                <td colspan="5"><div class="empty">尚未有資料</div></td>
               </tr>
-
             </tbody>
-
           </table>
-
         </div>
-
       </div>
-
     </section>
 
-
-    <!-- ==========================
-         ROOMS
-    =========================== -->
-
-    <section
-      id="page-rooms"
-      class="page"
-    >
-
+    <section id="page-rooms" class="page">
       <div class="tableCard">
-
         <div class="toolbar">
-
-          <input
-            id="roomSearch"
-            class="search"
-            placeholder="搜尋房間名稱、房間 ID、房主 UID"
-          >
-
+          <input id="roomSearch" class="search" placeholder="搜尋房間名稱、房間 ID、房主 UID">
         </div>
-
         <div class="tableWrap">
-
           <table>
-
             <thead>
-
               <tr>
                 <th>房間名稱</th>
                 <th>房間 ID</th>
@@ -967,57 +660,25 @@ td code{
                 <th>成員數</th>
                 <th>建立時間</th>
               </tr>
-
             </thead>
-
             <tbody id="roomsBody">
-
               <tr>
-                <td colspan="5">
-                  <div class="empty">
-                    尚未有資料
-                  </div>
-                </td>
+                <td colspan="5"><div class="empty">尚未有資料</div></td>
               </tr>
-
             </tbody>
-
           </table>
-
         </div>
-
       </div>
-
     </section>
 
-
-    <!-- ==========================
-         RECORDS
-    =========================== -->
-
-    <section
-      id="page-records"
-      class="page"
-    >
-
+    <section id="page-records" class="page">
       <div class="tableCard">
-
         <div class="toolbar">
-
-          <input
-            id="recordSearch"
-            class="search"
-            placeholder="搜尋紀錄文字、房間 ID、使用者 UID"
-          >
-
+          <input id="recordSearch" class="search" placeholder="搜尋紀錄文字、房間 ID、使用者 UID">
         </div>
-
         <div class="tableWrap">
-
           <table>
-
             <thead>
-
               <tr>
                 <th>日期</th>
                 <th>時間</th>
@@ -1025,110 +686,51 @@ td code{
                 <th>作者</th>
                 <th>內容</th>
               </tr>
-
             </thead>
-
             <tbody id="recordsBody">
-
               <tr>
-                <td colspan="5">
-                  <div class="empty">
-                    尚未有資料
-                  </div>
-                </td>
+                <td colspan="5"><div class="empty">尚未有資料</div></td>
               </tr>
-
             </tbody>
-
           </table>
-
         </div>
-
       </div>
-
     </section>
 
-
-    <!-- ==========================
-         ACTIVITY
-    =========================== -->
-
-    <section
-      id="page-activity"
-      class="page"
-    >
-
+    <section id="page-activity" class="page">
       <div class="card">
-
         <div class="cardHeader">
-
-          <h2>
-            即時活動
-          </h2>
-
+          <h2>即時活動</h2>
         </div>
-
-        <div
-          id="activityBody"
-          class="cardBody"
-        >
-
+        <div id="activityBody" class="cardBody">
           <div class="empty">
             目前 index.html 尚未寫入活動日誌。
             <br>
             後續可以加入登入、加入房間、離開房間、建立紀錄等事件。
           </div>
-
         </div>
-
       </div>
-
     </section>
 
-
-    <!-- ==========================
-         ERRORS
-    =========================== -->
-
-    <section
-      id="page-errors"
-      class="page"
-    >
-
+    <section id="page-errors" class="page">
       <div class="card">
-
         <div class="cardHeader">
-
-          <h2>
-            系統錯誤
-          </h2>
-
+          <h2>系統錯誤</h2>
         </div>
-
-        <div
-          id="errorsBody"
-          class="cardBody"
-        >
-
+        <div id="errorsBody" class="cardBody">
           <div class="empty">
             目前 index.html 尚未寫入錯誤日誌。
             <br>
             後續可以把 Firebase 錯誤自動送到這裡。
           </div>
-
         </div>
-
       </div>
-
     </section>
 
   </main>
-
 </div>
 
-
 <script type="module">
-
 import {
   initializeApp
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-app.js";
@@ -1147,1363 +749,348 @@ import {
   onValue
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-database.js";
 
-/*
- * 直接使用你原本的 firebase-config.js。
- *
- * 你的 Repository 應該已經有：
- *
- * firebase-config.js
- *
- * 內容大概是：
- *
- * export default {
- *   apiKey: "...",
- *   authDomain: "...",
- *   databaseURL: "...",
- *   projectId: "...",
- *   storageBucket: "...",
- *   messagingSenderId: "...",
- *   appId: "..."
- * };
- */
-
 import firebaseConfig from "./firebase-config.js";
 
-
-/* =====================================================
-   管理員 UID
-   =====================================================
-
-   第一次使用時：
-   1. 先到一般 MomentLog 登入 Google。
-   2. 開 F12 Console。
-   3. 輸入：
-
-      firebase.auth().currentUser.uid
-
-   但你的新版 Firebase Modular 程式沒有全域 firebase，
-   所以最簡單的方法是看本後台下面顯示的 UID，
-   然後把你的 UID 放進 ADMIN_UIDS。
-
-   例如：
-
-   const ADMIN_UIDS = [
-     "你的Firebase UID"
-   ];
-
-===================================================== */
-
 const ADMIN_UIDS = [
-
-  /*
-   * 把這裡換成你的 Firebase UID。
-   */
-  "請把你的Firebase UID填在這裡"
-
+  "nJdwA4Heqrbtqdt1atbiOsVi7r" // 替換為你的完整UID，如果截圖不完整，請自己補齊。
 ];
 
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+const googleProvider = new GoogleAuthProvider();
 
-const app =
-  initializeApp(
-    firebaseConfig
-  );
-
-
-const auth =
-  getAuth(
-    app
-  );
-
-
-const db =
-  getDatabase(
-    app
-  );
-
-
-const googleProvider =
-  new GoogleAuthProvider();
-
-
-const $ =
-  id =>
-    document.getElementById(
-      id
-    );
-
+const $ = id => document.getElementById(id);
 
 let allUsers = [];
 let allRooms = [];
 let allRecords = [];
 
-
-/* =====================================================
-   基本工具
-===================================================== */
-
-function esc(
-  value
-){
-
-  return String(
-    value ?? ""
-  )
-  .replaceAll(
-    "&",
-    "&amp;"
-  )
-  .replaceAll(
-    "<",
-    "&lt;"
-  )
-  .replaceAll(
-    ">",
-    "&gt;"
-  )
-  .replaceAll(
-    '"',
-    "&quot;"
-  )
-  .replaceAll(
-    "'",
-    "&#039;"
-  );
-
+function esc(value){
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
 
-
-function formatTime(
-  value
-){
-
-  if(
-    value === null ||
-    value === undefined ||
-    value === ""
-  ){
-
+function formatTime(value){
+  if(value === null || value === undefined || value === ""){
     return "—";
-
   }
 
+  const number = Number(value);
 
-  const number =
-    Number(
-      value
-    );
-
-
-  if(
-    !Number.isFinite(
-      number
-    )
-  ){
-
-    return String(
-      value
-    );
-
+  if(!Number.isFinite(number)){
+    return esc(String(value));
   }
 
-
-  return new Intl.DateTimeFormat(
-    "zh-TW",
-    {
-      timeZone:"Asia/Taipei",
-      year:"numeric",
-      month:"2-digit",
-      day:"2-digit",
-      hour:"2-digit",
-      minute:"2-digit",
-      second:"2-digit",
-      hourCycle:"h23"
-    }
-  )
-  .format(
-    new Date(
-      number
-    )
-  );
-
+  return new Intl.DateTimeFormat("zh-TW", {
+    timeZone: "Asia/Taipei",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hourCycle: "h23"
+  }).format(new Date(number));
 }
 
+$("googleLogin").onclick = async () => {
+  $("loginError").style.display = "none";
 
-/* =====================================================
-   登入
-===================================================== */
-
-$("googleLogin")
-  .onclick =
-  async () => {
-
-    $("loginError")
-      .style
-      .display =
-      "none";
-
-    try{
-
-      await signInWithPopup(
-        auth,
-        googleProvider
-      );
-
-    }catch(
-      error
-    ){
-
-      console.error(
-        "admin login:",
-        error
-      );
-
-
-      $("loginError")
-        .textContent =
-        error?.message ||
-        "Google 登入失敗";
-
-
-      $("loginError")
-        .style
-        .display =
-        "block";
-
-    }
-
-  };
-
-
-$("logout")
-  .onclick =
-  async () => {
-
-    await signOut(
-      auth
-    );
-
-  };
-
-
-/* =====================================================
-   頁面切換
-===================================================== */
-
-const pageNames = {
-
-  dashboard:
-    "總覽",
-
-  users:
-    "使用者",
-
-  rooms:
-    "房間",
-
-  records:
-    "紀錄",
-
-  activity:
-    "活動監控",
-
-  errors:
-    "錯誤監控"
-
+  try{
+    await signInWithPopup(auth, googleProvider);
+  }catch(error){
+    console.error("admin login:", error);
+    $("loginError").textContent = error?.message || "Google 登入失敗";
+    $("loginError").style.display = "block";
+  }
 };
 
+$("logout").onclick = async () => {
+  await signOut(auth);
+};
 
-document
-  .querySelectorAll(
-    ".nav button"
-  )
-  .forEach(
-    button => {
+const pageNames = {
+  dashboard: "總覽",
+  users: "使用者",
+  rooms: "房間",
+  records: "紀錄",
+  activity: "活動監控",
+  errors: "錯誤監控"
+};
 
-      button.onclick =
-        () => {
+document.querySelectorAll(".nav button").forEach(button => {
+  button.onclick = () => {
+    document.querySelectorAll(".nav button").forEach(item => item.classList.remove("active"));
+    document.querySelectorAll(".page").forEach(page => page.classList.remove("active"));
 
-          document
-            .querySelectorAll(
-              ".nav button"
-            )
-            .forEach(
-              item =>
-                item.classList
-                  .remove(
-                    "active"
-                  )
-            );
+    button.classList.add("active");
 
+    const page = button.dataset.page;
 
-          document
-            .querySelectorAll(
-              ".page"
-            )
-            .forEach(
-              page =>
-                page.classList
-                  .remove(
-                    "active"
-                  )
-            );
+    $(`page-${page}`).classList.add("active");
+    $("pageTitle").textContent = pageNames[page] || page;
+  };
+});
 
-
-          button.classList
-            .add(
-              "active"
-            );
-
-
-          const page =
-            button.dataset.page;
-
-
-          $(
-            `page-${page}`
-          )
-            .classList
-            .add(
-              "active"
-            );
-
-
-          $("pageTitle")
-            .textContent =
-            pageNames[page] ||
-            page;
-
-        };
-
-    }
-  );
-
-
-/* =====================================================
-   Auth 狀態
-===================================================== */
-
-onAuthStateChanged(
-  auth,
-  user => {
-
-    if(
-      !user
-    ){
-
-      $("loginScreen")
-        .style
-        .display =
-        "flex";
-
-      $("adminApp")
-        .classList
-        .add(
-          "hide"
-        );
-
-      return;
-
-    }
-
-
-    /*
-     * 管理員白名單。
-     */
-
-    if(
-      !ADMIN_UIDS.includes(
-        user.uid
-      )
-    ){
-
-      $("loginScreen")
-        .style
-        .display =
-        "flex";
-
-      $("adminApp")
-        .classList
-        .add(
-          "hide"
-        );
-
-
-      $("loginError")
-        .textContent =
-        "這個 Google 帳號沒有管理員權限。\\nUID："+user.uid;
-
-
-      $("loginError")
-        .style
-        .display =
-        "block";
-
-
-      signOut(
-        auth
-      );
-
-
-      return;
-
-    }
-
-
-    /*
-     * 登入成功。
-     */
-
-    $("loginScreen")
-      .style
-      .display =
-      "none";
-
-
-    $("adminApp")
-      .classList
-      .remove(
-        "hide"
-      );
-
-
-    $("adminName")
-      .textContent =
-      user.displayName ||
-      "管理員";
-
-
-    $("adminEmail")
-      .textContent =
-      user.email ||
-      user.uid;
-
-
-    $("firebaseProject")
-      .textContent =
-      firebaseConfig.projectId ||
-      "—";
-
-
-    $("firebaseAdminUid")
-      .textContent =
-      user.uid;
-
-
-    $("authStatus")
-      .textContent =
-      "已驗證";
-
-
-    $("authStatus")
-      .style
-      .color =
-      "#16a34a";
-
-
-    loadRealtimeData();
-
+onAuthStateChanged(auth, user => {
+  if(!user){
+    $("loginScreen").style.display = "flex";
+    $("adminApp").classList.add("hide");
+    return;
   }
-);
 
+  if(!ADMIN_UIDS.includes(user.uid)){
+    $("loginScreen").style.display = "flex";
+    $("adminApp").classList.add("hide");
 
-/* =====================================================
-   Firebase 即時資料
-===================================================== */
+    $("loginError").textContent = "這個 Google 帳號沒有管理員權限。\nUID：" + user.uid;
+    $("loginError").style.display = "block";
+
+    signOut(auth);
+    return;
+  }
+
+  $("loginScreen").style.display = "none";
+  $("adminApp").classList.remove("hide");
+
+  $("adminName").textContent = user.displayName || "管理員";
+  $("adminEmail").textContent = user.email || user.uid;
+  $("firebaseProject").textContent = firebaseConfig.projectId || "—";
+  $("firebaseAdminUid").textContent = user.uid;
+
+  $("authStatus").textContent = "已驗證";
+  $("authStatus").style.color = "#16a34a";
+
+  loadRealtimeData();
+});
 
 function loadRealtimeData(){
-
-  /*
-   * USERS
-   */
-
   onValue(
-    ref(
-      db,
-      "users"
-    ),
+    ref(db, "users"),
     snapshot => {
+      const data = snapshot.val() || {};
 
-      const data =
-        snapshot.val() ||
-        {};
+      allUsers = Object.entries(data).map(([uid, value]) => ({
+        uid,
+        ...(value || {})
+      }));
 
-
-      allUsers =
-        Object
-          .entries(
-            data
-          )
-          .map(
-            ([uid,value]) => ({
-              uid,
-              ...(value || {})
-            })
-          );
-
-
-      $("statUsers")
-        .textContent =
-        allUsers.length;
-
-
+      $("statUsers").textContent = allUsers.length;
       renderUsers();
-
     },
     error => {
-
-      console.error(
-        "users:",
-        error
-      );
-
+      console.error("users:", error);
     }
   );
 
-
-  /*
-   * ROOMS
-   */
-
   onValue(
-    ref(
-      db,
-      "rooms"
-    ),
+    ref(db, "rooms"),
     snapshot => {
-
-      const data =
-        snapshot.val() ||
-        {};
-
+      const data = snapshot.val() || {};
 
       allRooms = [];
-
-
-      for(
-        const [
-          roomId,
-          room
-        ]
-        of Object.entries(
-          data
-        )
-      ){
-
-        const meta =
-          room?.meta ||
-          {};
-
-
-        const members =
-          room?.members ||
-          {};
-
-
-        allRooms.push({
-
-          roomId,
-
-          name:
-            meta.name ||
-            "未命名",
-
-          ownerUid:
-            meta.ownerUid ||
-            "",
-
-          createdAt:
-            meta.createdAt ||
-            0,
-
-          updatedAt:
-            meta.updatedAt ||
-            0,
-
-          memberCount:
-            Object.keys(
-              members
-            ).length
-
-        });
-
-      }
-
-
-      $("statRooms")
-        .textContent =
-        allRooms.length;
-
-
-      renderRooms();
-
-      renderDashboardActivity();
-
-    },
-    error => {
-
-      console.error(
-        "rooms:",
-        error
-      );
-
-      $("databaseStatus")
-        .textContent =
-        "讀取失敗";
-
-      $("databaseStatus")
-        .style
-        .color =
-        "#dc2626";
-
-    }
-  );
-
-
-  /*
-   * 紀錄
-   *
-   * 你的結構：
-   *
-   * rooms/{roomId}/records/{date}/{hour}/{uid}
-   */
-
-  onValue(
-    ref(
-      db,
-      "rooms"
-    ),
-    snapshot => {
-
-      const data =
-        snapshot.val() ||
-        {};
-
-
       allRecords = [];
 
+      for(const [roomId, room] of Object.entries(data)){
+        const meta = room?.meta || {};
+        const members = room?.members || {};
 
-      for(
-        const [
+        allRooms.push({
           roomId,
-          room
-        ]
-        of Object.entries(
-          data
-        )
-      ){
+          name: meta.name || "未命名",
+          ownerUid: meta.ownerUid || "",
+          createdAt: meta.createdAt || 0,
+          updatedAt: meta.updatedAt || 0,
+          memberCount: Object.keys(members).length
+        });
 
-        const records =
-          room?.records ||
-          {};
+        const records = room?.records || {};
 
-
-        for(
-          const [
-            date,
-            hours
-          ]
-          of Object.entries(
-            records
-          )
-        ){
-
-          for(
-            const [
-              hour,
-              users
-            ]
-            of Object.entries(
-              hours ||
-              {}
-            )
-          ){
-
-            for(
-              const [
-                uid,
-                record
-              ]
-              of Object.entries(
-                users ||
-                {}
-              )
-            ){
-
+        for(const [date, hours] of Object.entries(records)){
+          for(const [hour, users] of Object.entries(hours || {})){
+            for(const [uid, record] of Object.entries(users || {})){
               allRecords.push({
-
                 roomId,
                 date,
                 hour,
                 uid,
-
                 ...(record || {})
-
               });
-
             }
-
           }
-
         }
-
       }
 
+      $("statRooms").textContent = allRooms.length;
+      $("statRecords").textContent = allRecords.length;
 
-      $("statRecords")
-        .textContent =
-        allRecords.length;
+      const today = new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Taipei"
+      }).format(new Date());
 
+      $("statToday").textContent = allRecords.filter(record => record.date === today).length;
 
-      const today =
-        new Intl.DateTimeFormat(
-          "en-CA",
-          {
-            timeZone:"Asia/Taipei"
-          }
-        )
-        .format(
-          new Date()
-        );
-
-
-      $("statToday")
-        .textContent =
-        allRecords
-          .filter(
-            record =>
-              record.date ===
-              today
-          )
-          .length;
-
-
+      renderRooms();
       renderRecords();
-
       renderDashboardActivity();
 
-
-      $("databaseStatus")
-        .textContent =
-        "正常";
-
-
-      $("databaseStatus")
-        .style
-        .color =
-        "#16a34a";
-
+      $("databaseStatus").textContent = "正常";
+      $("databaseStatus").style.color = "#16a34a";
     },
     error => {
-
-      console.error(
-        "records:",
-        error
-      );
-
-
-      $("databaseStatus")
-        .textContent =
-        "讀取失敗";
-
-
-      $("databaseStatus")
-        .style
-        .color =
-        "#dc2626";
-
+      console.error("rooms:", error);
+      $("databaseStatus").textContent = "讀取失敗";
+      $("databaseStatus").style.color = "#dc2626";
     }
   );
-
 }
-
-
-/* =====================================================
-   使用者
-===================================================== */
 
 function renderUsers(){
+  const keyword = ($("userSearch").value || "").trim().toLowerCase();
 
-  const keyword =
-    (
-      $("userSearch")
-        .value ||
-      ""
-    )
-    .trim()
-    .toLowerCase();
+  const rows = allUsers
+    .filter(user => {
+      const text = [user.displayName, user.email, user.uid].join(" ").toLowerCase();
+      return text.includes(keyword);
+    })
+    .sort((a, b) => String(a.displayName || "").localeCompare(String(b.displayName || ""), "zh-Hant"));
 
-
-  const rows =
-    allUsers
-      .filter(
-        user => {
-
-          const text =
-            [
-              user.displayName,
-              user.email,
-              user.uid
-            ]
-            .join(" ")
-            .toLowerCase();
-
-
-          return text.includes(
-            keyword
-          );
-
-        }
-      )
-      .sort(
-        (
-          a,
-          b
-        ) =>
-          String(
-            a.displayName ||
-            ""
-          )
-          .localeCompare(
-            String(
-              b.displayName ||
-              ""
-            ),
-            "zh-Hant"
-          )
-      );
-
-
-  if(
-    !rows.length
-  ){
-
-    $("usersBody")
-      .innerHTML =
-      `
-        <tr>
-          <td colspan="5">
-            <div class="empty">
-              沒有符合的使用者
-            </div>
-          </td>
-        </tr>
-      `;
-
+  if(!rows.length){
+    $("usersBody").innerHTML = `
+      <tr>
+        <td colspan="5"><div class="empty">沒有符合的使用者</div></td>
+      </tr>
+    `;
     return;
-
   }
 
-
-  $("usersBody")
-    .innerHTML =
-    rows
-      .map(
-        user => `
-          <tr>
-
-            <td>
-              ${esc(
-                user.displayName ||
-                "未設定"
-              )}
-            </td>
-
-            <td>
-              ${esc(
-                user.email ||
-                "—"
-              )}
-            </td>
-
-            <td>
-              <code>
-                ${esc(
-                  user.uid
-                )}
-              </code>
-            </td>
-
-            <td>
-              ${formatTime(
-                user.updatedAt
-              )}
-            </td>
-
-            <td>
-              <span class="badge green">
-                已建立
-              </span>
-            </td>
-
-          </tr>
-        `
-      )
-      .join("");
-
+  $("usersBody").innerHTML = rows.map(user => `
+    <tr>
+      <td>${esc(user.displayName || "未設定")}</td>
+      <td>${esc(user.email || "—")}</td>
+      <td><code>${esc(user.uid)}</code></td>
+      <td>${formatTime(user.updatedAt)}</td>
+      <td><span class="badge green">已建立</span></td>
+    </tr>
+  `).join("");
 }
-
-
-/* =====================================================
-   房間
-===================================================== */
 
 function renderRooms(){
+  const keyword = ($("roomSearch").value || "").trim().toLowerCase();
 
-  const keyword =
-    (
-      $("roomSearch")
-        .value ||
-      ""
-    )
-    .trim()
-    .toLowerCase();
+  const rows = allRooms
+    .filter(room => {
+      const text = [room.name, room.roomId, room.ownerUid].join(" ").toLowerCase();
+      return text.includes(keyword);
+    })
+    .sort((a, b) => Number(b.createdAt || 0) - Number(a.createdAt || 0));
 
-
-  const rows =
-    allRooms
-      .filter(
-        room => {
-
-          const text =
-            [
-              room.name,
-              room.roomId,
-              room.ownerUid
-            ]
-            .join(" ")
-            .toLowerCase();
-
-
-          return text.includes(
-            keyword
-          );
-
-        }
-      )
-      .sort(
-        (
-          a,
-          b
-        ) =>
-          Number(
-            b.createdAt ||
-            0
-          ) -
-          Number(
-            a.createdAt ||
-            0
-          )
-      );
-
-
-  if(
-    !rows.length
-  ){
-
-    $("roomsBody")
-      .innerHTML =
-      `
-        <tr>
-          <td colspan="5">
-            <div class="empty">
-              沒有符合的房間
-            </div>
-          </td>
-        </tr>
-      `;
-
+  if(!rows.length){
+    $("roomsBody").innerHTML = `
+      <tr>
+        <td colspan="5"><div class="empty">沒有符合的房間</div></td>
+      </tr>
+    `;
     return;
-
   }
 
-
-  $("roomsBody")
-    .innerHTML =
-    rows
-      .map(
-        room => `
-          <tr>
-
-            <td>
-              <strong>
-                ${esc(
-                  room.name
-                )}
-              </strong>
-            </td>
-
-            <td>
-              <code>
-                ${esc(
-                  room.roomId
-                )}
-              </code>
-            </td>
-
-            <td>
-              <code>
-                ${esc(
-                  room.ownerUid ||
-                  "—"
-                )}
-              </code>
-            </td>
-
-            <td>
-              ${room.memberCount}
-            </td>
-
-            <td>
-              ${formatTime(
-                room.createdAt
-              )}
-            </td>
-
-          </tr>
-        `
-      )
-      .join("");
-
+  $("roomsBody").innerHTML = rows.map(room => `
+    <tr>
+      <td><strong>${esc(room.name)}</strong></td>
+      <td><code>${esc(room.roomId)}</code></td>
+      <td><code>${esc(room.ownerUid || "—")}</code></td>
+      <td>${room.memberCount}</td>
+      <td>${formatTime(room.createdAt)}</td>
+    </tr>
+  `).join("");
 }
-
-
-/* =====================================================
-   紀錄
-===================================================== */
 
 function renderRecords(){
+  const keyword = ($("recordSearch").value || "").trim().toLowerCase();
 
-  const keyword =
-    (
-      $("recordSearch")
-        .value ||
-      ""
-    )
-    .trim()
-    .toLowerCase();
+  const rows = allRecords
+    .filter(record => {
+      const text = [record.text, record.roomId, record.uid, record.authorName, record.date, record.hour]
+        .join(" ")
+        .toLowerCase();
+      return text.includes(keyword);
+    })
+    .sort((a, b) => Number(b.updatedAt || b.savedAt || 0) - Number(a.updatedAt || a.savedAt || 0))
+    .slice(0, 500);
 
-
-  const rows =
-    allRecords
-      .filter(
-        record => {
-
-          const text =
-            [
-              record.text,
-              record.roomId,
-              record.uid,
-              record.authorName,
-              record.date,
-              record.hour
-            ]
-            .join(" ")
-            .toLowerCase();
-
-
-          return text.includes(
-            keyword
-          );
-
-        }
-      )
-      .sort(
-        (
-          a,
-          b
-        ) =>
-          Number(
-            b.updatedAt ||
-            b.savedAt ||
-            0
-          ) -
-          Number(
-            a.updatedAt ||
-            a.savedAt ||
-            0
-          )
-      )
-      .slice(
-        0,
-        500
-      );
-
-
-  if(
-    !rows.length
-  ){
-
-    $("recordsBody")
-      .innerHTML =
-      `
-        <tr>
-          <td colspan="5">
-            <div class="empty">
-              沒有符合的紀錄
-            </div>
-          </td>
-        </tr>
-      `;
-
+  if(!rows.length){
+    $("recordsBody").innerHTML = `
+      <tr>
+        <td colspan="5"><div class="empty">沒有符合的紀錄</div></td>
+      </tr>
+    `;
     return;
-
   }
 
-
-  $("recordsBody")
-    .innerHTML =
-    rows
-      .map(
-        record => `
-          <tr>
-
-            <td>
-              ${esc(
-                record.date ||
-                "—"
-              )}
-            </td>
-
-            <td>
-              ${esc(
-                String(
-                  record.hour ??
-                  ""
-                )
-              )}:00
-            </td>
-
-            <td>
-              <code>
-                ${esc(
-                  record.roomId
-                )}
-              </code>
-            </td>
-
-            <td>
-              ${
-                esc(
-                  record.authorName ||
-                  record.uid ||
-                  "—"
-                )
-              }
-            </td>
-
-            <td>
-              ${esc(
-                record.text ||
-                "（沒有文字）"
-              )}
-            </td>
-
-          </tr>
-        `
-      )
-      .join("");
-
+  $("recordsBody").innerHTML = rows.map(record => `
+    <tr>
+      <td>${esc(record.date || "—")}</td>
+      <td>${esc(String(record.hour ?? ""))}:00</td>
+      <td><code>${esc(record.roomId)}</code></td>
+      <td>${esc(record.authorName || record.uid || "—")}</td>
+      <td>${esc(record.text || "（沒有文字）")}</td>
+    </tr>
+  `).join("");
 }
 
-
-/* =====================================================
-   總覽活動
-===================================================== */
-
 function renderDashboardActivity(){
-
   const activity = [];
-
-
-  /*
-   * 最新紀錄
-   */
 
   allRecords
     .slice()
-    .sort(
-      (
-        a,
-        b
-      ) =>
-        Number(
-          b.updatedAt ||
-          b.savedAt ||
-          0
-        ) -
-        Number(
-          a.updatedAt ||
-          a.savedAt ||
-          0
-        )
-    )
-    .slice(
-      0,
-      12
-    )
-    .forEach(
-      record => {
-
-        activity.push({
-
-          text:
-            `📝 ${
-              record.authorName ||
-              record.uid
-            } 在房間 ${
-              record.roomId
-            } 新增紀錄`,
-
-          time:
-            record.updatedAt ||
-            record.savedAt ||
-            0
-
-        });
-
-      }
-    );
-
-
-  /*
-   * 最新房間
-   */
+    .sort((a, b) => Number(b.updatedAt || b.savedAt || 0) - Number(a.updatedAt || a.savedAt || 0))
+    .slice(0, 12)
+    .forEach(record => {
+      activity.push({
+        text: `📝 ${record.authorName || record.uid} 在房間 ${record.roomId} 新增紀錄`,
+        time: record.updatedAt || record.savedAt || 0
+      });
+    });
 
   allRooms
     .slice()
-    .sort(
-      (
-        a,
-        b
-      ) =>
-        Number(
-          b.createdAt ||
-          0
-        ) -
-        Number(
-          a.createdAt ||
-          0
-        )
-    )
-    .slice(
-      0,
-      8
-    )
-    .forEach(
-      room => {
+    .sort((a, b) => Number(b.createdAt || 0) - Number(a.createdAt || 0))
+    .slice(0, 8)
+    .forEach(room => {
+      activity.push({
+        text: `🏠 建立房間「${room.name}」`,
+        time: room.createdAt || 0
+      });
+    });
 
-        activity.push({
+  activity.sort((a, b) => Number(b.time || 0) - Number(a.time || 0));
 
-          text:
-            `🏠 建立房間「${
-              room.name
-            }」`,
+  const limited = activity.slice(0, 12);
 
-          time:
-            room.createdAt ||
-            0
-
-        });
-
-      }
-    );
-
-
-  activity
-    .sort(
-      (
-        a,
-        b
-      ) =>
-        Number(
-          b.time ||
-          0
-        ) -
-        Number(
-          a.time ||
-          0
-        )
-    )
-    .slice(
-      0,
-      12
-    );
-
-
-  if(
-    !activity.length
-  ){
-
-    $("dashboardActivity")
-      .innerHTML =
-      `
-        <div class="empty">
-          目前沒有活動
-        </div>
-      `;
-
+  if(!limited.length){
+    $("dashboardActivity").innerHTML = `<div class="empty">目前沒有活動</div>`;
     return;
-
   }
 
-
-  $("dashboardActivity")
-    .innerHTML =
-    activity
-      .map(
-        item => `
-          <div class="activityItem">
-
-            <div class="activityDot"></div>
-
-            <div>
-
-              <div class="activityText">
-                ${esc(
-                  item.text
-                )}
-              </div>
-
-              <div class="activityTime">
-                ${formatTime(
-                  item.time
-                )}
-              </div>
-
-            </div>
-
-          </div>
-        `
-      )
-      .join("");
-
+  $("dashboardActivity").innerHTML = limited.map(item => `
+    <div class="activityItem">
+      <div class="activityDot"></div>
+      <div>
+        <div class="activityText">${esc(item.text)}</div>
+        <div class="activityTime">${formatTime(item.time)}</div>
+      </div>
+    </div>
+  `).join("");
 }
 
-
-/* =====================================================
-   搜尋
-===================================================== */
-
-$("userSearch")
-  .addEventListener(
-    "input",
-    renderUsers
-  );
-
-
-$("roomSearch")
-  .addEventListener(
-    "input",
-    renderRooms
-  );
-
-
-$("recordSearch")
-  .addEventListener(
-    "input",
-    renderRecords
-  );
-
+$("userSearch").addEventListener("input", renderUsers);
+$("roomSearch").addEventListener("input", renderRooms);
+$("recordSearch").addEventListener("input", renderRecords);
 </script>
 
 </body>
