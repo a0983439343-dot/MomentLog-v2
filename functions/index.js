@@ -1,129 +1,214 @@
-const {onSchedule} = require("firebase-functions/v2/scheduler");
-const {initializeApp} = require("firebase-admin/app");
-const {getDatabase} = require("firebase-admin/database");
-const {getMessaging} = require("firebase-admin/messaging");
+const { onSchedule } = require("firebase-functions/v2/scheduler");
+const { initializeApp } = require("firebase-admin/app");
+const { getDatabase } = require("firebase-admin/database");
+const { getMessaging } = require("firebase-admin/messaging");
 
 initializeApp();
 
 const db = getDatabase();
 const messaging = getMessaging();
 
-function parts(date) {
+function taipeiParts(date) {
   return Object.fromEntries(
     new Intl.DateTimeFormat("en-CA", {
       timeZone: "Asia/Taipei",
-      year: "numeric", month: "2-digit", day: "2-digit",
-      hour: "2-digit", minute: "2-digit",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
       hourCycle: "h23"
-    }).formatToParts(date)
-      .filter(p => p.type !== "literal")
-      .map(p => [p.type, p.value])
+    })
+      .formatToParts(date)
+      .filter(part => part.type !== "literal")
+      .map(part => [part.type, part.value])
   );
 }
 
-function targetKey(date) {
-  const p = parts(date);
-  return {date: `${p.year}-${p.month}-${p.day}`, hour: p.hour};
+function getTargetKey(date) {
+  const p = taipeiParts(date);
+
+  return {
+    date: `${p.year}-${p.month}-${p.day}`,
+    hour: p.hour
+  };
 }
 
 exports.momentLogReminder = onSchedule(
-  {schedule: "every 1 minutes", timeZone: "Asia/Taipei", region: "asia-east1"},
+  {
+    schedule: "every 1 minutes",
+    timeZone: "Asia/Taipei",
+    region: "asia-east1"
+  },
   async () => {
     const now = new Date();
-    const p = parts(now);
-    const minute = Number(p.minute);
+    const current = taipeiParts(now);
+    const minute = Number(current.minute);
 
-    let target;
-    let kind;
+    const roomsSnapshot = await db.ref("rooms").get();
 
-    if (minute === 0) {
-      target = now;
-      kind = "hour";
-    } else if (minute === 50) {
-      target = new Date(now.getTime() + 60 * 60 * 1000);
-      kind = "heads-up";
-    } else {
+    if (!roomsSnapshot.exists()) {
       return null;
     }
 
-    const key = targetKey(target);
-    const roomsSnap = await db.ref("rooms").get();
-    if (!roomsSnap.exists()) return null;
-
-    const rooms = roomsSnap.val() || {};
-    const sends = [];
+    const rooms = roomsSnapshot.val() || {};
+    const jobs = [];
 
     for (const [roomId, room] of Object.entries(rooms)) {
       const members = room?.members || {};
-      const records = room?.records?.[key.date]?.[key.hour] || {};
       const settings = room?.notificationSettings || {};
 
       for (const uid of Object.keys(members)) {
-        if (!settings[uid]?.enabled || records[uid]) continue;
+        const setting = settings[uid];
 
-        const claimRef = db.ref(
-          `reminderDeliveries/${roomId}/${kind}/${key.date}_${key.hour}/${uid}`
+        if (!setting?.enabled) {
+          continue;
+        }
+
+        const lead = Math.max(
+          0,
+          Math.min(
+            10,
+            Number(setting.minute || 0)
+          )
         );
 
-        const claim = await claimRef.transaction(current => {
-          if (current !== null) return;
-          return {claimedAt: Date.now()};
+        let target = null;
+        let kind = null;
+
+        if (lead === 0 && minute === 0) {
+          target = now;
+          kind = "hour";
+        } else if (
+          lead > 0 &&
+          minute === 60 - lead
+        ) {
+          target = new Date(
+            now.getTime() + lead * 60 * 1000
+          );
+          kind = "heads-up";
+        } else {
+          continue;
+        }
+
+        const targetKey = getTargetKey(target);
+
+        const records =
+          room?.records?.[targetKey.date]?.[targetKey.hour] || {};
+
+        // 已經完成這個時段的人不需要通知。
+        if (records[uid]) {
+          continue;
+        }
+
+        // 防止相同通知因排程重疊而重複發送。
+        const claimRef = db.ref(
+          `reminderDeliveries/${roomId}/${kind}/${targetKey.date}_${targetKey.hour}/${uid}`
+        );
+
+        const claim = await claimRef.transaction(currentValue => {
+          if (currentValue !== null) {
+            return;
+          }
+
+          return {
+            claimedAt: Date.now()
+          };
         });
 
-        if (!claim.committed) continue;
+        if (!claim.committed) {
+          continue;
+        }
 
-        const tokenSnap = await db.ref(`fcmTokens/${uid}`).get();
-        const tokenMap = tokenSnap.val() || {};
-        const entries = Object.entries(tokenMap)
-          .map(([tokenKey, value]) => ({tokenKey, token: value?.token}))
-          .filter(x => x.token);
+        const tokenSnapshot = await db
+          .ref(`fcmTokens/${uid}`)
+          .get();
 
-        if (!entries.length) continue;
+        const tokenMap = tokenSnapshot.val() || {};
 
-        sends.push(sendToUser(
-          roomId, uid, entries,
-          room?.meta?.name || "MomentLog", key, kind
-        ));
+        const tokens = Object.entries(tokenMap)
+          .map(([tokenKey, value]) => ({
+            tokenKey,
+            token: value?.token
+          }))
+          .filter(item => Boolean(item.token));
+
+        if (!tokens.length) {
+          continue;
+        }
+
+        jobs.push(
+          sendReminder(
+            uid,
+            tokens,
+            room?.meta?.name || "MomentLog",
+            targetKey,
+            kind,
+            roomId
+          )
+        );
       }
     }
 
-    await Promise.allSettled(sends);
+    await Promise.allSettled(jobs);
+
     return null;
   }
 );
 
-async function sendToUser(roomId, uid, entries, roomName, key, kind) {
-  const title = kind === "heads-up"
-    ? "MomentLog｜準備記錄"
-    : "MomentLog｜該記錄了";
+async function sendReminder(
+  uid,
+  tokens,
+  roomName,
+  targetKey,
+  kind,
+  roomId
+) {
+  const title =
+    kind === "heads-up"
+      ? "MomentLog｜準備記錄"
+      : "MomentLog｜該記錄了";
 
-  const body = kind === "heads-up"
-    ? `${roomName}：${key.hour}:00 就要記錄了`
-    : `${roomName}：現在是 ${key.hour}:00，記得留下這一刻`;
+  const body =
+    kind === "heads-up"
+      ? `${roomName}：${targetKey.hour}:00 就要記錄了`
+      : `${roomName}：現在是 ${targetKey.hour}:00，記得留下這一刻`;
 
-  const response = await messaging.sendEachForMulticast({
-    tokens: entries.map(x => x.token),
-    data: {
-      title,
-      body,
-      roomId,
-      date: key.date,
-      hour: key.hour,
-      tag: `${roomId}-${key.date}-${key.hour}-${kind}`
-    }
-  });
+  const response =
+    await messaging.sendEachForMulticast({
+      tokens: tokens.map(item => item.token),
+
+      data: {
+        title,
+        body,
+        roomId,
+        date: targetKey.date,
+        hour: targetKey.hour,
+        tag:
+          `${roomId}-${targetKey.date}-${targetKey.hour}-${kind}`
+      }
+    });
 
   const updates = {};
+
   response.responses.forEach((result, index) => {
     const code = result.error?.code;
-    if (!result.success &&
-        (code === "messaging/registration-token-not-registered" ||
-         code === "messaging/invalid-registration-token")) {
-      updates[`fcmTokens/${uid}/${entries[index].tokenKey}`] = null;
+
+    if (
+      !result.success &&
+      (
+        code === "messaging/registration-token-not-registered" ||
+        code === "messaging/invalid-registration-token"
+      )
+    ) {
+      updates[
+        `fcmTokens/${uid}/${tokens[index].tokenKey}`
+      ] = null;
     }
   });
 
-  if (Object.keys(updates).length) {
+  if (Object.keys(updates).length > 0) {
     await db.ref().update(updates);
   }
 }
