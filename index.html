@@ -140,12 +140,6 @@ button:disabled{opacity:.55;cursor:not-allowed}
   border-color:#86efac
 }
 
-.btn.small{
-  padding:7px 9px;
-  min-height:34px;
-  font-size:12px
-}
-
 .card{
   background:rgba(255,255,255,.96);
   border-radius:20px;
@@ -201,16 +195,6 @@ button:disabled{opacity:.55;cursor:not-allowed}
   display:grid;
   gap:8px;
   margin-top:14px
-}
-
-.loginStatus,
-.status{
-  margin-top:10px;
-  padding:10px;
-  border-radius:12px;
-  background:#f8fafc;
-  border:1px solid var(--border);
-  font-size:13px
 }
 
 .privacy{
@@ -284,7 +268,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
 .next{
   font-size:12px;
-  color:#718096;
+  color:var(--muted);
   text-align:right;
   margin-top:2px
 }
@@ -407,19 +391,6 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
 .timelineHead h3{
   margin:0
-}
-
-.dateTools{
-  display:flex;
-  gap:6px
-}
-
-.dateBtn{
-  border:1px solid var(--border);
-  background:var(--card);
-  color:var(--text);
-  border-radius:10px;
-  padding:8px 10px
 }
 
 .slots{
@@ -727,25 +698,17 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
     <div class="setupActions">
 
-      <button
-        id="saveProfile"
-        class="btn"
-      >
+      <button id="saveProfile" class="btn">
         保存個人資料
       </button>
 
-      <button
-        id="create"
-        class="btn primary"
-      >
+      <button id="create" class="btn primary">
         建立新房間
       </button>
 
     </div>
 
-    <hr
-      style="border:0;border-top:1px solid var(--border);margin:18px 0"
-    >
+    <hr style="border:0;border-top:1px solid var(--border);margin:18px 0">
 
     <div class="field">
 
@@ -763,10 +726,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
     </div>
 
-    <button
-      id="join"
-      class="btn"
-    >
+    <button id="join" class="btn">
       加入房間
     </button>
 
@@ -838,26 +798,17 @@ button:disabled{opacity:.55;cursor:not-allowed}
         MomentLog
       </h2>
 
-      <div
-        id="sub"
-        class="muted"
-      ></div>
+      <div id="sub" class="muted"></div>
 
     </div>
 
     <div>
 
-      <div
-        id="clock"
-        class="clock"
-      >
+      <div id="clock" class="clock">
         00:00:00
       </div>
 
-      <div
-        id="next"
-        class="next"
-      ></div>
+      <div id="next" class="next"></div>
 
     </div>
 
@@ -871,10 +822,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
         已到時段
       </div>
 
-      <div
-        id="available"
-        class="statValue"
-      >
+      <div id="available" class="statValue">
         0
       </div>
 
@@ -882,17 +830,11 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
     <div class="stat">
 
-      <div
-        id="doneLabel"
-        class="statTitle"
-      >
+      <div id="doneLabel" class="statTitle">
         今日已完成
       </div>
 
-      <div
-        id="doneCount"
-        class="statValue"
-      >
+      <div id="doneCount" class="statValue">
         0
       </div>
 
@@ -904,10 +846,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
         房間碼
       </div>
 
-      <div
-        id="roomCode"
-        class="statValue"
-      ></div>
+      <div id="roomCode" class="statValue"></div>
 
     </div>
 
@@ -924,45 +863,27 @@ button:disabled{opacity:.55;cursor:not-allowed}
     房間成員
   </div>
 
-  <div
-    id="members"
-    class="members"
-  ></div>
+  <div id="members" class="members"></div>
 
   <div class="sideButtons">
 
-    <button
-      id="now"
-      class="btn primary"
-    >
+    <button id="now" class="btn primary">
       📍 記錄現在
     </button>
 
-    <button
-      id="yesterday"
-      class="btn"
-    >
+    <button id="yesterday" class="btn">
       查看昨天
     </button>
 
-    <button
-      id="today"
-      class="btn hide"
-    >
+    <button id="today" class="btn hide">
       ↩ 返回今天
     </button>
 
-    <button
-      id="prevDate"
-      class="btn"
-    >
+    <button id="prevDate" class="btn">
       ◀ 前一天
     </button>
 
-    <button
-      id="nextDate"
-      class="btn"
-    >
+    <button id="nextDate" class="btn">
       下一天 ▶
     </button>
 
@@ -977,9 +898,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
     <div>
 
-      <h3>
-        時間軸
-      </h3>
+      <h3>時間軸</h3>
 
       <div
         id="dateLabel"
@@ -991,10 +910,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
   </div>
 
-  <div
-    id="slots"
-    class="slots"
-  ></div>
+  <div id="slots" class="slots"></div>
 
 </section>
 
@@ -1005,10 +921,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 </div>
 
 
-<div
-  id="recordModal"
-  class="modal"
->
+<div id="recordModal" class="modal">
 
 <div class="modalCard">
 
@@ -1027,10 +940,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
     </div>
 
-    <button
-      id="recordClose"
-      class="close"
-    >
+    <button id="recordClose" class="close">
       ×
     </button>
 
@@ -1054,31 +964,19 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
   <div class="mediaBtns">
 
-    <button
-      id="photo"
-      class="btn"
-    >
+    <button id="photo" class="btn">
       📷 拍照
     </button>
 
-    <button
-      id="video"
-      class="btn"
-    >
+    <button id="video" class="btn">
       🎥 錄影
     </button>
 
-    <button
-      id="album"
-      class="btn"
-    >
+    <button id="album" class="btn">
       🖼️ 相簿
     </button>
 
-    <button
-      id="remove"
-      class="btn danger"
-    >
+    <button id="remove" class="btn danger">
       🗑️ 移除媒體
     </button>
 
@@ -1109,10 +1007,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
   <div id="preview"></div>
 
-  <div
-    id="uploadStatus"
-    class="status hide"
-  >
+  <div id="uploadStatus" class="status hide">
 
     <div id="uploadText"></div>
 
@@ -1129,17 +1024,11 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
   <div class="modalActions">
 
-    <button
-      id="cancelRecord"
-      class="btn"
-    >
+    <button id="cancelRecord" class="btn">
       取消
     </button>
 
-    <button
-      id="saveRecord"
-      class="btn primary"
-    >
+    <button id="saveRecord" class="btn primary">
       儲存
     </button>
 
@@ -1150,89 +1039,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 </div>
 
 
-<div
-  id="profileModal"
-  class="modal"
->
-
-<div class="modalCard">
-
-  <div class="modalHead">
-
-    <h3>
-      👤 個人資料
-    </h3>
-
-    <button
-      id="profileClose"
-      class="close"
-    >
-      ×
-    </button>
-
-  </div>
-
-  <div class="field">
-
-    <label for="profileName">
-      自訂暱稱
-    </label>
-
-    <input
-      id="profileName"
-      maxlength="30"
-      translate="no"
-    >
-
-  </div>
-
-  <div class="field">
-
-    <label for="notifyLead">
-      通知提前時間
-    </label>
-
-    <select id="notifyLead">
-      <option value="0">
-        整點
-      </option>
-      <option value="5">
-        提前 5 分鐘
-      </option>
-      <option value="10">
-        提前 10 分鐘
-      </option>
-    </select>
-
-  </div>
-
-  <div class="modalActions">
-
-    <button
-      id="profileCancel"
-      class="btn"
-    >
-      取消
-    </button>
-
-    <button
-      id="profileSave"
-      class="btn primary"
-    >
-      保存
-    </button>
-
-  </div>
-
-</div>
-
-</div>
-
-
-<div
-  id="themeModal"
-  class="modal"
->
+<div id="themeModal" class="modal">
 
 <div class="modalCard">
 
@@ -1242,10 +1049,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
       🎨 背景主題
     </h3>
 
-    <button
-      id="themeClose"
-      class="close"
-    >
+    <button id="themeClose" class="close">
       ×
     </button>
 
@@ -1253,80 +1057,38 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
   <div class="themeGrid">
 
-    <button
-      class="themeOpt"
-      data-theme="default"
-    >
-      <div
-        class="swatch"
-        style="background:linear-gradient(135deg,#eef2ff,#f8fafc)"
-      ></div>
+    <button class="themeOpt" data-theme="default">
+      <div class="swatch" style="background:linear-gradient(135deg,#eef2ff,#f8fafc)"></div>
       🌤️ 預設
     </button>
 
-    <button
-      class="themeOpt"
-      data-theme="blue"
-    >
-      <div
-        class="swatch"
-        style="background:linear-gradient(135deg,#dbeafe,#eff6ff)"
-      ></div>
+    <button class="themeOpt" data-theme="blue">
+      <div class="swatch" style="background:linear-gradient(135deg,#dbeafe,#eff6ff)"></div>
       🌊 藍色
     </button>
 
-    <button
-      class="themeOpt"
-      data-theme="green"
-    >
-      <div
-        class="swatch"
-        style="background:linear-gradient(135deg,#dcfce7,#f0fdf4)"
-      ></div>
+    <button class="themeOpt" data-theme="green">
+      <div class="swatch" style="background:linear-gradient(135deg,#dcfce7,#f0fdf4)"></div>
       🌿 綠色
     </button>
 
-    <button
-      class="themeOpt"
-      data-theme="pink"
-    >
-      <div
-        class="swatch"
-        style="background:linear-gradient(135deg,#fce7f3,#fff1f2)"
-      ></div>
+    <button class="themeOpt" data-theme="pink">
+      <div class="swatch" style="background:linear-gradient(135deg,#fce7f3,#fff1f2)"></div>
       🌸 粉色
     </button>
 
-    <button
-      class="themeOpt"
-      data-theme="purple"
-    >
-      <div
-        class="swatch"
-        style="background:linear-gradient(135deg,#ede9fe,#f5f3ff)"
-      ></div>
+    <button class="themeOpt" data-theme="purple">
+      <div class="swatch" style="background:linear-gradient(135deg,#ede9fe,#f5f3ff)"></div>
       💜 紫色
     </button>
 
-    <button
-      class="themeOpt"
-      data-theme="sunset"
-    >
-      <div
-        class="swatch"
-        style="background:linear-gradient(135deg,#ffedd5,#fef3c7)"
-      ></div>
+    <button class="themeOpt" data-theme="sunset">
+      <div class="swatch" style="background:linear-gradient(135deg,#ffedd5,#fef3c7)"></div>
       🌅 日落
     </button>
 
-    <button
-      class="themeOpt"
-      data-theme="dark"
-    >
-      <div
-        class="swatch"
-        style="background:linear-gradient(135deg,#1e293b,#0f172a)"
-      ></div>
+    <button class="themeOpt" data-theme="dark">
+      <div class="swatch" style="background:linear-gradient(135deg,#1e293b,#0f172a)"></div>
       🌌 黑暗
     </button>
 
@@ -1337,10 +1099,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 </div>
 
 
-<div
-  id="toast"
-  class="toast"
-></div>
+<div id="toast" class="toast"></div>
 
 
 <script type="module">
@@ -1390,216 +1149,165 @@ const VAPID_PUBLIC_KEY =
 "BN4k0ivU8J1bzyVlUncMDqgJnQKpzO33wwOJW4PbKvjGBHhBlc74bo_LmRw6lfsjREcjqH5YUfmCBMegeMMr83c";
 
 
-const app =
-initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
-const auth =
-getAuth(app);
+const auth = getAuth(app);
 
-const db =
-getDatabase(app);
+const db = getDatabase(app);
 
-const storage =
-getStorage(app);
+const storage = getStorage(app);
 
 const googleProvider =
-new GoogleAuthProvider();
+  new GoogleAuthProvider();
 
 const $ =
-id => document.getElementById(id);
+  id => document.getElementById(id);
 
 
 const themes = {
-
-  default:
-  "linear-gradient(135deg,#eef2ff,#f8fafc)",
-
-  blue:
-  "linear-gradient(135deg,#dbeafe,#eff6ff)",
-
-  green:
-  "linear-gradient(135deg,#dcfce7,#f0fdf4)",
-
-  pink:
-  "linear-gradient(135deg,#fce7f3,#fff1f2)",
-
-  purple:
-  "linear-gradient(135deg,#ede9fe,#f5f3ff)",
-
-  sunset:
-  "linear-gradient(135deg,#ffedd5,#fef3c7)",
-
-  dark:
-  "linear-gradient(135deg,#1e293b,#0f172a)"
-
+  default:"linear-gradient(135deg,#eef2ff,#f8fafc)",
+  blue:"linear-gradient(135deg,#dbeafe,#eff6ff)",
+  green:"linear-gradient(135deg,#dcfce7,#f0fdf4)",
+  pink:"linear-gradient(135deg,#fce7f3,#fff1f2)",
+  purple:"linear-gradient(135deg,#ede9fe,#f5f3ff)",
+  sunset:"linear-gradient(135deg,#ffedd5,#fef3c7)",
+  dark:"linear-gradient(135deg,#1e293b,#0f172a)"
 };
 
 
 const pad =
-n => String(n).padStart(2,"0");
+  n => String(n).padStart(2,"0");
 
 
 const taipeiParts =
-date => {
+  date => {
 
-  return new Intl.DateTimeFormat(
-    "zh-TW",
-    {
-      timeZone:"Asia/Taipei",
-      year:"numeric",
-      month:"2-digit",
-      day:"2-digit",
-      hour:"2-digit",
-      minute:"2-digit",
-      second:"2-digit",
-      hourCycle:"h23"
-    }
-  )
-  .formatToParts(date)
-  .reduce(
-    (o,p) => {
+    return new Intl.DateTimeFormat(
+      "zh-TW",
+      {
+        timeZone:"Asia/Taipei",
+        year:"numeric",
+        month:"2-digit",
+        day:"2-digit",
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit",
+        hourCycle:"h23"
+      }
+    )
+    .formatToParts(date)
+    .reduce(
+      (obj,part) => {
 
-      o[p.type] = p.value;
+        obj[part.type] =
+          part.value;
 
-      return o;
+        return obj;
 
-    },
-    {}
-  );
+      },
+      {}
+    );
 
-};
+  };
 
 
 const dateKey =
-d => {
+  date => {
 
-  const p =
-    taipeiParts(d);
+    const p =
+      taipeiParts(date);
 
-  return `
-    ${p.year}-
-    ${p.month}-
-    ${p.day}
-  `.replace(/\s+/g,"");
+    return `${p.year}-${p.month}-${p.day}`;
 
-};
-
-
-const dateFromKey =
-key => {
-
-  const [
-    year,
-    month,
-    day
-  ] =
-    key
-    .split("-")
-    .map(Number);
-
-  return new Date(
-    Date.UTC(
-      year,
-      month-1,
-      day,
-      4,
-      0,
-      0
-    )
-  );
-
-};
+  };
 
 
 const addDays =
-(d,n) => {
+  (date,amount) => {
 
-  const x =
-    new Date(d);
+    const result =
+      new Date(date);
 
-  x.setUTCDate(
-    x.getUTCDate()+n
-  );
+    result.setDate(
+      result.getDate() + amount
+    );
 
-  return x;
+    return result;
 
-};
+  };
 
 
 const isToday =
-d =>
-dateKey(d) ===
-dateKey(new Date());
+  date =>
+    dateKey(date) ===
+    dateKey(new Date());
 
 
 const escapeHtml =
-value =>
-String(value ?? "")
-.replace(
-  /[&<>"']/g,
-  match =>
-    ({
-      "&":"&amp;",
-      "<":"&lt;",
-      ">":"&gt;",
-      '"':"&quot;",
-      "'":"&#039;"
-    })[match]
-);
+  value =>
+    String(value ?? "")
+      .replace(
+        /[&<>"']/g,
+        match =>
+          ({
+            "&":"&amp;",
+            "<":"&lt;",
+            ">":"&gt;",
+            '"':"&quot;",
+            "'":"&#039;"
+          })[match]
+      );
 
 
 const safeFileName =
-name =>
-String(name || "file")
-.replace(
-  /[^a-zA-Z0-9._-]/g,
-  "_"
-)
-.slice(
-  0,
-  120
-);
+  value =>
+    String(value || "file")
+      .replace(
+        /[^a-zA-Z0-9._-]/g,
+        "_"
+      )
+      .slice(0,120);
 
 
 const tokenKey =
-token => {
+  token => {
 
-  const bytes =
-    new TextEncoder()
-    .encode(token);
+    const bytes =
+      new TextEncoder()
+        .encode(token);
 
-  let output = "";
+    let output = "";
 
-  bytes.forEach(
-    byte => {
+    bytes.forEach(
+      byte => {
 
-      output +=
-        String.fromCharCode(
-          byte
-        );
+        output +=
+          String.fromCharCode(
+            byte
+          );
 
-    }
-  );
+      }
+    );
 
-  return btoa(output)
-    .replace(/\+/g,"-")
-    .replace(/\//g,"_")
-    .replace(/=+$/,"");
+    return btoa(output)
+      .replace(/\+/g,"-")
+      .replace(/\//g,"_")
+      .replace(/=+$/,"");
 
-};
+  };
 
 
 let user = null;
 
 let roomId =
-localStorage.getItem(
-  "momentlog_room"
-) || "";
+  localStorage.getItem(
+    "momentlog_room"
+  ) || "";
 
 let room = null;
 
 let currentDate =
-new Date();
+  new Date();
 
 let activeHour = null;
 
@@ -1636,8 +1344,10 @@ function toast(message){
   window.__momentToast =
     setTimeout(
       () => {
+
         element.style.display =
           "none";
+
       },
       2800
     );
@@ -1685,7 +1395,8 @@ function applyTheme(){
 
         button.classList.toggle(
           "selected",
-          button.dataset.theme === theme
+          button.dataset.theme ===
+          theme
         );
 
       }
@@ -1707,9 +1418,7 @@ function friendlyError(error){
     "PERMISSION_DENIED"
   ){
 
-    return(
-      "Firebase 權限被拒絕，請檢查 Realtime Database Rules"
-    );
+    return "Firebase 權限被拒絕，請檢查 Realtime Database Rules";
 
   }
 
@@ -1719,9 +1428,7 @@ function friendlyError(error){
     )
   ){
 
-    return(
-      "Storage 權限被拒絕，請檢查 Storage Rules"
-    );
+    return "Storage 權限被拒絕，請檢查 Storage Rules";
 
   }
 
@@ -1731,9 +1438,7 @@ function friendlyError(error){
     )
   ){
 
-    return(
-      "Storage 尚未建立"
-    );
+    return "Storage 尚未建立";
 
   }
 
@@ -1742,9 +1447,7 @@ function friendlyError(error){
     "auth/unauthorized-domain"
   ){
 
-    return(
-      "目前網站網域尚未加入 Firebase Authentication 授權網域"
-    );
+    return "目前網站網域尚未加入 Firebase Authentication 授權網域";
 
   }
 
@@ -1753,9 +1456,7 @@ function friendlyError(error){
     "auth/operation-not-allowed"
   ){
 
-    return(
-      "Firebase 尚未啟用 Google 登入"
-    );
+    return "Firebase 尚未啟用 Google 登入";
 
   }
 
@@ -1764,9 +1465,7 @@ function friendlyError(error){
     "auth/popup-blocked"
   ){
 
-    return(
-      "瀏覽器阻擋 Google 登入視窗"
-    );
+    return "瀏覽器阻擋 Google 登入視窗";
 
   }
 
@@ -1775,13 +1474,11 @@ function friendlyError(error){
     "auth/popup-closed-by-user"
   ){
 
-    return(
-      "你關閉了 Google 登入視窗"
-    );
+    return "你關閉了 Google 登入視窗";
 
   }
 
-  return(
+  return (
     error?.message ||
     "未知錯誤"
   );
@@ -1796,7 +1493,10 @@ function memberPath(
 
   return `
     rooms/${id}/members/${uid}
-  `.replace(/\s+/g,"");
+  `.replace(
+    /\s+/g,
+    ""
+  );
 
 }
 
@@ -1810,7 +1510,10 @@ function recordPath(
 
   return `
     rooms/${id}/records/${dateKey(date)}/${pad(hour)}/${uid}
-  `.replace(/\s+/g,"");
+  `.replace(
+    /\s+/g,
+    ""
+  );
 
 }
 
@@ -1855,7 +1558,8 @@ function clearListeners(){
 function renderNotify(){
 
   const enabled =
-    room?.myNotification?.enabled === true;
+    room?.myNotification
+      ?.enabled === true;
 
   const button =
     $("notify");
@@ -1895,20 +1599,15 @@ function renderAccount(){
   if(!loggedIn){
 
     $("accountName")
-      .textContent =
-      "";
+      .textContent = "";
 
     $("accountEmail")
-      .textContent =
-      "";
+      .textContent = "";
 
     $("accountAvatar")
-      .removeAttribute(
-        "src"
-      );
+      .removeAttribute("src");
 
     return;
-
   }
 
   $("accountName")
@@ -1958,17 +1657,10 @@ async function loadProfile(){
     room =
       room || {};
 
-    if(snapshot.exists()){
-
-      room.profile =
-        snapshot.val() || {};
-
-    }else{
-
-      room.profile =
-        {};
-
-    }
+    room.profile =
+      snapshot.exists()
+        ? snapshot.val() || {}
+        : {};
 
   }catch(error){
 
@@ -1980,10 +1672,10 @@ async function loadProfile(){
     room =
       room || {};
 
-    room.profile =
-      {};
+    room.profile = {};
 
   }
+
 
   const savedName =
     room.profile?.displayName ||
@@ -1992,19 +1684,9 @@ async function loadProfile(){
     ) ||
     "";
 
+
   $("name").value =
     savedName;
-
-  $("profileName").value =
-    savedName;
-
-  $("notifyLead").value =
-    String(
-      Number(
-        room.profile?.notificationMinute ||
-        0
-      )
-    );
 
 }
 
@@ -2021,9 +1703,12 @@ async function saveProfile(){
 
   }
 
+
   const name =
-    $("profileName").value.trim() ||
-    $("name").value.trim();
+    $("name")
+      .value
+      .trim();
+
 
   if(!name){
 
@@ -2037,6 +1722,7 @@ async function saveProfile(){
 
   }
 
+
   if(name.length > 30){
 
     toast(
@@ -2047,21 +1733,12 @@ async function saveProfile(){
 
   }
 
-  const notificationMinute =
-    Math.max(
-      0,
-      Math.min(
-        10,
-        Number(
-          $("notifyLead").value
-        ) || 0
-      )
-    );
 
   try{
 
     const now =
       Date.now();
+
 
     await set(
       ref(
@@ -2070,13 +1747,10 @@ async function saveProfile(){
       ),
       {
         displayName:name,
-        notificationMinute,
-        createdAt:
-          room?.profile?.createdAt ||
-          now,
         updatedAt:now
       }
     );
+
 
     if(
       room?.members?.[user.uid]
@@ -2095,38 +1769,30 @@ async function saveProfile(){
 
     }
 
+
     room =
       room || {};
 
     room.profile = {
+      ...(room.profile || {}),
       displayName:name,
-      notificationMinute,
-      createdAt:
-        room?.profile?.createdAt ||
-        now,
       updatedAt:now
     };
+
 
     localStorage.setItem(
       "momentlog_name",
       name
     );
 
-    $("name").value =
-      name;
-
-    $("profileName").value =
-      name;
-
-    $("profileModal")
-      .classList
-      .remove("show");
 
     toast(
       "個人資料已保存"
     );
 
+
     return true;
+
 
   }catch(error){
 
@@ -2151,21 +1817,24 @@ async function loginGoogle(){
   try{
 
     $("googleLogin")
-      .disabled =
-      true;
+      .disabled = true;
+
 
     showSetupStatus(
       "正在開啟 Google 登入…"
     );
+
 
     await signInWithPopup(
       auth,
       googleProvider
     );
 
+
     toast(
       "Google 登入成功"
     );
+
 
   }catch(error){
 
@@ -2174,19 +1843,21 @@ async function loginGoogle(){
       error
     );
 
+
     toast(
       "Google 登入失敗："+friendlyError(error)
     );
+
 
     showSetupStatus(
       "尚未登入 Google"
     );
 
+
   }finally{
 
     $("googleLogin")
-      .disabled =
-      false;
+      .disabled = false;
 
   }
 
@@ -2203,9 +1874,6 @@ async function logout(){
 
     roomId = "";
 
-    currentDate =
-      new Date();
-
     localStorage.removeItem(
       "momentlog_room"
     );
@@ -2213,6 +1881,7 @@ async function logout(){
     await signOut(
       auth
     );
+
 
     $("room")
       .classList
@@ -2222,9 +1891,11 @@ async function logout(){
       .classList
       .remove("hide");
 
+
     showSetupStatus(
       "已登出"
     );
+
 
     toast(
       "已登出"
@@ -2236,6 +1907,7 @@ async function logout(){
       "logout:",
       error
     );
+
 
     toast(
       "登出失敗："+friendlyError(error)
@@ -2258,11 +1930,18 @@ async function createRoom(){
 
   }
 
+
   const name =
-    $("name").value.trim();
+    $("name")
+      .value
+      .trim();
+
 
   const log =
-    $("log").value.trim();
+    $("log")
+      .value
+      .trim();
+
 
   if(!name){
 
@@ -2276,6 +1955,7 @@ async function createRoom(){
 
   }
 
+
   if(!log){
 
     toast(
@@ -2288,8 +1968,6 @@ async function createRoom(){
 
   }
 
-  $("profileName").value =
-    name;
 
   if(
     !(await saveProfile())
@@ -2299,13 +1977,15 @@ async function createRoom(){
 
   }
 
+
   try{
 
     let id = "";
 
+
     for(
-      let i=0;
-      i<8 && !id;
+      let i = 0;
+      i < 8 && !id;
       i++
     ){
 
@@ -2321,6 +2001,7 @@ async function createRoom(){
             8
           )
           .toUpperCase();
+
 
       const transaction =
         await runTransaction(
@@ -2338,6 +2019,7 @@ async function createRoom(){
 
             }
 
+
             return {
               roomId:candidate,
               name:log,
@@ -2348,6 +2030,7 @@ async function createRoom(){
 
           }
         );
+
 
       if(
         transaction.committed
@@ -2360,6 +2043,7 @@ async function createRoom(){
 
     }
 
+
     if(!id){
 
       throw new Error(
@@ -2367,6 +2051,7 @@ async function createRoom(){
       );
 
     }
+
 
     await set(
       ref(
@@ -2383,22 +2068,34 @@ async function createRoom(){
       }
     );
 
+
     localStorage.setItem(
       "momentlog_room",
       id
     );
 
+
+    localStorage.setItem(
+      "momentlog_name",
+      name
+    );
+
+
     roomId =
       id;
+
 
     currentDate =
       new Date();
 
+
     connectRoom();
+
 
     toast(
       "房間建立成功"
     );
+
 
   }catch(error){
 
@@ -2406,6 +2103,7 @@ async function createRoom(){
       "createRoom:",
       error
     );
+
 
     toast(
       "建立房間失敗："+friendlyError(error)
@@ -2428,16 +2126,19 @@ async function joinRoom(){
 
   }
 
+
   const name =
     $("name")
       .value
       .trim();
+
 
   const id =
     $("joinCode")
       .value
       .trim()
       .toUpperCase();
+
 
   if(!name){
 
@@ -2451,6 +2152,7 @@ async function joinRoom(){
 
   }
 
+
   if(
     !/^[A-Z0-9]{8,12}$/.test(id)
   ){
@@ -2463,6 +2165,7 @@ async function joinRoom(){
 
   }
 
+
   try{
 
     const meta =
@@ -2473,7 +2176,10 @@ async function joinRoom(){
         )
       );
 
-    if(!meta.exists()){
+
+    if(
+      !meta.exists()
+    ){
 
       toast(
         "找不到這個房間"
@@ -2483,8 +2189,10 @@ async function joinRoom(){
 
     }
 
+
     const now =
       Date.now();
+
 
     await set(
       ref(
@@ -2500,6 +2208,7 @@ async function joinRoom(){
         updatedAt:now
       }
     );
+
 
     try{
 
@@ -2523,27 +2232,34 @@ async function joinRoom(){
 
     }
 
+
     localStorage.setItem(
       "momentlog_room",
       id
     );
+
 
     localStorage.setItem(
       "momentlog_name",
       name
     );
 
+
     roomId =
       id;
+
 
     currentDate =
       new Date();
 
+
     connectRoom();
+
 
     toast(
       "已加入房間"
     );
+
 
   }catch(error){
 
@@ -2551,6 +2267,7 @@ async function joinRoom(){
       "joinRoom:",
       error
     );
+
 
     toast(
       "加入房間失敗："+friendlyError(error)
@@ -2565,6 +2282,7 @@ function connectRoom(){
 
   clearListeners();
 
+
   if(
     !roomId ||
     !user
@@ -2573,6 +2291,7 @@ function connectRoom(){
     return;
 
   }
+
 
   room =
     room || {};
@@ -2590,23 +2309,7 @@ function connectRoom(){
           !snapshot.exists()
         ){
 
-          clearListeners();
-
-          room = null;
-
-          roomId = "";
-
-          localStorage.removeItem(
-            "momentlog_room"
-          );
-
-          $("room")
-            .classList
-            .add("hide");
-
-          $("setup")
-            .classList
-            .remove("hide");
+          leaveLocal();
 
           toast(
             "房間不存在或已被關閉"
@@ -2616,8 +2319,10 @@ function connectRoom(){
 
         }
 
+
         room.meta =
           snapshot.val() || {};
+
 
         render();
 
@@ -2653,23 +2358,7 @@ function connectRoom(){
           !room.members[user.uid]
         ){
 
-          clearListeners();
-
-          room = null;
-
-          roomId = "";
-
-          localStorage.removeItem(
-            "momentlog_room"
-          );
-
-          $("room")
-            .classList
-            .add("hide");
-
-          $("setup")
-            .classList
-            .remove("hide");
+          leaveLocal();
 
           toast(
             "你已離開這個房間"
@@ -2704,7 +2393,12 @@ function connectRoom(){
     onValue(
       ref(
         db,
-        `rooms/${roomId}/notificationSettings/${user.uid}`
+        `
+          rooms/${roomId}/notificationSettings/${user.uid}
+        `.replace(
+          /\s+/g,
+          ""
+        )
       ),
       snapshot => {
 
@@ -2729,7 +2423,9 @@ function connectRoom(){
 
 function loadRecordsListener(){
 
-  if(unsubRecords){
+  if(
+    unsubRecords
+  ){
 
     try{
       unsubRecords();
@@ -2739,6 +2435,7 @@ function loadRecordsListener(){
       null;
 
   }
+
 
   if(
     !roomId ||
@@ -2750,6 +2447,7 @@ function loadRecordsListener(){
 
   }
 
+
   const targetDate =
     dateKey(
       currentDate
@@ -2760,7 +2458,12 @@ function loadRecordsListener(){
     onValue(
       ref(
         db,
-        `rooms/${roomId}/records/${targetDate}`
+        `
+          rooms/${roomId}/records/${targetDate}
+        `.replace(
+          /\s+/g,
+          ""
+        )
       ),
       snapshot => {
 
@@ -2803,6 +2506,7 @@ function render(){
     .classList
     .add("hide");
 
+
   $("room")
     .classList
     .remove("hide");
@@ -2827,6 +2531,7 @@ function render(){
   const now =
     new Date();
 
+
   const p =
     taipeiParts(now);
 
@@ -2839,32 +2544,22 @@ function render(){
   const all =
     room.records || {};
 
+
   const entries = [];
 
 
-  let maxHour;
+  /*
+   * 今天：
+   * 不顯示目前小時。
+   *
+   * 21:00～21:59：
+   * 最後顯示 20:00。
+   */
 
-
-  if(
-    isToday(
-      currentDate
-    )
-  ){
-
-    /*
-     * 今天只顯示已經結束的整點。
-     * 21:00 ~ 21:59 => 最後顯示 20:00
-     */
-
-    maxHour =
-      Number(p.hour) - 1;
-
-  }else{
-
-    maxHour =
-      23;
-
-  }
+  const maxHour =
+    isToday(currentDate)
+      ? Number(p.hour) - 1
+      : 23;
 
 
   for(
@@ -2876,9 +2571,7 @@ function render(){
     entries.push(
       [
         hour,
-        all[
-          pad(hour)
-        ] || {}
+        all[pad(hour)] || {}
       ]
     );
 
@@ -2910,18 +2603,14 @@ function render(){
 
   $("doneLabel")
     .textContent =
-    isToday(
-      currentDate
-    )
+    isToday(currentDate)
       ? "今日已完成"
       : "當日已完成";
 
 
   $("dateLabel")
     .textContent =
-    isToday(
-      currentDate
-    )
+    isToday(currentDate)
       ? "今天"
       : `歷史日期：${dateKey(currentDate)}`;
 
@@ -2960,11 +2649,13 @@ function render(){
     );
 
     next.setHours(
-      next.getHours()+1
+      next.getHours() + 1
     );
+
 
     const nextParts =
       taipeiParts(next);
+
 
     $("next")
       .textContent =
@@ -3008,9 +2699,7 @@ function renderMembers(){
 
   $("members")
     .innerHTML =
-    Object.entries(
-      members
-    )
+    Object.entries(members)
     .map(
       ([uid,member]) => {
 
@@ -3020,8 +2709,11 @@ function renderMembers(){
           )
           .some(
             slot =>
-              !!slot?.[uid]
+              Boolean(
+                slot?.[uid]
+              )
           );
+
 
         const isRoomOwner =
           uid === ownerUid;
@@ -3055,11 +2747,13 @@ function renderMembers(){
                   ? "done"
                   : "wait"
               }">
+
                 ${
                   completed
                     ? "已完成"
                     : "等待中"
                 }
+
               </span>
 
             </span>
@@ -3099,12 +2793,6 @@ function renderTimeline(
   }
 
 
-  const current =
-    taipeiParts(
-      new Date()
-    );
-
-
   $("slots")
     .innerHTML =
     entries
@@ -3115,19 +2803,9 @@ function renderTimeline(
           users?.[user.uid] ||
           null;
 
-        /*
-         * 注意：
-         * 今天的時間軸不包含目前小時，
-         * 所以這裡通常不會成立。
-         * 保留是為了 UI 狀態完整。
-         */
 
-        const isCurrent =
-          isToday(currentDate) &&
-          hour === Number(current.hour);
-
-
-        let media = "";
+        let media =
+          "";
 
 
         if(
@@ -3202,9 +2880,7 @@ function renderTimeline(
                   ${
                     mine
                       ? "📌 已記錄"
-                      : isCurrent
-                        ? "⏰ 現在"
-                        : "尚未紀錄"
+                      : "尚未紀錄"
                   }
                 </b>
 
@@ -3221,20 +2897,12 @@ function renderTimeline(
               }
 
               ${
-                isCurrent
-                  ? `
-                    <div class="pill now">
-                      🔔 現在要記錄
-                    </div>
-                  `
-                  : ""
-              }
-
-              ${
                 mine?.text
                   ? `
                     <div class="caption">
-                      ${escapeHtml(mine.text)}
+                      ${escapeHtml(
+                        mine.text
+                      )}
                     </div>
                   `
                   : ""
@@ -3246,7 +2914,9 @@ function renderTimeline(
 
                 <button
                   class="btn ${
-                    mine ? "primary" : ""
+                    mine
+                      ? "primary"
+                      : ""
                   }"
                   data-hour="${hour}"
                 >
@@ -3312,6 +2982,7 @@ function openRecord(hour){
   activeHour =
     hour;
 
+
   selectedFile =
     null;
 
@@ -3350,80 +3021,68 @@ function openRecord(hour){
     "0%";
 
 
-  renderExistingMedia(
-    mine?.media
-  );
-
-
-  $("recordModal")
-    .classList
-    .add("show");
-
-}
-
-
-function renderExistingMedia(
-  media
-){
-
   if(
-    !media?.downloadURL
+    mine?.media?.downloadURL
   ){
 
-    $("preview")
-      .innerHTML =
+    const type =
+      mine.media.contentType ||
       "";
 
-    return;
 
-  }
+    if(
+      type.startsWith(
+        "image/"
+      )
+    ){
 
+      $("preview")
+        .innerHTML =
+        `
+          <div class="media">
 
-  const type =
-    media.contentType ||
-    "";
+            <img
+              src="${escapeHtml(
+                mine.media.downloadURL
+              )}"
+              alt="預覽"
+            >
 
+          </div>
+        `;
 
-  if(
-    type.startsWith(
-      "image/"
-    )
-  ){
+    }else{
 
-    $("preview")
-      .innerHTML =
-      `
-        <div class="media">
+      $("preview")
+        .innerHTML =
+        `
+          <div class="media">
 
-          <img
-            src="${escapeHtml(
-              media.downloadURL
-            )}"
-            alt="預覽"
-          >
+            <video
+              src="${escapeHtml(
+                mine.media.downloadURL
+              )}"
+              controls
+              playsinline
+            ></video>
 
-        </div>
-      `;
+          </div>
+        `;
+
+    }
 
   }else{
 
     $("preview")
       .innerHTML =
-      `
-        <div class="media">
-
-          <video
-            src="${escapeHtml(
-              media.downloadURL
-            )}"
-            controls
-            playsinline
-          ></video>
-
-        </div>
-      `;
+      "";
 
   }
+
+
+  $("recordModal")
+    .classList
+    .add("show");
 
 }
 
@@ -3441,16 +3100,17 @@ function closeRecord(){
   }
 
 
-  $("recordModal")
-    .classList
-    .remove("show");
-
-
   selectedFile =
     null;
 
+
   activeHour =
     null;
+
+
+  $("recordModal")
+    .classList
+    .remove("show");
 
 
   $("preview")
@@ -3585,13 +3245,14 @@ function setUploadStatus(
 ){
 
   /*
-   * 只改 #uploadText，
-   * 不破壞 #progressBar。
+   * 只修改文字節點。
+   * 不會刪除 progressBar。
    */
 
   $("uploadText")
     .textContent =
     message;
+
 
   $("uploadStatus")
     .classList
@@ -3661,18 +3322,6 @@ async function saveRecord(){
         selectedFile.file;
 
 
-      if(
-        file.size >
-        250 * 1024 * 1024
-      ){
-
-        throw new Error(
-          "單檔不能超過 250MB"
-        );
-
-      }
-
-
       newStoragePath =
         `
           room-media/
@@ -3681,8 +3330,7 @@ async function saveRecord(){
           ${dateKey(currentDate)}_${pad(activeHour)}/
           ${crypto.randomUUID()}-
           ${safeFileName(file.name)}
-        `
-        .replace(
+        `.replace(
           /\s+/g,
           ""
         );
@@ -3696,7 +3344,8 @@ async function saveRecord(){
           ),
           file,
           {
-            contentType:file.type,
+            contentType:
+              file.type,
 
             customMetadata:{
               roomId,
@@ -3718,10 +3367,9 @@ async function saveRecord(){
               const percent =
                 snapshot.totalBytes
                   ? Math.round(
-                      (
-                        snapshot.bytesTransferred /
-                        snapshot.totalBytes
-                      ) * 100
+                      snapshot.bytesTransferred /
+                      snapshot.totalBytes *
+                      100
                     )
                   : 0;
 
@@ -3738,9 +3386,7 @@ async function saveRecord(){
 
             },
 
-            error => {
-              reject(error);
-            },
+            reject,
 
             async () => {
 
@@ -3777,7 +3423,6 @@ async function saveRecord(){
               }
 
             }
-
           );
 
         }
@@ -3788,14 +3433,14 @@ async function saveRecord(){
 
     const text =
       $("caption")
-      .value
-      .trim();
+        .value
+        .trim();
 
 
     const authorName =
       $("name")
-      .value
-      .trim() ||
+        .value
+        .trim() ||
       "我";
 
 
@@ -3899,6 +3544,7 @@ async function saveRecord(){
       "儲存失敗："+friendlyError(error)
     );
 
+
   }finally{
 
     $("saveRecord")
@@ -3978,7 +3624,7 @@ async function removeMedia(){
     }catch(error){
 
       console.warn(
-        "Storage delete:",
+        "delete media:",
         error
       );
 
@@ -3988,10 +3634,6 @@ async function removeMedia(){
     $("preview")
       .innerHTML =
       "";
-
-
-    selectedFile =
-      null;
 
 
     toast(
@@ -4024,8 +3666,8 @@ async function removeMedia(){
 async function toggleNotification(){
 
   if(
-    !user ||
-    !roomId
+    !roomId ||
+    !user
   ){
 
     toast(
@@ -4040,7 +3682,8 @@ async function toggleNotification(){
   try{
 
     const enabled =
-      room?.myNotification?.enabled === true;
+      room?.myNotification
+        ?.enabled === true;
 
 
     if(enabled){
@@ -4048,7 +3691,13 @@ async function toggleNotification(){
       await update(
         ref(
           db,
-          `rooms/${roomId}/notificationSettings/${user.uid}`
+          `
+            rooms/${roomId}/
+            notificationSettings/${user.uid}
+          `.replace(
+            /\s+/g,
+            ""
+          )
         ),
         {
           enabled:false,
@@ -4114,7 +3763,7 @@ async function toggleNotification(){
     ){
 
       toast(
-        "這個瀏覽器不支援 Firebase 推播"
+        "瀏覽器不支援 Firebase 推播"
       );
 
       return;
@@ -4133,20 +3782,15 @@ async function toggleNotification(){
         );
 
 
-    const messaging =
-      getMessaging(app);
-
-
     const token =
       await getToken(
-        messaging,
+        getMessaging(app),
         {
           vapidKey:
             VAPID_PUBLIC_KEY,
 
           serviceWorkerRegistration:
             registration
-
         }
       );
 
@@ -4175,9 +3819,7 @@ async function toggleNotification(){
       {
         token,
         createdAt:Date.now(),
-        updatedAt:Date.now(),
-        userAgent:
-          navigator.userAgent
+        updatedAt:Date.now()
       }
     );
 
@@ -4213,12 +3855,14 @@ async function toggleNotification(){
       "提醒已開啟"
     );
 
+
   }catch(error){
 
     console.error(
-      "notification:",
+      "toggleNotification:",
       error
     );
+
 
     toast(
       "通知設定失敗："+friendlyError(error)
@@ -4282,10 +3926,7 @@ async function invite(){
 
 
   const text =
-    `
-      加入 MomentLog「${room.meta.name || "MomentLog"}」
-      房間碼：${roomId}
-    `.trim();
+    `加入 MomentLog「${room.meta.name || "MomentLog"}」\n房間碼：${roomId}`;
 
 
   try{
@@ -4294,9 +3935,11 @@ async function invite(){
       text
     );
 
+
     toast(
       "邀請資訊已複製"
     );
+
 
   }catch{
 
@@ -4343,12 +3986,6 @@ async function leaveRoom(){
 
   try{
 
-    /*
-     * 重新從 Firebase 取得最新 members。
-     * 不完全相信本地 room.members，
-     * 避免房主轉移時使用舊資料。
-     */
-
     const membersSnapshot =
       await get(
         ref(
@@ -4364,17 +4001,19 @@ async function leaveRoom(){
 
 
     const memberIds =
-      Object.keys(members);
+      Object.keys(
+        members
+      );
 
 
-    const currentlyOwner =
+    const currentOwner =
       room?.meta?.ownerUid ===
       user.uid;
 
 
     /*
-     * 最後一人：
-     * 直接關閉房間。
+     * 只有自己：
+     * 房主離開 -> 刪除整個房間。
      */
 
     if(
@@ -4382,28 +4021,8 @@ async function leaveRoom(){
     ){
 
       if(
-        memberIds.length === 1 &&
-        memberIds[0] !== user.uid
+        currentOwner
       ){
-
-        throw new Error(
-          "房間成員資料與目前帳號不一致"
-        );
-
-      }
-
-
-      /*
-       * 房主才處理整個房間。
-       * 正常情況最後一人一定是房主。
-       */
-
-      if(currentlyOwner){
-
-        /*
-         * 先刪掉房間內容，
-         * 最後刪 meta。
-         */
 
         await remove(
           ref(
@@ -4438,11 +4057,6 @@ async function leaveRoom(){
 
       }else{
 
-        /*
-         * 異常資料狀態：
-         * 只移除自己，避免誤刪別人的房間。
-         */
-
         await remove(
           ref(
             db,
@@ -4468,20 +4082,21 @@ async function leaveRoom(){
 
     /*
      * 房主：
-     * 選擇其他成員接任。
+     * 找另一位成員接任。
      */
 
-    if(currentlyOwner){
+    if(currentOwner){
 
       const newOwnerUid =
         memberIds.find(
           uid =>
-            uid !==
-            user.uid
+            uid !== user.uid
         );
 
 
-      if(!newOwnerUid){
+      if(
+        !newOwnerUid
+      ){
 
         throw new Error(
           "沒有其他成員可以接任房主"
@@ -4496,11 +4111,6 @@ async function leaveRoom(){
         ]?.displayName ||
         "下一位成員";
 
-
-      /*
-       * 先讓新的成員成為房主，
-       * 再把舊房主移除。
-       */
 
       await update(
         ref(db),
@@ -4536,8 +4146,7 @@ async function leaveRoom(){
 
 
     /*
-     * 一般成員：
-     * 直接刪自己的 member。
+     * 一般成員離開。
      */
 
     await remove(
@@ -4551,7 +4160,13 @@ async function leaveRoom(){
     await remove(
       ref(
         db,
-        `rooms/${id}/notificationSettings/${user.uid}`
+        `
+          rooms/${id}/
+          notificationSettings/${user.uid}
+        `.replace(
+          /\s+/g,
+          ""
+        )
       )
     )
     .catch(
@@ -4574,6 +4189,7 @@ async function leaveRoom(){
       error
     );
 
+
     toast(
       "離開房間失敗："+friendlyError(error)
     );
@@ -4587,11 +4203,9 @@ function leaveLocal(){
 
   clearListeners();
 
-  room =
-    null;
+  room = null;
 
-  roomId =
-    "";
+  roomId = "";
 
   currentDate =
     new Date();
@@ -4624,8 +4238,10 @@ function showYesterday(){
       -1
     );
 
+
   lastRenderedHour =
     null;
+
 
   loadRecordsListener();
 
@@ -4639,8 +4255,10 @@ function showToday(){
   currentDate =
     new Date();
 
+
   lastRenderedHour =
     null;
+
 
   loadRecordsListener();
 
@@ -4660,10 +4278,6 @@ function changeDate(
     );
 
 
-  /*
-   * 不允許瀏覽未來日期。
-   */
-
   if(
     dateKey(next) >
     dateKey(new Date())
@@ -4677,8 +4291,10 @@ function changeDate(
   currentDate =
     next;
 
+
   lastRenderedHour =
     null;
+
 
   loadRecordsListener();
 
@@ -4687,72 +4303,39 @@ function changeDate(
 }
 
 
-$("googleLogin")
-  .onclick =
+$("googleLogin").onclick =
   loginGoogle;
 
 
-$("logout")
-  .onclick =
+$("logout").onclick =
   logout;
 
 
-$("saveProfile")
-  .onclick =
-  () => {
-
-    $("profileName")
-      .value =
-      $("name")
-        .value
-        .trim();
-
-    $("notifyLead")
-      .value =
-      String(
-        Number(
-          room?.profile?.notificationMinute ||
-          0
-        )
-      );
-
-    /*
-     * 這個按鈕直接保存，
-     * 不需要再開 Modal。
-     */
-
-    saveProfile();
-
-  };
+$("saveProfile").onclick =
+  saveProfile;
 
 
-$("create")
-  .onclick =
+$("create").onclick =
   createRoom;
 
 
-$("join")
-  .onclick =
+$("join").onclick =
   joinRoom;
 
 
-$("notify")
-  .onclick =
+$("notify").onclick =
   toggleNotification;
 
 
-$("invite")
-  .onclick =
+$("invite").onclick =
   invite;
 
 
-$("leave")
-  .onclick =
+$("leave").onclick =
   leaveRoom;
 
 
-$("now")
-  .onclick =
+$("now").onclick =
   () => {
 
     currentDate =
@@ -4762,6 +4345,7 @@ $("now")
       null;
 
     loadRecordsListener();
+
 
     const hour =
       Number(
@@ -4778,137 +4362,97 @@ $("now")
   };
 
 
-$("yesterday")
-  .onclick =
+$("yesterday").onclick =
   showYesterday;
 
 
-$("today")
-  .onclick =
+$("today").onclick =
   showToday;
 
 
-$("prevDate")
-  .onclick =
+$("prevDate").onclick =
   () => changeDate(-1);
 
 
-$("nextDate")
-  .onclick =
+$("nextDate").onclick =
   () => changeDate(1);
 
 
-$("recordClose")
-  .onclick =
+$("recordClose").onclick =
   closeRecord;
 
 
-$("cancelRecord")
-  .onclick =
+$("cancelRecord").onclick =
   closeRecord;
 
 
-$("saveRecord")
-  .onclick =
+$("saveRecord").onclick =
   saveRecord;
 
 
-$("remove")
-  .onclick =
+$("remove").onclick =
   removeMedia;
 
 
-$("photo")
-  .onclick =
+$("photo").onclick =
   () =>
     $("photoInput").click();
 
 
-$("video")
-  .onclick =
+$("video").onclick =
   () =>
     $("videoInput").click();
 
 
-$("album")
-  .onclick =
+$("album").onclick =
   () =>
     $("albumInput").click();
 
 
-$("photoInput")
-  .onchange =
+$("photoInput").onchange =
   event => {
 
     chooseFile(
       event.target.files?.[0]
     );
 
-    event.target.value =
-      "";
+    event.target.value = "";
 
   };
 
 
-$("videoInput")
-  .onchange =
+$("videoInput").onchange =
   event => {
 
     chooseFile(
       event.target.files?.[0]
     );
 
-    event.target.value =
-      "";
+    event.target.value = "";
 
   };
 
 
-$("albumInput")
-  .onchange =
+$("albumInput").onchange =
   event => {
 
     chooseFile(
       event.target.files?.[0]
     );
 
-    event.target.value =
-      "";
+    event.target.value = "";
 
   };
 
 
-$("profileClose")
-  .onclick =
-  () =>
-    $("profileModal")
-      .classList
-      .remove("show");
-
-
-$("profileCancel")
-  .onclick =
-  () =>
-    $("profileModal")
-      .classList
-      .remove("show");
-
-
-$("profileSave")
-  .onclick =
-  saveProfile;
-
-
-$("theme")
-  .onclick =
+$("theme").onclick =
   () =>
     $("themeModal")
       .classList
       .add("show");
 
 
-$("themeClose")
-  .onclick =
+$("themeClose").onclick =
   () =>
     $("themeModal")
       .classList
@@ -4968,11 +4512,10 @@ document
   );
 
 
-window
-  .addEventListener(
-    "beforeunload",
-    clearListeners
-  );
+window.addEventListener(
+  "beforeunload",
+  clearListeners
+);
 
 
 applyTheme();
@@ -4998,12 +4541,17 @@ setInterval(
       isToday(currentDate)
     ){
 
+      /*
+       * 目前小時不顯示在時間軸。
+       */
+
       const maxHour =
         Number(p.hour) - 1;
 
 
       /*
-       * 每跨一個小時重新 render。
+       * 跨過整點：
+       * 自動增加新的時間軸。
        */
 
       if(
@@ -5033,7 +4581,7 @@ setInterval(
       );
 
       next.setHours(
-        next.getHours()+1
+        next.getHours() + 1
       );
 
 
@@ -5070,17 +4618,21 @@ onAuthStateChanged(
       room =
         null;
 
+
       showSetupStatus(
         "請先登入 Google 帳號"
       );
+
 
       $("room")
         .classList
         .add("hide");
 
+
       $("setup")
         .classList
         .remove("hide");
+
 
       return;
 
@@ -5093,6 +4645,7 @@ onAuthStateChanged(
 
 
     await loadProfile();
+
 
     renderAccount();
 
