@@ -146,7 +146,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 }
 
 .setup{
-  max-width:560px;
+  max-width:620px;
   margin:7vh auto;
   padding:28px
 }
@@ -241,6 +241,69 @@ button:disabled{opacity:.55;cursor:not-allowed}
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap
+}
+
+.recentRooms{
+  margin-top:18px;
+  border-top:1px solid var(--border);
+  padding-top:18px
+}
+
+.recentHead{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:10px
+}
+
+.recentHead h3{
+  margin:0;
+  font-size:16px
+}
+
+.recentList{
+  display:grid;
+  gap:8px
+}
+
+.recentRoom{
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:11px;
+  background:var(--card);
+  display:flex;
+  align-items:center;
+  gap:10px
+}
+
+.recentRoomInfo{
+  min-width:0;
+  flex:1
+}
+
+.recentRoomName{
+  font-weight:800;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap
+}
+
+.recentRoomMeta{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:3px;
+  line-height:1.5
+}
+
+.recentRoomActions{
+  display:flex;
+  gap:6px;
+  flex:none
+}
+
+.recentRoom.dead{
+  opacity:.72
 }
 
 .hero{
@@ -597,6 +660,12 @@ button:disabled{opacity:.55;cursor:not-allowed}
   .themeGrid{grid-template-columns:1fr}
   .slot{grid-template-columns:52px 1fr}
   .modalActions{display:grid;grid-template-columns:1fr 1fr}
+  .recentRoom{
+    align-items:flex-start;
+  }
+  .recentRoomActions{
+    flex-direction:column;
+  }
 }
 </style>
 </head>
@@ -733,6 +802,31 @@ class="btn"
 >
 加入房間
 </button>
+
+<div id="recentRooms" class="recentRooms hide">
+
+<div class="recentHead">
+
+<h3>
+🏠 曾加入的房間
+</h3>
+
+<button
+id="clearRecentRooms"
+class="btn"
+style="padding:7px 10px;min-height:34px;font-size:12px"
+>
+清除紀錄
+</button>
+
+</div>
+
+<div
+id="recentRoomList"
+class="recentList"
+></div>
+
+</div>
 
 </div>
 
@@ -945,6 +1039,7 @@ class="btn"
 </div>
 
 </aside>
+
 
 <section class="timeline card">
 
@@ -1307,26 +1402,26 @@ document.getElementById(id);
 
 const themes = {
 
-default:
-"linear-gradient(135deg,#eef2ff,#f8fafc)",
+  default:
+    "linear-gradient(135deg,#eef2ff,#f8fafc)",
 
-blue:
-"linear-gradient(135deg,#dbeafe,#eff6ff)",
+  blue:
+    "linear-gradient(135deg,#dbeafe,#eff6ff)",
 
-green:
-"linear-gradient(135deg,#dcfce7,#f0fdf4)",
+  green:
+    "linear-gradient(135deg,#dcfce7,#f0fdf4)",
 
-pink:
-"linear-gradient(135deg,#fce7f3,#fff1f2)",
+  pink:
+    "linear-gradient(135deg,#fce7f3,#fff1f2)",
 
-purple:
-"linear-gradient(135deg,#ede9fe,#f5f3ff)",
+  purple:
+    "linear-gradient(135deg,#ede9fe,#f5f3ff)",
 
-sunset:
-"linear-gradient(135deg,#ffedd5,#fef3c7)",
+  sunset:
+    "linear-gradient(135deg,#ffedd5,#fef3c7)",
 
-dark:
-"linear-gradient(135deg,#1e293b,#0f172a)"
+  dark:
+    "linear-gradient(135deg,#1e293b,#0f172a)"
 
 };
 
@@ -1339,35 +1434,39 @@ String(n).padStart(2,"0");
 const taipeiParts =
 date =>
 new Intl.DateTimeFormat(
-"zh-TW",
-{
-timeZone:"Asia/Taipei",
-year:"numeric",
-month:"2-digit",
-day:"2-digit",
-hour:"2-digit",
-minute:"2-digit",
-second:"2-digit",
-hourCycle:"h23"
-}
+  "zh-TW",
+  {
+    timeZone:"Asia/Taipei",
+    year:"numeric",
+    month:"2-digit",
+    day:"2-digit",
+    hour:"2-digit",
+    minute:"2-digit",
+    second:"2-digit",
+    hourCycle:"h23"
+  }
 )
 .formatToParts(date)
 .reduce(
-(obj,part)=>{
-obj[part.type]=part.value;
-return obj;
-},
-{}
+  (obj,part) => {
+
+    obj[part.type] =
+      part.value;
+
+    return obj;
+
+  },
+  {}
 );
 
 
 const dateKey =
 date => {
 
-const p =
-taipeiParts(date);
+  const p =
+    taipeiParts(date);
 
-return `${p.year}-${p.month}-${p.day}`;
+  return `${p.year}-${p.month}-${p.day}`;
 
 };
 
@@ -1375,76 +1474,622 @@ return `${p.year}-${p.month}-${p.day}`;
 const addDays =
 (date,amount) => {
 
-const result =
-new Date(date);
+  const result =
+    new Date(date);
 
-result.setDate(
-result.getDate()+amount
-);
+  result.setDate(
+    result.getDate() +
+    amount
+  );
 
-return result;
+  return result;
 
 };
 
 
 const isToday =
 date =>
-dateKey(date)===
+dateKey(date) ===
 dateKey(new Date());
 
 
 const escapeHtml =
 value =>
-String(value??"")
+String(value ?? "")
 .replace(
-/[&<>"']/g,
-match =>
-({
-"&":"&amp;",
-"<":"&lt;",
-">":"&gt;",
-'"':"&quot;",
-"'":"&#039;"
-})[match]
+  /[&<>"']/g,
+  match =>
+    ({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#039;"
+    })[match]
 );
 
 
 const safeFileName =
 value =>
-String(value||"file")
+String(
+  value ||
+  "file"
+)
 .replace(
-/[^a-zA-Z0-9._-]/g,
-"_"
+  /[^a-zA-Z0-9._-]/g,
+  "_"
 )
 .slice(
-0,
-120
+  0,
+  120
 );
 
 
 const tokenKey =
 token => {
 
-const bytes =
-new TextEncoder()
-.encode(token);
+  const bytes =
+    new TextEncoder()
+    .encode(token);
 
-let output =
-"";
+  let output =
+    "";
 
-bytes.forEach(
-byte=>{
-output+=
-String.fromCharCode(byte);
-}
-);
+  bytes.forEach(
+    byte => {
 
-return btoa(output)
-.replace(/\+/g,"-")
-.replace(/\//g,"_")
-.replace(/=+$/,"");
+      output +=
+        String.fromCharCode(
+          byte
+        );
+
+    }
+  );
+
+  return btoa(output)
+    .replace(/\+/g,"-")
+    .replace(/\//g,"_")
+    .replace(/=+$/,"");
 
 };
+
+
+/*
+ * 曾加入房間只存在這台裝置的 localStorage。
+ * 不修改 Firebase Rules。
+ */
+
+const RECENT_ROOMS_KEY =
+"momentlog_recent_rooms";
+
+const MAX_RECENT_ROOMS =
+20;
+
+
+function getRecentRooms(){
+
+  try{
+
+    const raw =
+      localStorage.getItem(
+        RECENT_ROOMS_KEY
+      );
+
+    const list =
+      raw
+        ? JSON.parse(raw)
+        : [];
+
+    return Array.isArray(list)
+      ? list
+      : [];
+
+  }catch{
+
+    return [];
+
+  }
+
+}
+
+
+function saveRecentRooms(list){
+
+  try{
+
+    localStorage.setItem(
+      RECENT_ROOMS_KEY,
+      JSON.stringify(
+        list.slice(
+          0,
+          MAX_RECENT_ROOMS
+        )
+      )
+    );
+
+  }catch(error){
+
+    console.warn(
+      "saveRecentRooms:",
+      error
+    );
+
+  }
+
+}
+
+
+function rememberRoom(
+  id,
+  name
+){
+
+  if(
+    !id ||
+    !/^[A-Z0-9]{8,12}$/.test(
+      id
+    )
+  ){
+
+    return;
+
+  }
+
+  const old =
+    getRecentRooms()
+    .filter(
+      room =>
+        room?.roomId !== id
+    );
+
+  old.unshift({
+
+    roomId:id,
+
+    name:
+      String(
+        name ||
+        "MomentLog"
+      ).slice(
+        0,
+        60
+      ),
+
+    lastJoinedAt:
+      Date.now(),
+
+    lastLeftAt:
+      null
+
+  });
+
+  saveRecentRooms(old);
+
+  renderRecentRooms();
+
+}
+
+
+function markRecentRoomLeft(
+  id
+){
+
+  if(!id){
+    return;
+  }
+
+  const list =
+    getRecentRooms();
+
+  const item =
+    list.find(
+      room =>
+        room?.roomId === id
+    );
+
+  if(item){
+
+    item.lastLeftAt =
+      Date.now();
+
+  }else{
+
+    list.push({
+
+      roomId:id,
+
+      name:
+        room?.meta?.name ||
+        "MomentLog",
+
+      lastJoinedAt:
+        Date.now(),
+
+      lastLeftAt:
+        Date.now()
+
+    });
+
+  }
+
+  saveRecentRooms(list);
+
+  renderRecentRooms();
+
+}
+
+
+function removeRecentRoom(
+  id
+){
+
+  saveRecentRooms(
+    getRecentRooms()
+      .filter(
+        room =>
+          room?.roomId !== id
+      )
+  );
+
+  renderRecentRooms();
+
+}
+
+
+function formatRecentTime(
+  value
+){
+
+  if(!value){
+    return "尚未加入";
+  }
+
+  try{
+
+    return new Intl.DateTimeFormat(
+      "zh-TW",
+      {
+        timeZone:"Asia/Taipei",
+        year:"numeric",
+        month:"numeric",
+        day:"numeric",
+        hour:"2-digit",
+        minute:"2-digit"
+      }
+    ).format(
+      new Date(value)
+    );
+
+  }catch{
+
+    return "未知";
+
+  }
+
+}
+
+
+async function rejoinRoom(
+  id
+){
+
+  if(!user){
+
+    toast(
+      "請先登入 Google 帳號"
+    );
+
+    return;
+
+  }
+
+  const record =
+    getRecentRooms()
+      .find(
+        item =>
+          item?.roomId === id
+      );
+
+
+  if(!record){
+
+    toast(
+      "找不到這個房間紀錄"
+    );
+
+    return;
+
+  }
+
+
+  const name =
+    $("name")
+      .value
+      .trim();
+
+
+  if(!name){
+
+    toast(
+      "請輸入暱稱"
+    );
+
+    $("name").focus();
+
+    return;
+
+  }
+
+
+  try{
+
+    const metaSnapshot =
+      await get(
+        ref(
+          db,
+          `rooms/${id}/meta`
+        )
+      );
+
+
+    if(
+      !metaSnapshot.exists()
+    ){
+
+      toast(
+        "這個房間已經不存在"
+      );
+
+      renderRecentRooms();
+
+      return;
+
+    }
+
+
+    const meta =
+      metaSnapshot.val() ||
+      {};
+
+
+    const now =
+      Date.now();
+
+
+    await set(
+      ref(
+        db,
+        `rooms/${id}/members/${user.uid}`
+      ),
+      {
+
+        displayName:name,
+
+        joinedAt:
+          now,
+
+        updatedAt:
+          now
+
+      }
+    );
+
+
+    localStorage.setItem(
+      "momentlog_room",
+      id
+    );
+
+    localStorage.setItem(
+      "momentlog_name",
+      name
+    );
+
+
+    rememberRoom(
+      id,
+      meta.name ||
+      record.name ||
+      "MomentLog"
+    );
+
+
+    roomId =
+      id;
+
+    currentDate =
+      new Date();
+
+    connectRoom();
+
+    toast(
+      "已重新加入房間"
+    );
+
+  }catch(error){
+
+    console.error(
+      "rejoinRoom:",
+      error
+    );
+
+    toast(
+      "重新加入失敗："+friendlyError(error)
+    );
+
+  }
+
+}
+
+
+function renderRecentRooms(){
+
+  const container =
+    $("recentRooms");
+
+  const list =
+    $("recentRoomList");
+
+  if(
+    !container ||
+    !list
+  ){
+
+    return;
+
+  }
+
+
+  const rooms =
+    getRecentRooms();
+
+
+  if(
+    !user ||
+    !rooms.length
+  ){
+
+    container
+      .classList
+      .add(
+        "hide"
+      );
+
+    list.innerHTML =
+      "";
+
+    return;
+
+  }
+
+
+  container
+    .classList
+    .remove(
+      "hide"
+    );
+
+
+  list.innerHTML =
+    rooms
+      .map(
+        item => {
+
+          const id =
+            escapeHtml(
+              item?.roomId ||
+              ""
+            );
+
+          const name =
+            escapeHtml(
+              item?.name ||
+              "MomentLog"
+            );
+
+
+          return `
+            <div
+              class="recentRoom"
+              data-recent-room="${id}"
+            >
+
+              <div class="recentRoomInfo">
+
+                <div class="recentRoomName">
+                  🏠 ${name}
+                </div>
+
+                <div class="recentRoomMeta">
+                  房間碼：${id}
+                  <br>
+                  最後加入：
+                  ${escapeHtml(
+                    formatRecentTime(
+                      item?.lastJoinedAt
+                    )
+                  )}
+                  ${
+                    item?.lastLeftAt
+                      ? `
+                        <br>
+                        已離開
+                      `
+                      : ""
+                  }
+                </div>
+
+              </div>
+
+              <div class="recentRoomActions">
+
+                <button
+                  class="btn primary"
+                  data-rejoin="${id}"
+                  style="min-height:36px;padding:8px 10px;font-size:12px"
+                >
+                  重新加入
+                </button>
+
+                <button
+                  class="btn danger"
+                  data-remove-recent="${id}"
+                  style="min-height:36px;padding:8px 10px;font-size:12px"
+                >
+                  移除
+                </button>
+
+              </div>
+
+            </div>
+          `;
+
+        }
+      )
+      .join("");
+
+
+  list
+    .querySelectorAll(
+      "[data-rejoin]"
+    )
+    .forEach(
+      button => {
+
+        button.onclick =
+          () =>
+            rejoinRoom(
+              button.dataset.rejoin
+            );
+
+      }
+    );
+
+
+  list
+    .querySelectorAll(
+      "[data-remove-recent]"
+    )
+    .forEach(
+      button => {
+
+        button.onclick =
+          () => {
+
+            removeRecentRoom(
+              button.dataset.removeRecent
+            );
+
+            toast(
+              "已從歷史清單移除"
+            );
+
+          };
+
+      }
+    );
+
+}
 
 
 let user =
@@ -1452,9 +2097,8 @@ null;
 
 let roomId =
 localStorage.getItem(
-"momentlog_room"
-)||
-"";
+  "momentlog_room"
+) || "";
 
 let room =
 null;
@@ -1487,3187 +2131,3953 @@ let lastRenderedHour =
 null;
 
 
-function toast(message){
+function toast(
+  message
+){
 
-const t =
-$("toast");
+  const t =
+    $("toast");
 
-t.textContent =
-message;
+  t.textContent =
+    message;
 
-t.style.display =
-"block";
+  t.style.display =
+    "block";
 
-clearTimeout(
-window.__momentToast
-);
+  clearTimeout(
+    window.__momentToast
+  );
 
-window.__momentToast =
-setTimeout(
-()=>{
-t.style.display=
-"none";
-},
-2800
-);
+  window.__momentToast =
+    setTimeout(
+      () => {
+
+        t.style.display =
+          "none";
+
+      },
+      2800
+    );
 
 }
 
 
-function showSetupStatus(message){
+function showSetupStatus(
+  message
+){
 
-$("setupStatus")
-.textContent=
-message;
+  $("setupStatus")
+    .textContent =
+    message;
 
 }
 
 
 function applyTheme(){
 
-const theme =
-localStorage.getItem(
-"momentlog_theme"
-)||
-"default";
+  const theme =
+    localStorage.getItem(
+      "momentlog_theme"
+    ) ||
+    "default";
 
-document.documentElement
-.style
-.setProperty(
-"--bg",
-themes[theme]||
-themes.default
-);
 
-document.body
-.classList
-.toggle(
-"dark",
-theme===
-"dark"
-);
+  document.documentElement
+    .style
+    .setProperty(
+      "--bg",
+      themes[theme] ||
+      themes.default
+    );
 
-document
-.querySelectorAll(
-".themeOpt"
-)
-.forEach(
-button=>{
-button.classList.toggle(
-"selected",
-button.dataset.theme===
-theme
-);
+
+  document.body
+    .classList
+    .toggle(
+      "dark",
+      theme === "dark"
+    );
+
+
+  document
+    .querySelectorAll(
+      ".themeOpt"
+    )
+    .forEach(
+      button => {
+
+        button.classList.toggle(
+          "selected",
+          button.dataset.theme ===
+          theme
+        );
+
+      }
+    );
+
 }
-);
-
-}
 
 
-function friendlyError(error){
-
-const code =
-error?.code||
-"";
-
-if(
-code.includes(
-"permission-denied"
-)||
-code===
-"PERMISSION_DENIED"
+function friendlyError(
+  error
 ){
 
-return(
-"Firebase 權限被拒絕，請檢查 Realtime Database Rules"
-);
+  const code =
+    error?.code ||
+    "";
 
-}
 
-if(
-code.includes(
-"storage/unauthorized"
-)
-){
+  if(
+    code.includes(
+      "permission-denied"
+    ) ||
+    code ===
+    "PERMISSION_DENIED"
+  ){
 
-return(
-"Storage 權限被拒絕，請檢查 Storage Rules"
-);
+    return(
+      "Firebase 權限被拒絕，請檢查 Realtime Database Rules"
+    );
 
-}
+  }
 
-if(
-code.includes(
-"storage/bucket-not-found"
-)
-){
 
-return(
-"Storage 尚未建立"
-);
+  if(
+    code.includes(
+      "storage/unauthorized"
+    )
+  ){
 
-}
+    return(
+      "Storage 權限被拒絕，請檢查 Storage Rules"
+    );
 
-if(
-code===
-"auth/unauthorized-domain"
-){
+  }
 
-return(
-"目前網站網域尚未加入 Firebase Authentication 授權網域"
-);
 
-}
+  if(
+    code.includes(
+      "storage/bucket-not-found"
+    )
+  ){
 
-if(
-code===
-"auth/operation-not-allowed"
-){
+    return(
+      "Storage 尚未建立"
+    );
 
-return(
-"Firebase 尚未啟用 Google 登入"
-);
+  }
 
-}
 
-if(
-code===
-"auth/popup-blocked"
-){
+  if(
+    code ===
+    "auth/unauthorized-domain"
+  ){
 
-return(
-"瀏覽器阻擋 Google 登入視窗"
-);
+    return(
+      "目前網站網域尚未加入 Firebase Authentication 授權網域"
+    );
 
-}
+  }
 
-if(
-code===
-"auth/popup-closed-by-user"
-){
 
-return(
-"你關閉了 Google 登入視窗"
-);
+  if(
+    code ===
+    "auth/operation-not-allowed"
+  ){
 
-}
+    return(
+      "Firebase 尚未啟用 Google 登入"
+    );
 
-return(
-error?.message||
-"未知錯誤"
-);
+  }
+
+
+  if(
+    code ===
+    "auth/popup-blocked"
+  ){
+
+    return(
+      "瀏覽器阻擋 Google 登入視窗"
+    );
+
+  }
+
+
+  if(
+    code ===
+    "auth/popup-closed-by-user"
+  ){
+
+    return(
+      "你關閉了 Google 登入視窗"
+    );
+
+  }
+
+
+  return(
+    error?.message ||
+    "未知錯誤"
+  );
 
 }
 
 
 function memberPath(
-uid,
-id=roomId
+  uid,
+  id =
+    roomId
 ){
 
-return `
-rooms/${id}/members/${uid}
-`.replace(
-/\s+/g,
-""
-);
+  return `
+    rooms/${id}/members/${uid}
+  `.replace(
+    /\s+/g,
+    ""
+  );
 
 }
 
 
 function recordPath(
-date,
-hour,
-uid,
-id=roomId
+  date,
+  hour,
+  uid,
+  id =
+    roomId
 ){
 
-return `
-rooms/${id}/records/${dateKey(date)}/${pad(hour)}/${uid}
-`.replace(
-/\s+/g,
-""
-);
+  return `
+    rooms/${id}/records/${dateKey(date)}/${pad(hour)}/${uid}
+  `.replace(
+    /\s+/g,
+    ""
+  );
 
 }
 
 
 function clearListeners(){
 
-[
-unsubMeta,
-unsubMembers,
-unsubSettings,
-unsubRecords
-]
-.forEach(
-fn=>{
-try{
-fn?.();
-}catch{}
-}
-);
+  [
+    unsubMeta,
+    unsubMembers,
+    unsubSettings,
+    unsubRecords
+  ]
+  .forEach(
+    fn => {
 
-unsubMeta=
-unsubMembers=
-unsubSettings=
-unsubRecords=
-null;
+      try{
+        fn?.();
+      }catch{}
+
+    }
+  );
+
+
+  unsubMeta =
+  unsubMembers =
+  unsubSettings =
+  unsubRecords =
+  null;
 
 }
 
 
 function renderNotify(){
 
-const on =
-room?.myNotification
-?.enabled===
-true;
+  const on =
+    room?.myNotification
+      ?.enabled ===
+    true;
 
-const b =
-$("notify");
 
-b.textContent =
-on
-?"🔔 通知：開啟"
-:"🔕 通知：關閉";
+  const button =
+    $("notify");
 
-b.classList.toggle(
-"active",
-on
-);
+
+  button.textContent =
+    on
+      ? "🔔 通知：開啟"
+      : "🔕 通知：關閉";
+
+
+  button.classList.toggle(
+    "active",
+    on
+  );
 
 }
 
 
 function renderAccount(){
 
-const loggedIn =
-Boolean(user);
+  const loggedIn =
+    Boolean(
+      user
+    );
 
-$("loginArea")
-.classList
-.toggle(
-"hide",
-loggedIn
-);
 
-$("profileArea")
-.classList
-.toggle(
-"hide",
-!loggedIn
-);
+  $("loginArea")
+    .classList
+    .toggle(
+      "hide",
+      loggedIn
+    );
 
-if(!loggedIn){
 
-$("accountName")
-.textContent=
-"";
+  $("profileArea")
+    .classList
+    .toggle(
+      "hide",
+      !loggedIn
+    );
 
-$("accountEmail")
-.textContent=
-"";
 
-$("accountAvatar")
-.removeAttribute(
-"src"
-);
+  if(
+    !loggedIn
+  ){
 
-return;
+    $("accountName")
+      .textContent =
+      "";
 
-}
+    $("accountEmail")
+      .textContent =
+      "";
 
-$("accountName")
-.textContent=
-user.displayName||
-"Google 使用者";
+    $("accountAvatar")
+      .removeAttribute(
+        "src"
+      );
 
-$("accountEmail")
-.textContent=
-user.email||
-"已登入";
+    renderRecentRooms();
 
-if(user.photoURL){
+    return;
 
-$("accountAvatar")
-.src=
-user.photoURL;
+  }
 
-}else{
 
-$("accountAvatar")
-.removeAttribute(
-"src"
-);
+  $("accountName")
+    .textContent =
+    user.displayName ||
+    "Google 使用者";
 
-}
+
+  $("accountEmail")
+    .textContent =
+    user.email ||
+    "已登入";
+
+
+  if(
+    user.photoURL
+  ){
+
+    $("accountAvatar")
+      .src =
+      user.photoURL;
+
+  }else{
+
+    $("accountAvatar")
+      .removeAttribute(
+        "src"
+      );
+
+  }
+
+
+  renderRecentRooms();
 
 }
 
 
 async function loadProfile(){
 
-if(!user)return;
+  if(
+    !user
+  ){
 
-try{
+    return;
 
-const snapshot =
-await get(
-ref(
-db,
-`users/${user.uid}`
-)
-);
+  }
 
-room=
-room||
-{};
 
-room.profile=
-snapshot.exists()
-?snapshot.val()||
-{}
-:{};
+  try{
 
-}catch(e){
+    const snapshot =
+      await get(
+        ref(
+          db,
+          `users/${user.uid}`
+        )
+      );
 
-console.warn(
-"loadProfile:",
-e
-);
 
-room=
-room||
-{};
+    room =
+      room ||
+      {};
 
-room.profile=
-{};
 
-}
+    room.profile =
+      snapshot.exists()
+        ? snapshot.val() || {}
+        : {};
 
-$("name").value=
-room.profile?.displayName||
-localStorage.getItem(
-"momentlog_name"
-)||
-"";
+  }catch(error){
+
+    console.warn(
+      "loadProfile:",
+      error
+    );
+
+
+    room =
+      room ||
+      {};
+
+
+    room.profile =
+      {};
+
+  }
+
+
+  const savedName =
+    room.profile?.displayName ||
+    localStorage.getItem(
+      "momentlog_name"
+    ) ||
+    "";
+
+
+  $("name")
+    .value =
+    savedName;
+
+
+  renderRecentRooms();
 
 }
 
 
 async function saveProfile(){
 
-if(!user){
+  if(
+    !user
+  ){
 
-toast(
-"請先登入 Google 帳號"
-);
+    toast(
+      "請先登入 Google 帳號"
+    );
 
-return false;
+    return false;
 
-}
+  }
 
-const name =
-$("name")
-.value
-.trim();
 
-if(!name){
+  const name =
+    $("name")
+      .value
+      .trim();
 
-toast(
-"請輸入暱稱"
-);
 
-$("name").focus();
+  if(
+    !name
+  ){
 
-return false;
+    toast(
+      "請輸入暱稱"
+    );
 
-}
+    $("name")
+      .focus();
 
-if(
-name.length>30
-){
+    return false;
 
-toast(
-"暱稱最多 30 個字"
-);
+  }
 
-return false;
 
-}
+  if(
+    name.length >
+    30
+  ){
 
-try{
+    toast(
+      "暱稱最多 30 個字"
+    );
 
-const now =
-Date.now();
+    return false;
 
-await set(
-ref(
-db,
-`users/${user.uid}`
-),
-{
-displayName:name,
-updatedAt:now
-}
-);
+  }
 
-if(
-room?.members?.[user.uid]
-){
 
-await update(
-ref(
-db,
-memberPath(
-user.uid
-)
-),
-{
-displayName:name,
-updatedAt:now
-}
-);
+  try{
 
-}
+    const now =
+      Date.now();
 
-room=
-room||
-{};
 
-room.profile={
-...(room.profile||
-{}),
-displayName:name,
-updatedAt:now
-};
+    await set(
+      ref(
+        db,
+        `users/${user.uid}`
+      ),
+      {
+        displayName:
+          name,
+        updatedAt:
+          now
+      }
+    );
 
-localStorage.setItem(
-"momentlog_name",
-name
-);
 
-toast(
-"個人資料已保存"
-);
+    if(
+      room?.members?.[
+        user.uid
+      ]
+    ){
 
-return true;
+      await update(
+        ref(
+          db,
+          memberPath(
+            user.uid
+          )
+        ),
+        {
+          displayName:
+            name,
+          updatedAt:
+            now
+        }
+      );
 
-}catch(e){
+    }
 
-console.error(
-"saveProfile:",
-e
-);
 
-toast(
-"保存個人資料失敗："+friendlyError(e)
-);
+    room =
+      room ||
+      {};
 
-return false;
 
-}
+    room.profile = {
+
+      ...(room.profile || {}),
+
+      displayName:
+        name,
+
+      updatedAt:
+        now
+
+    };
+
+
+    localStorage.setItem(
+      "momentlog_name",
+      name
+    );
+
+
+    toast(
+      "個人資料已保存"
+    );
+
+
+    return true;
+
+  }catch(error){
+
+    console.error(
+      "saveProfile:",
+      error
+    );
+
+
+    toast(
+      "保存個人資料失敗："+friendlyError(error)
+    );
+
+
+    return false;
+
+  }
 
 }
 
 
 async function loginGoogle(){
 
-try{
+  try{
 
-$("googleLogin")
-.disabled=
-true;
+    $("googleLogin")
+      .disabled =
+      true;
 
-showSetupStatus(
-"正在開啟 Google 登入…"
-);
 
-await signInWithPopup(
-auth,
-googleProvider
-);
+    showSetupStatus(
+      "正在開啟 Google 登入…"
+    );
 
-toast(
-"Google 登入成功"
-);
 
-}catch(e){
+    await signInWithPopup(
+      auth,
+      googleProvider
+    );
 
-console.error(
-"Google login:",
-e
-);
 
-toast(
-"Google 登入失敗："+friendlyError(e)
-);
+    toast(
+      "Google 登入成功"
+    );
 
-showSetupStatus(
-"尚未登入 Google"
-);
 
-}finally{
+  }catch(error){
 
-$("googleLogin")
-.disabled=
-false;
+    console.error(
+      "Google login:",
+      error
+    );
 
-}
+
+    toast(
+      "Google 登入失敗："+friendlyError(error)
+    );
+
+
+    showSetupStatus(
+      "尚未登入 Google"
+    );
+
+
+  }finally{
+
+    $("googleLogin")
+      .disabled =
+      false;
+
+  }
 
 }
 
 
 async function logout(){
 
-try{
+  try{
 
-clearListeners();
+    clearListeners();
 
-room=
-null;
+    room =
+      null;
 
-roomId=
-"";
+    roomId =
+      "";
 
-localStorage.removeItem(
-"momentlog_room"
-);
+    localStorage.removeItem(
+      "momentlog_room"
+    );
 
-await signOut(
-auth
-);
 
-$("room")
-.classList
-.add(
-"hide"
-);
+    await signOut(
+      auth
+    );
 
-$("setup")
-.classList
-.remove(
-"hide"
-);
 
-showSetupStatus(
-"已登出"
-);
+    $("room")
+      .classList
+      .add(
+        "hide"
+      );
 
-toast(
-"已登出"
-);
 
-}catch(e){
+    $("setup")
+      .classList
+      .remove(
+        "hide"
+      );
 
-console.error(
-"logout:",
-e
-);
 
-toast(
-"登出失敗："+friendlyError(e)
-);
+    showSetupStatus(
+      "已登出"
+    );
 
-}
+
+    renderRecentRooms();
+
+
+    toast(
+      "已登出"
+    );
+
+  }catch(error){
+
+    console.error(
+      "logout:",
+      error
+    );
+
+
+    toast(
+      "登出失敗："+friendlyError(error)
+    );
+
+  }
 
 }
 
 
 async function createRoom(){
 
-if(!user){
+  if(
+    !user
+  ){
 
-toast(
-"請先登入 Google 帳號"
-);
+    toast(
+      "請先登入 Google 帳號"
+    );
 
-return;
+    return;
 
-}
+  }
 
-const name =
-$("name")
-.value
-.trim();
 
-const log =
-$("log")
-.value
-.trim();
+  const name =
+    $("name")
+      .value
+      .trim();
 
-if(!name){
 
-toast(
-"請輸入暱稱"
-);
+  const log =
+    $("log")
+      .value
+      .trim();
 
-$("name").focus();
 
-return;
+  if(
+    !name
+  ){
 
-}
+    toast(
+      "請輸入暱稱"
+    );
 
-if(!log){
+    $("name")
+      .focus();
 
-toast(
-"請輸入 Log 名稱"
-);
+    return;
 
-$("log").focus();
+  }
 
-return;
 
-}
+  if(
+    !log
+  ){
 
-if(
-!(await saveProfile())
-){
+    toast(
+      "請輸入 Log 名稱"
+    );
 
-return;
+    $("log")
+      .focus();
 
-}
+    return;
 
-try{
+  }
 
-let id=
-"";
 
-for(
-let i=0;
-i<8&&!id;
-i++
-){
+  if(
+    !(await saveProfile())
+  ){
 
-const candidate =
-crypto
-.randomUUID()
-.replace(
-/-/g,
-""
-)
-.slice(
-0,
-8
-)
-.toUpperCase();
+    return;
 
-const tx =
-await runTransaction(
-ref(
-db,
-`rooms/${candidate}/meta`
-),
-cur=>{
+  }
 
-if(cur!==null){
-return;
-}
 
-return{
-roomId:candidate,
-name:log,
-ownerUid:user.uid,
-createdAt:Date.now(),
-updatedAt:Date.now()
-};
+  try{
 
-}
-);
+    let id =
+      "";
 
-if(tx.committed){
-id=
-candidate;
-}
 
-}
+    for(
+      let i = 0;
+      i < 8 &&
+      !id;
+      i++
+    ){
 
-if(!id){
+      const candidate =
+        crypto
+          .randomUUID()
+          .replace(
+            /-/g,
+            ""
+          )
+          .slice(
+            0,
+            8
+          )
+          .toUpperCase();
 
-throw new Error(
-"房間碼建立失敗"
-);
 
-}
+      const transaction =
+        await runTransaction(
+          ref(
+            db,
+            `rooms/${candidate}/meta`
+          ),
+          current => {
 
-await set(
-ref(
-db,
-memberPath(
-user.uid,
-id
-)
-),
-{
-displayName:name,
-joinedAt:Date.now(),
-updatedAt:Date.now()
-}
-);
+            if(
+              current !==
+              null
+            ){
 
-localStorage.setItem(
-"momentlog_room",
-id
-);
+              return;
 
-localStorage.setItem(
-"momentlog_name",
-name
-);
+            }
 
-roomId=
-id;
 
-currentDate=
-new Date();
+            return {
 
-connectRoom();
+              roomId:
+                candidate,
 
-toast(
-"房間建立成功"
-);
+              name:
+                log,
 
-}catch(e){
+              ownerUid:
+                user.uid,
 
-console.error(
-"createRoom:",
-e
-);
+              createdAt:
+                Date.now(),
 
-toast(
-"建立房間失敗："+friendlyError(e)
-);
+              updatedAt:
+                Date.now()
 
-}
+            };
+
+          }
+        );
+
+
+      if(
+        transaction.committed
+      ){
+
+        id =
+          candidate;
+
+      }
+
+    }
+
+
+    if(
+      !id
+    ){
+
+      throw new Error(
+        "房間碼建立失敗"
+      );
+
+    }
+
+
+    await set(
+      ref(
+        db,
+        memberPath(
+          user.uid,
+          id
+        )
+      ),
+      {
+
+        displayName:
+          name,
+
+        joinedAt:
+          Date.now(),
+
+        updatedAt:
+          Date.now()
+
+      }
+    );
+
+
+    localStorage.setItem(
+      "momentlog_room",
+      id
+    );
+
+
+    localStorage.setItem(
+      "momentlog_name",
+      name
+    );
+
+
+    rememberRoom(
+      id,
+      log
+    );
+
+
+    roomId =
+      id;
+
+
+    currentDate =
+      new Date();
+
+
+    connectRoom();
+
+
+    toast(
+      "房間建立成功"
+    );
+
+  }catch(error){
+
+    console.error(
+      "createRoom:",
+      error
+    );
+
+
+    toast(
+      "建立房間失敗："+friendlyError(error)
+    );
+
+  }
 
 }
 
 
 async function joinRoom(){
 
-if(!user){
+  if(
+    !user
+  ){
 
-toast(
-"請先登入 Google 帳號"
-);
+    toast(
+      "請先登入 Google 帳號"
+    );
 
-return;
+    return;
 
-}
+  }
 
-const name =
-$("name")
-.value
-.trim();
 
-const id =
-$("joinCode")
-.value
-.trim()
-.toUpperCase();
+  const name =
+    $("name")
+      .value
+      .trim();
 
-if(!name){
 
-toast(
-"請輸入暱稱"
-);
+  const id =
+    $("joinCode")
+      .value
+      .trim()
+      .toUpperCase();
 
-$("name").focus();
 
-return;
+  if(
+    !name
+  ){
 
-}
+    toast(
+      "請輸入暱稱"
+    );
 
-if(
-!/^[A-Z0-9]{8,12}$/.test(
-id
-)
-){
+    $("name")
+      .focus();
 
-toast(
-"房間碼格式不正確"
-);
+    return;
 
-return;
+  }
 
-}
 
-try{
+  if(
+    !/^[A-Z0-9]{8,12}$/
+      .test(id)
+  ){
 
-const meta =
-await get(
-ref(
-db,
-`rooms/${id}/meta`
-)
-);
+    toast(
+      "房間碼格式不正確"
+    );
 
-if(!meta.exists()){
+    return;
 
-toast(
-"找不到這個房間"
-);
+  }
 
-return;
 
-}
+  try{
 
-const now =
-Date.now();
+    const meta =
+      await get(
+        ref(
+          db,
+          `rooms/${id}/meta`
+        )
+      );
 
-await set(
-ref(
-db,
-memberPath(
-user.uid,
-id
-)
-),
-{
-displayName:name,
-joinedAt:now,
-updatedAt:now
-}
-);
 
-try{
+    if(
+      !meta.exists()
+    ){
 
-await update(
-ref(
-db,
-`users/${user.uid}`
-),
-{
-displayName:name,
-updatedAt:now
-}
-);
+      toast(
+        "找不到這個房間"
+      );
 
-}catch(e){
+      return;
 
-console.warn(
-"profile update:",
-e
-);
+    }
 
-}
 
-localStorage.setItem(
-"momentlog_room",
-id
-);
+    const nameFromRoom =
+      meta.val()?.name ||
+      "MomentLog";
 
-localStorage.setItem(
-"momentlog_name",
-name
-);
 
-roomId=
-id;
+    const now =
+      Date.now();
 
-currentDate=
-new Date();
 
-connectRoom();
+    await set(
+      ref(
+        db,
+        memberPath(
+          user.uid,
+          id
+        )
+      ),
+      {
 
-toast(
-"已加入房間"
-);
+        displayName:
+          name,
 
-}catch(e){
+        joinedAt:
+          now,
 
-console.error(
-"joinRoom:",
-e
-);
+        updatedAt:
+          now
 
-toast(
-"加入房間失敗："+friendlyError(e)
-);
+      }
+    );
 
-}
+
+    try{
+
+      await update(
+        ref(
+          db,
+          `users/${user.uid}`
+        ),
+        {
+
+          displayName:
+            name,
+
+          updatedAt:
+            now
+
+        }
+      );
+
+    }catch(error){
+
+      console.warn(
+        "profile update:",
+        error
+      );
+
+    }
+
+
+    localStorage.setItem(
+      "momentlog_room",
+      id
+    );
+
+
+    localStorage.setItem(
+      "momentlog_name",
+      name
+    );
+
+
+    rememberRoom(
+      id,
+      nameFromRoom
+    );
+
+
+    roomId =
+      id;
+
+
+    currentDate =
+      new Date();
+
+
+    connectRoom();
+
+
+    toast(
+      "已加入房間"
+    );
+
+  }catch(error){
+
+    console.error(
+      "joinRoom:",
+      error
+    );
+
+
+    toast(
+      "加入房間失敗："+friendlyError(error)
+    );
+
+  }
 
 }
 
 
 function connectRoom(){
 
-clearListeners();
-
-if(!roomId||
-!user
-)return;
-
-unsubMeta =
-onValue(
-ref(
-db,
-`rooms/${roomId}/meta`
-),
-s=>{
-
-if(!s.exists()){
-
-clearListeners();
-
-room=
-null;
-
-roomId=
-"";
-
-localStorage.removeItem(
-"momentlog_room"
-);
-
-$("room")
-.classList
-.add(
-"hide"
-);
-
-$("setup")
-.classList
-.remove(
-"hide"
-);
-
-toast(
-"房間不存在或已被關閉"
-);
-
-return;
-
-}
-
-room=
-room||
-{};
-
-room.meta=
-s.val();
-
-render();
-
-},
-e=>{
-
-console.error(
-"meta listener:",
-e
-);
-
-toast(
-"房間資料讀取失敗："+friendlyError(e)
-);
-
-}
-);
+  clearListeners();
 
 
-unsubMembers =
-onValue(
-ref(
-db,
-`rooms/${roomId}/members`
-),
-s=>{
+  if(
+    !roomId ||
+    !user
+  ){
 
-room=
-room||
-{};
+    return;
 
-room.members=
-s.val()||
-{};
-
-if(
-!room.members?.[user.uid]
-){
-
-clearListeners();
-
-room=
-null;
-
-roomId=
-"";
-
-localStorage.removeItem(
-"momentlog_room"
-);
-
-$("room")
-.classList
-.add(
-"hide"
-);
-
-$("setup")
-.classList
-.remove(
-"hide"
-);
-
-toast(
-"你已離開這個房間"
-);
-
-return;
-
-}
-
-loadRecordsListener();
-
-render();
-
-},
-e=>{
-
-console.error(
-"members listener:",
-e
-);
-
-toast(
-"成員資料讀取失敗："+friendlyError(e)
-);
-
-}
-);
+  }
 
 
-unsubSettings =
-onValue(
-ref(
-db,
-`rooms/${roomId}/notificationSettings/${user.uid}`
-),
-s=>{
+  room =
+    room ||
+    {};
 
-room=
-room||
-{};
 
-room.myNotification=
-s.val()||
-{};
+  unsubMeta =
+    onValue(
+      ref(
+        db,
+        `rooms/${roomId}/meta`
+      ),
+      snapshot => {
 
-render();
+        if(
+          !snapshot.exists()
+        ){
 
-},
-e=>{
+          clearListeners();
 
-console.warn(
-"notification listener:",
-e
-);
+          room =
+            null;
 
-}
-);
+          roomId =
+            "";
+
+          localStorage.removeItem(
+            "momentlog_room"
+          );
+
+
+          $("room")
+            .classList
+            .add(
+              "hide"
+            );
+
+
+          $("setup")
+            .classList
+            .remove(
+              "hide"
+            );
+
+
+          toast(
+            "房間不存在或已被關閉"
+          );
+
+          return;
+
+        }
+
+
+        room.meta =
+          snapshot.val() ||
+          {};
+
+
+        /*
+         * 確保曾加入房間名稱同步。
+         */
+
+        rememberRoom(
+          roomId,
+          room.meta.name ||
+          "MomentLog"
+        );
+
+
+        render();
+
+      },
+      error => {
+
+        console.error(
+          "meta listener:",
+          error
+        );
+
+
+        toast(
+          "房間資料讀取失敗："+friendlyError(error)
+        );
+
+      }
+    );
+
+
+  unsubMembers =
+    onValue(
+      ref(
+        db,
+        `rooms/${roomId}/members`
+      ),
+      snapshot => {
+
+        room.members =
+          snapshot.val() ||
+          {};
+
+
+        if(
+          !room.members[user.uid]
+        ){
+
+          clearListeners();
+
+          roomId =
+            "";
+
+
+          /*
+           * 注意：
+           * 這裡只把目前加入狀態清掉。
+           * 最近房間紀錄仍然保留。
+           */
+
+          localStorage.removeItem(
+            "momentlog_room"
+          );
+
+
+          /*
+           * 保留歷史房間。
+           */
+
+          markRecentRoomLeft(
+            room?.meta?.roomId ||
+            localStorage.getItem(
+              "momentlog_last_room"
+            ) ||
+            ""
+          );
+
+
+          $("room")
+            .classList
+            .add(
+              "hide"
+            );
+
+
+          $("setup")
+            .classList
+            .remove(
+              "hide"
+            );
+
+
+          toast(
+            "你已離開這個房間"
+          );
+
+
+          renderRecentRooms();
+
+
+          return;
+
+        }
+
+
+        loadRecordsListener();
+
+        render();
+
+      },
+      error => {
+
+        console.error(
+          "members listener:",
+          error
+        );
+
+
+        toast(
+          "成員資料讀取失敗："+friendlyError(error)
+        );
+
+      }
+    );
+
+
+  unsubSettings =
+    onValue(
+      ref(
+        db,
+        `rooms/${roomId}/notificationSettings/${user.uid}`
+      ),
+      snapshot => {
+
+        room.myNotification =
+          snapshot.val() ||
+          {};
+
+
+        renderNotify();
+
+      },
+      error => {
+
+        console.warn(
+          "notification listener:",
+          error
+        );
+
+      }
+    );
 
 }
 
 
 function loadRecordsListener(){
 
-if(unsubRecords){
+  if(
+    unsubRecords
+  ){
 
-try{
-unsubRecords();
-}catch{}
+    try{
+      unsubRecords();
+    }catch{}
 
-unsubRecords=
-null;
+    unsubRecords =
+      null;
 
-}
+  }
 
-if(
-!roomId||
-!user||
-!room?.members?.[user.uid]
-){
 
-return;
+  if(
+    !roomId ||
+    !user ||
+    !room?.members?.[user.uid]
+  ){
 
-}
+    return;
 
-const targetDate =
-dateKey(
-currentDate
-);
+  }
 
-unsubRecords =
-onValue(
-ref(
-db,
-`rooms/${roomId}/records/${targetDate}`
-),
-s=>{
 
-room=
-room||
-{};
+  const targetDate =
+    dateKey(
+      currentDate
+    );
 
-room.records=
-s.val()||
-{};
 
-render();
+  unsubRecords =
+    onValue(
+      ref(
+        db,
+        `rooms/${roomId}/records/${targetDate}`
+      ),
+      snapshot => {
 
-},
-e=>{
+        room.records =
+          snapshot.val() ||
+          {};
 
-console.error(
-"records listener:",
-e
-);
 
-toast(
-"紀錄讀取失敗："+friendlyError(e)
-);
+        render();
 
-}
-);
+      },
+      error => {
+
+        console.error(
+          "records listener:",
+          error
+        );
+
+
+        toast(
+          "紀錄讀取失敗："+friendlyError(error)
+        );
+
+      }
+    );
 
 }
 
 
 function render(){
 
-if(!room?.meta)return;
+  if(
+    !room?.meta
+  ){
 
-$("setup")
-.classList
-.add(
-"hide"
-);
+    return;
 
-$("room")
-.classList
-.remove(
-"hide"
-);
+  }
 
-$("title")
-.textContent=
-room.meta.name||
-"MomentLog";
 
-$("roomCode")
-.textContent=
-roomId;
+  $("setup")
+    .classList
+    .add(
+      "hide"
+    );
 
-$("sub")
-.textContent=
-`${dateKey(currentDate)} · 房間碼 ${roomId}`;
 
-const now =
-new Date();
+  $("room")
+    .classList
+    .remove(
+      "hide"
+    );
 
-const p =
-taipeiParts(
-now
-);
 
-$("clock")
-.textContent=
-`${p.hour}:${p.minute}:${p.second}`;
+  $("title")
+    .textContent =
+    room.meta.name ||
+    "MomentLog";
 
-const max =
-isToday(currentDate)
-?Number(p.hour)
-:23;
 
-const all=
-room.records||
-{};
+  $("roomCode")
+    .textContent =
+    roomId;
 
-const entries=[];
 
-for(
-let h=0;
-h<=max;
-h++
-){
+  $("sub")
+    .textContent =
+    `${dateKey(currentDate)} · 房間碼 ${roomId}`;
 
-entries.push(
-[
-h,
-all[pad(h)]||
-{}
-]
-);
 
-}
+  const now =
+    new Date();
 
-$("available")
-.textContent=
-String(entries.length);
 
-$("doneCount")
-.textContent=
-String(
-entries.reduce(
-(n,[,v])=>
-n+
-(
-v[user.uid]
-?1
-:0
-),
-0
-)
-);
+  const p =
+    taipeiParts(
+      now
+    );
 
-$("doneLabel")
-.textContent=
-isToday(currentDate)
-?"今日已完成"
-:"當日已完成";
 
-$("dateLabel")
-.textContent=
-isToday(currentDate)
-?"今天"
-:`歷史日期：${dateKey(currentDate)}`;
+  $("clock")
+    .textContent =
+    `${p.hour}:${p.minute}:${p.second}`;
 
-$("yesterday")
-.classList
-.toggle(
-"hide",
-!isToday(currentDate)
-);
 
-$("today")
-.classList
-.toggle(
-"hide",
-isToday(currentDate)
-);
+  const maxHour =
+    isToday(
+      currentDate
+    )
+      ? Number(p.hour)
+      : 23;
 
-renderMembers();
 
-renderTimeline(
-entries
-);
+  const all =
+    room.records ||
+    {};
 
-renderNotify();
 
-renderAccount();
+  const entries =
+    [];
 
-applyTheme();
+
+  for(
+    let h = 0;
+    h <= maxHour;
+    h++
+  ){
+
+    entries.push(
+      [
+        h,
+        all[pad(h)] ||
+        {}
+      ]
+    );
+
+  }
+
+
+  $("available")
+    .textContent =
+    String(
+      entries.length
+    );
+
+
+  $("doneCount")
+    .textContent =
+    String(
+      entries.reduce(
+        (n,[,v]) =>
+          n +
+          (
+            v[user.uid]
+              ? 1
+              : 0
+          ),
+        0
+      )
+    );
+
+
+  $("doneLabel")
+    .textContent =
+    isToday(
+      currentDate
+    )
+      ? "今日已完成"
+      : "當日已完成";
+
+
+  $("dateLabel")
+    .textContent =
+    isToday(
+      currentDate
+    )
+      ? "今天"
+      : `歷史日期：${dateKey(currentDate)}`;
+
+
+  $("yesterday")
+    .classList
+    .toggle(
+      "hide",
+      !isToday(currentDate)
+    );
+
+
+  $("today")
+    .classList
+    .toggle(
+      "hide",
+      isToday(currentDate)
+    );
+
+
+  if(
+    isToday(
+      currentDate
+    )
+  ){
+
+    const next =
+      new Date(
+        now
+      );
+
+
+    next.setSeconds(
+      0,
+      0
+    );
+
+
+    next.setMinutes(
+      0,
+      0
+    );
+
+
+    next.setHours(
+      next.getHours() + 1
+    );
+
+
+    const np =
+      taipeiParts(
+        next
+      );
+
+
+    $("next")
+      .textContent =
+      `下一個紀錄點 ${np.hour}:00`;
+
+  }else{
+
+    $("next")
+      .textContent =
+      "正在查看歷史紀錄";
+
+  }
+
+
+  renderMembers();
+
+  renderTimeline(
+    entries
+  );
+
+  renderNotify();
+
+  renderAccount();
+
+  applyTheme();
 
 }
 
 
 function renderMembers(){
 
-const members=
-room.members||
-{};
+  const members =
+    room.members ||
+    {};
 
-const entries=
-room.records||
-{};
+  const entries =
+    room.records ||
+    {};
 
-const ownerUid=
-room.meta?.ownerUid;
-
-$("members").innerHTML=
-Object.entries(
-members
-)
-.map(
-([uid,m])=>{
-
-const done=
-Object.values(
-entries
-)
-.some(
-slot=>
-Boolean(
-slot?.[uid]
-)
-);
-
-const owner=
-uid===
-ownerUid;
-
-return`
-<div class="member">
-
-<span class="memberName">
-👤
-${escapeHtml(
-m.displayName||
-"未命名"
-)}
-</span>
-
-<span class="memberRight">
-
-${
-owner
-?`
-<span class="badge owner">
-房主
-</span>
-`
-:""
-}
-
-<span class="badge ${
-done
-?"done"
-:"wait"
-}">
-${
-done
-?"已完成"
-:"等待中"
-}
-</span>
-
-</span>
-
-</div>
-`;
-
-}
-)
-.join("")
-||
-"<div class='muted'>沒有成員</div>";
-
-}
+  const ownerUid =
+    room.meta?.ownerUid;
 
 
-function renderTimeline(entries){
+  $("members")
+    .innerHTML =
+    Object.entries(
+      members
+    )
+    .map(
+      ([uid,m]) => {
 
-if(!entries.length){
+        const done =
+          Object.values(
+            entries
+          )
+          .some(
+            slot =>
+              Boolean(
+                slot?.[uid]
+              )
+          );
 
-$("slots").innerHTML=
-`
-<div class="emptyTimeline">
-今天還沒有可顯示的紀錄點。
-</div>
-`;
 
-return;
+        const owner =
+          uid ===
+          ownerUid;
+
+
+        return `
+          <div class="member">
+
+            <span class="memberName">
+              👤
+              ${escapeHtml(
+                m.displayName ||
+                "未命名"
+              )}
+            </span>
+
+            <span class="memberRight">
+
+              ${
+                owner
+                  ? `
+                    <span class="badge owner">
+                      房主
+                    </span>
+                  `
+                  : ""
+              }
+
+              <span class="badge ${
+                done
+                  ? "done"
+                  : "wait"
+              }">
+
+                ${
+                  done
+                    ? "已完成"
+                    : "等待中"
+                }
+
+              </span>
+
+            </span>
+
+          </div>
+        `;
+
+      }
+    )
+    .join("")
+    ||
+    "<div class='muted'>沒有成員</div>";
 
 }
 
-$("slots").innerHTML=
-entries
-.map(
-([h,users])=>{
 
-const mine=
-users?.[user.uid]||
-null;
-
-let media=
-"";
-
-if(
-mine?.media?.downloadURL
+function renderTimeline(
+  entries
 ){
 
-if(
-(mine.media.contentType||
-"")
-.startsWith(
-"image/"
-)
+  if(
+    !entries.length
+  ){
+
+    $("slots")
+      .innerHTML =
+      `
+        <div class="emptyTimeline">
+          今天還沒有可顯示的紀錄點。
+        </div>
+      `;
+
+    return;
+
+  }
+
+
+  $("slots")
+    .innerHTML =
+    entries
+      .map(
+        ([h,users]) => {
+
+          const mine =
+            users?.[user.uid] ||
+            null;
+
+
+          let media =
+            "";
+
+
+          if(
+            mine?.media?.downloadURL
+          ){
+
+            const type =
+              mine.media.contentType ||
+              "";
+
+
+            if(
+              type.startsWith(
+                "image/"
+              )
+            ){
+
+              media =
+                `
+                  <div class="media">
+                    <img
+                      src="${escapeHtml(
+                        mine.media.downloadURL
+                      )}"
+                      alt="圖片"
+                      loading="lazy"
+                    >
+                  </div>
+                `;
+
+            }else if(
+              type.startsWith(
+                "video/"
+              )
+            ){
+
+              media =
+                `
+                  <div class="media">
+                    <video
+                      src="${escapeHtml(
+                        mine.media.downloadURL
+                      )}"
+                      controls
+                      playsinline
+                      preload="metadata"
+                    ></video>
+                  </div>
+                `;
+
+            }
+
+          }
+
+
+          return `
+            <div class="slot">
+
+              <div class="time">
+                ${pad(h)}:00
+              </div>
+
+              <div class="slotBox">
+
+                <div class="slotTitle">
+
+                  <b>
+                    ${
+                      mine
+                        ? "📌 已記錄"
+                        : "尚未紀錄"
+                    }
+                  </b>
+
+                </div>
+
+                ${
+                  mine
+                    ? `
+                      <div class="pill done">
+                        ✅ 你已完成
+                      </div>
+                    `
+                    : ""
+                }
+
+                ${
+                  mine?.text
+                    ? `
+                      <div class="caption">
+                        ${escapeHtml(
+                          mine.text
+                        )}
+                      </div>
+                    `
+                    : ""
+                }
+
+                ${media}
+
+                <div
+                  style="margin-top:9px"
+                >
+
+                  <button
+                    class="btn ${
+                      mine
+                        ? "primary"
+                        : ""
+                    }"
+                    data-hour="${h}"
+                  >
+                    ${
+                      mine
+                        ? "編輯紀錄"
+                        : "立即紀錄"
+                    }
+                  </button>
+
+                </div>
+
+              </div>
+
+            </div>
+          `;
+
+        }
+      )
+      .join("");
+
+
+  document
+    .querySelectorAll(
+      "[data-hour]"
+    )
+    .forEach(
+      button => {
+
+        button.onclick =
+          () => {
+
+            openRecord(
+              Number(
+                button.dataset.hour
+              )
+            );
+
+          };
+
+      }
+    );
+
+}
+
+
+function openRecord(
+  h
 ){
 
-media=
-`
-<div class="media">
-<img
-src="${escapeHtml(
-mine.media.downloadURL
-)}"
-alt="圖片"
-loading="lazy"
->
-</div>
-`;
+  if(
+    !user ||
+    !roomId
+  ){
 
-}else if(
-(mine.media.contentType||
-"")
-.startsWith(
-"video/"
-)
-){
+    toast(
+      "請先登入並加入房間"
+    );
 
-media=
-`
-<div class="media">
-<video
-src="${escapeHtml(
-mine.media.downloadURL
-)}"
-controls
-playsinline
-preload="metadata"
-></video>
-</div>
-`;
+    return;
 
-}
-
-}
-
-return`
-<div class="slot">
-
-<div class="time">
-${pad(h)}:00
-</div>
-
-<div class="slotBox">
-
-<div class="slotTitle">
-
-<b>
-${
-mine
-?"📌 已記錄"
-:"尚未紀錄"
-}
-</b>
-
-</div>
-
-${
-mine
-?`
-<div class="pill done">
-✅ 你已完成
-</div>
-`
-:""
-}
-
-${
-mine?.text
-?`
-<div class="caption">
-${escapeHtml(
-mine.text
-)}
-</div>
-`
-:""
-}
-
-${media}
-
-<div style="margin-top:9px">
-
-<button
-class="btn ${
-mine
-?"primary"
-:""
-}"
-data-hour="${h}"
->
-${
-mine
-?"編輯紀錄"
-:"立即紀錄"
-}
-</button>
-
-</div>
-
-</div>
-
-</div>
-`;
-
-}
-)
-.join(
-""
-);
-
-document
-.querySelectorAll(
-"[data-hour]"
-)
-.forEach(
-b=>{
-b.onclick=
-()=>{
-openRecord(
-Number(
-b.dataset.hour
-)
-);
-};
-}
-);
-
-}
+  }
 
 
-function openRecord(h){
+  activeHour =
+    h;
 
-if(!user||
-!roomId
-){
 
-toast(
-"請先登入並加入房間"
-);
+  selectedFile =
+    null;
 
-return;
 
-}
+  const mine =
+    room?.records?.[
+      pad(h)
+    ]?.[
+      user.uid
+    ] ||
+    null;
 
-activeHour=
-h;
 
-selectedFile=
-null;
+  $("recordWhen")
+    .textContent =
+    `${dateKey(currentDate)} · ${pad(h)}:00`;
 
-const mine=
-room?.records?.[
-pad(h)
-]?.[
-user.uid
-]||
-null;
 
-$("recordWhen")
-.textContent=
-`${dateKey(currentDate)} · ${pad(h)}:00`;
+  $("caption")
+    .value =
+    mine?.text ||
+    "";
 
-$("caption")
-.value=
-mine?.text||
-"";
 
-$("uploadStatus")
-.classList
-.add(
-"hide"
-);
+  $("uploadStatus")
+    .classList
+    .add(
+      "hide"
+    );
 
-$("uploadText")
-.textContent=
-"";
 
-$("progressBar")
-.style
-.width=
-"0%";
+  $("uploadText")
+    .textContent =
+    "";
 
-renderPreview(
-mine?.media
-);
 
-$("recordModal")
-.classList
-.add(
-"show"
-);
+  $("progressBar")
+    .style
+    .width =
+    "0%";
+
+
+  renderPreview(
+    mine?.media
+  );
+
+
+  $("recordModal")
+    .classList
+    .add(
+      "show"
+    );
 
 }
 
 
 function renderPreview(
-url,
-type,
-fileUrl=""
+  url,
+  type,
+  fileUrl=""
 ){
 
-const src=
-fileUrl||
-url;
+  const src =
+    fileUrl ||
+    url;
 
-if(!src){
 
-$("preview")
-.innerHTML=
-"";
+  if(
+    !src
+  ){
 
-return;
+    $("preview")
+      .innerHTML =
+      "";
 
-}
+    return;
 
-$("preview").innerHTML=
-(type||
-"")
-.startsWith(
-"image/"
-)
-?`
-<div class="media">
-<img
-src="${escapeHtml(src)}"
-alt="預覽"
->
-</div>
-`
-:`
-<div class="media">
-<video
-src="${escapeHtml(src)}"
-controls
-playsinline
-></video>
-</div>
-`;
+  }
+
+
+  $("preview")
+    .innerHTML =
+    (type || "")
+      .startsWith(
+        "image/"
+      )
+      ? `
+        <div class="media">
+          <img
+            src="${escapeHtml(src)}"
+            alt="預覽"
+          >
+        </div>
+      `
+      : `
+        <div class="media">
+          <video
+            src="${escapeHtml(src)}"
+            controls
+            playsinline
+          ></video>
+        </div>
+      `;
 
 }
 
 
 function closeRecord(){
 
-if(
-selectedFile?.previewUrl
+  if(
+    selectedFile?.previewUrl
+  ){
+
+    URL.revokeObjectURL(
+      selectedFile.previewUrl
+    );
+
+  }
+
+
+  $("recordModal")
+    .classList
+    .remove(
+      "show"
+    );
+
+
+  selectedFile =
+    null;
+
+
+  activeHour =
+    null;
+
+
+  $("preview")
+    .innerHTML =
+    "";
+
+
+  $("uploadStatus")
+    .classList
+    .add(
+      "hide"
+    );
+
+
+  $("uploadText")
+    .textContent =
+    "";
+
+
+  $("progressBar")
+    .style
+    .width =
+    "0%";
+
+}
+
+
+function chooseFile(
+  f
 ){
 
-URL.revokeObjectURL(
-selectedFile.previewUrl
-);
+  if(
+    !f
+  ){
 
-}
+    return;
 
-$("recordModal")
-.classList
-.remove(
-"show"
-);
-
-selectedFile=
-null;
-
-activeHour=
-null;
-
-$("preview").innerHTML=
-"";
-
-$("uploadStatus")
-.classList
-.add(
-"hide"
-);
-
-$("uploadText")
-.textContent=
-"";
-
-$("progressBar")
-.style
-.width=
-"0%";
-
-}
+  }
 
 
-function chooseFile(f){
+  if(
+    !/^(image|video)\//
+      .test(
+        f.type
+      )
+  ){
 
-if(!f)return;
+    toast(
+      "只支援圖片或影片"
+    );
 
-if(
-!/^(image|video)\//
-.test(
-f.type
-)
-){
+    return;
 
-toast(
-"只支援圖片或影片"
-);
+  }
 
-return;
 
-}
+  if(
+    f.size >
+    250 *
+    1024 *
+    1024
+  ){
 
-if(
-f.size>
-250*
-1024*
-1024
-){
+    toast(
+      "單檔不能超過 250MB"
+    );
 
-toast(
-"單檔不能超過 250MB"
-);
+    return;
 
-return;
+  }
 
-}
 
-if(
-selectedFile?.previewUrl
-){
+  if(
+    selectedFile?.previewUrl
+  ){
 
-URL.revokeObjectURL(
-selectedFile.previewUrl
-);
+    URL.revokeObjectURL(
+      selectedFile.previewUrl
+    );
 
-}
+  }
 
-selectedFile={
-file:f,
-previewUrl:
-URL.createObjectURL(f)
-};
 
-renderPreview(
-"",
-f.type,
-selectedFile.previewUrl
-);
+  selectedFile = {
+
+    file:
+      f,
+
+    previewUrl:
+      URL.createObjectURL(
+        f
+      )
+
+  };
+
+
+  renderPreview(
+    "",
+    f.type,
+    selectedFile.previewUrl
+  );
 
 }
 
 
 function setUploadStatus(
-t
+  text
 ){
 
-$("uploadText")
-.textContent=
-t;
+  $("uploadText")
+    .textContent =
+    text;
 
-$("uploadStatus")
-.classList
-.remove(
-"hide"
-);
+
+  $("uploadStatus")
+    .classList
+    .remove(
+      "hide"
+    );
 
 }
 
 
 async function saveRecord(){
 
-if(
-activeHour===null||
-!user
-)return;
+  if(
+    activeHour ===
+    null ||
+    !user ||
+    !roomId
+  ){
 
-const path=
-recordPath(
-currentDate,
-activeHour,
-user.uid
-);
+    toast(
+      "目前無法儲存紀錄"
+    );
 
-const old=
-room?.records?.[
-pad(activeHour)
-]?.[
-user.uid
-]||
-null;
+    return;
 
-let media=
-old?.media||
-null;
+  }
 
-let newStoragePath=
-null;
 
-try{
+  const path =
+    recordPath(
+      currentDate,
+      activeHour,
+      user.uid
+    );
 
-$("saveRecord")
-.disabled=
-true;
 
-setUploadStatus(
-selectedFile
-?"準備上傳媒體…"
-:"正在儲存紀錄…"
-);
+  const old =
+    room?.records?.[
+      pad(activeHour)
+    ]?.[
+      user.uid
+    ] ||
+    null;
 
-if(
-selectedFile
-){
 
-const f=
-selectedFile.file;
+  let media =
+    old?.media ||
+    null;
 
-newStoragePath=
-`
-room-media/
-${roomId}/
-${user.uid}/
-${dateKey(currentDate)}_${pad(activeHour)}/
-${crypto.randomUUID()}-
-${safeFileName(f.name)}
-`.replace(
-/\s+/g,
-""
-);
 
-const task=
-uploadBytesResumable(
-storageRef(
-storage,
-newStoragePath
-),
-f,
-{
-contentType:f.type,
-customMetadata:{
-roomId,
-uid:user.uid
-}
-}
-);
+  let newStoragePath =
+    null;
 
-await new Promise(
-(resolve,reject)=>{
 
-task.on(
-"state_changed",
-snapshot=>{
+  try{
 
-const pct=
-snapshot.totalBytes
-?Math.round(
-snapshot.bytesTransferred/
-snapshot.totalBytes*
-100
-)
-:0;
+    $("saveRecord")
+      .disabled =
+      true;
 
-setUploadStatus(
-`正在上傳媒體… ${pct}%`
-);
 
-$("progressBar")
-.style
-.width=
-`${pct}%`;
+    setUploadStatus(
+      selectedFile
+        ? "準備上傳媒體…"
+        : "正在儲存紀錄…"
+    );
 
-},
-reject,
-async()=>{
 
-try{
+    if(
+      selectedFile
+    ){
 
-media={
-storagePath:
-newStoragePath,
+      const f =
+        selectedFile.file;
 
-downloadURL:
-await getDownloadURL(
-task.snapshot.ref
-),
 
-contentType:
-f.type,
+      newStoragePath =
+        `
+          room-media/
+          ${roomId}/
+          ${user.uid}/
+          ${dateKey(currentDate)}_${pad(activeHour)}/
+          ${crypto.randomUUID()}-
+          ${safeFileName(f.name)}
+        `.replace(
+          /\s+/g,
+          ""
+        );
 
-name:
-f.name,
 
-size:
-f.size
-};
+      const task =
+        uploadBytesResumable(
+          storageRef(
+            storage,
+            newStoragePath
+          ),
+          f,
+          {
+            contentType:
+              f.type,
 
-resolve();
+            customMetadata:{
+              roomId,
+              uid:user.uid
+            }
 
-}catch(e){
+          }
+        );
 
-reject(e);
 
-}
+      await new Promise(
+        (
+          resolve,
+          reject
+        ) => {
 
-}
-);
+          task.on(
 
-}
-);
+            "state_changed",
 
-}
+            snapshot => {
 
-const text=
-$("caption")
-.value
-.trim();
+              const percent =
+                snapshot.totalBytes
+                  ? Math.round(
+                      snapshot.bytesTransferred /
+                      snapshot.totalBytes *
+                      100
+                    )
+                  : 0;
 
-const now=
-Date.now();
 
-await set(
-ref(
-db,
-path
-),
-{
-date:
-dateKey(currentDate),
+              setUploadStatus(
+                `正在上傳媒體… ${percent}%`
+              );
 
-hour:
-activeHour,
 
-text,
+              $("progressBar")
+                .style
+                .width =
+                `${percent}%`;
 
-authorUid:
-user.uid,
+            },
 
-authorName:
-localStorage.getItem(
-"momentlog_name"
-)||
-"我",
+            reject,
 
-savedAt:
-old?.savedAt||
-now,
+            async () => {
 
-updatedAt:
-now,
+              try{
 
-media
-}
-);
+                media = {
 
-if(
-old?.media?.storagePath&&
-newStoragePath&&
-old.media.storagePath!==
-newStoragePath
-){
+                  storagePath:
+                    newStoragePath,
 
-deleteObject(
-storageRef(
-storage,
-old.media.storagePath
-)
-)
-.catch(
-console.warn
-);
+                  downloadURL:
+                    await getDownloadURL(
+                      task.snapshot.ref
+                    ),
 
-}
+                  contentType:
+                    f.type,
 
-closeRecord();
+                  name:
+                    f.name,
 
-toast(
-"已同步到雲端"
-);
+                  size:
+                    f.size
 
-}catch(e){
+                };
 
-if(newStoragePath){
 
-try{
+                resolve();
 
-await deleteObject(
-storageRef(
-storage,
-newStoragePath
-)
-);
+              }catch(error){
 
-}catch{}
+                reject(
+                  error
+                );
 
-}
+              }
 
-console.error(
-"saveRecord:",
-e
-);
+            }
 
-setUploadStatus(
-"儲存失敗："+friendlyError(e)
-);
+          );
 
-toast(
-"儲存失敗："+friendlyError(e)
-);
+        }
+      );
 
-}finally{
+    }
 
-$("saveRecord")
-.disabled=
-false;
 
-}
+    const text =
+      $("caption")
+        .value
+        .trim();
+
+
+    const now =
+      Date.now();
+
+
+    await set(
+      ref(
+        db,
+        path
+      ),
+      {
+
+        date:
+          dateKey(
+            currentDate
+          ),
+
+        hour:
+          activeHour,
+
+        text,
+
+        authorUid:
+          user.uid,
+
+        authorName:
+          localStorage.getItem(
+            "momentlog_name"
+          ) ||
+          "我",
+
+        savedAt:
+          old?.savedAt ||
+          now,
+
+        updatedAt:
+          now,
+
+        media
+
+      }
+    );
+
+
+    if(
+      old?.media?.storagePath &&
+      newStoragePath &&
+      old.media.storagePath !==
+      newStoragePath
+    ){
+
+      deleteObject(
+        storageRef(
+          storage,
+          old.media.storagePath
+        )
+      )
+      .catch(
+        console.warn
+      );
+
+    }
+
+
+    closeRecord();
+
+
+    toast(
+      "已同步到雲端"
+    );
+
+
+  }catch(error){
+
+    if(
+      newStoragePath
+    ){
+
+      try{
+
+        await deleteObject(
+          storageRef(
+            storage,
+            newStoragePath
+          )
+        );
+
+      }catch{}
+
+    }
+
+
+    console.error(
+      "saveRecord:",
+      error
+    );
+
+
+    setUploadStatus(
+      "儲存失敗："+friendlyError(error)
+    );
+
+
+    toast(
+      "儲存失敗："+friendlyError(error)
+    );
+
+
+  }finally{
+
+    $("saveRecord")
+      .disabled =
+      false;
+
+  }
 
 }
 
 
 async function removeMedia(){
 
-if(
-activeHour===null||
-!user
-)return;
+  if(
+    activeHour ===
+    null ||
+    !user
+  ){
 
-const old=
-room?.records?.[
-pad(activeHour)
-]?.[
-user.uid
-]||
-null;
+    return;
 
-if(
-!old?.media?.storagePath
-){
+  }
 
-toast(
-"目前沒有媒體"
-);
 
-return;
+  const old =
+    room?.records?.[
+      pad(activeHour)
+    ]?.[
+      user.uid
+    ] ||
+    null;
 
-}
 
-try{
+  if(
+    !old?.media?.storagePath
+  ){
 
-setUploadStatus(
-"正在移除媒體…"
-);
+    toast(
+      "目前沒有媒體"
+    );
 
-await set(
-ref(
-db,
-recordPath(
-currentDate,
-activeHour,
-user.uid
-)
-),
-{
-...old,
-media:null,
-updatedAt:
-Date.now()
-}
-);
+    return;
 
-try{
+  }
 
-await deleteObject(
-storageRef(
-storage,
-old.media.storagePath
-)
-);
 
-}catch(e){
+  try{
 
-console.warn(e);
+    setUploadStatus(
+      "正在移除媒體…"
+    );
 
-}
 
-selectedFile=
-null;
+    await set(
+      ref(
+        db,
+        recordPath(
+          currentDate,
+          activeHour,
+          user.uid
+        )
+      ),
+      {
 
-$("preview")
-.innerHTML=
-"";
+        ...old,
 
-toast(
-"媒體已移除"
-);
+        media:
+          null,
 
-}catch(e){
+        updatedAt:
+          Date.now()
 
-console.error(
-"removeMedia:",
-e
-);
+      }
+    );
 
-setUploadStatus(
-"移除失敗："+friendlyError(e)
-);
 
-toast(
-"移除失敗："+friendlyError(e)
-);
+    try{
 
-}
+      await deleteObject(
+        storageRef(
+          storage,
+          old.media.storagePath
+        )
+      );
+
+    }catch(error){
+
+      console.warn(
+        error
+      );
+
+    }
+
+
+    selectedFile =
+      null;
+
+
+    $("preview")
+      .innerHTML =
+      "";
+
+
+    toast(
+      "媒體已移除"
+    );
+
+  }catch(error){
+
+    console.error(
+      "removeMedia:",
+      error
+    );
+
+
+    setUploadStatus(
+      "移除失敗："+friendlyError(error)
+    );
+
+
+    toast(
+      "移除失敗："+friendlyError(error)
+    );
+
+  }
 
 }
 
 
 async function toggleNotification(){
 
-try{
+  try{
 
-if(
-room?.myNotification?.enabled===
-true
-){
+    if(
+      room?.myNotification
+        ?.enabled ===
+      true
+    ){
 
-await update(
-ref(
-db,
-`rooms/${roomId}/notificationSettings/${user.uid}`
-),
-{
-enabled:false,
-updatedAt:Date.now()
-}
-);
+      await update(
+        ref(
+          db,
+          `rooms/${roomId}/notificationSettings/${user.uid}`
+        ),
+        {
 
-toast(
-"提醒已關閉"
-);
+          enabled:
+            false,
 
-return;
+          updatedAt:
+            Date.now()
 
-}
+        }
+      );
 
-if(
-!("Notification" in window)
-){
 
-toast(
-"這個瀏覽器不支援通知"
-);
+      toast(
+        "提醒已關閉"
+      );
 
-return;
 
-}
+      return;
 
-if(
-Notification.permission===
-"denied"
-){
+    }
 
-toast(
-"請到瀏覽器網站設定允許通知"
-);
 
-return;
+    if(
+      !("Notification" in window)
+    ){
 
-}
+      toast(
+        "這個瀏覽器不支援通知"
+      );
 
-if(
-Notification.permission===
-"default"
-){
+      return;
 
-const permission=
-await Notification.requestPermission();
+    }
 
-if(
-permission!==
-"granted"
-){
 
-toast(
-"沒有允許通知"
-);
+    if(
+      Notification.permission ===
+      "denied"
+    ){
 
-return;
+      toast(
+        "請到瀏覽器網站設定允許通知"
+      );
 
-}
+      return;
 
-}
+    }
 
-if(
-!(await isSupported())
-){
 
-toast(
-"瀏覽器不支援 Firebase 推播"
-);
+    if(
+      Notification.permission ===
+      "default"
+    ){
 
-return;
+      const permission =
+        await Notification
+          .requestPermission();
 
-}
 
-const registration=
-await navigator
-.serviceWorker
-.register(
-"./firebase-messaging-sw.js",
-{
-scope:"./"
-}
-);
+      if(
+        permission !==
+        "granted"
+      ){
 
-const token=
-await getToken(
-getMessaging(app),
-{
-vapidKey:
-VAPID_PUBLIC_KEY,
+        toast(
+          "沒有允許通知"
+        );
 
-serviceWorkerRegistration:
-registration
-}
-);
+        return;
 
-if(!token){
+      }
 
-throw new Error(
-"無法取得推播 token"
-);
+    }
 
-}
 
-await set(
-ref(
-db,
-`fcmTokens/${user.uid}/${tokenKey(token)}`
-),
-{
-token,
-createdAt:
-Date.now(),
-updatedAt:
-Date.now()
-}
-);
+    if(
+      !(await isSupported())
+    ){
 
-await update(
-ref(
-db,
-`rooms/${roomId}/notificationSettings/${user.uid}`
-),
-{
-enabled:true,
-minute:0,
-timezone:
-"Asia/Taipei",
-updatedAt:
-Date.now()
-}
-);
+      toast(
+        "瀏覽器不支援 Firebase 推播"
+      );
 
-toast(
-"提醒已開啟"
-);
+      return;
 
-}catch(e){
+    }
 
-console.error(
-"toggleNotification:",
-e
-);
 
-toast(
-"通知設定失敗："+friendlyError(e)
-);
+    const registration =
+      await navigator
+        .serviceWorker
+        .register(
+          "./firebase-messaging-sw.js",
+          {
+            scope:"./"
+          }
+        );
 
-}
+
+    const token =
+      await getToken(
+        getMessaging(app),
+        {
+          vapidKey:
+            VAPID_PUBLIC_KEY,
+
+          serviceWorkerRegistration:
+            registration
+        }
+      );
+
+
+    if(
+      !token
+    ){
+
+      throw new Error(
+        "無法取得推播 token"
+      );
+
+    }
+
+
+    await set(
+      ref(
+        db,
+        `fcmTokens/${user.uid}/${tokenKey(token)}`
+      ),
+      {
+
+        token,
+
+        createdAt:
+          Date.now(),
+
+        updatedAt:
+          Date.now()
+
+      }
+    );
+
+
+    await update(
+      ref(
+        db,
+        `rooms/${roomId}/notificationSettings/${user.uid}`
+      ),
+      {
+
+        enabled:
+          true,
+
+        minute:
+          0,
+
+        timezone:
+          "Asia/Taipei",
+
+        updatedAt:
+          Date.now()
+
+      }
+    );
+
+
+    toast(
+      "提醒已開啟"
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "toggleNotification:",
+      error
+    );
+
+
+    toast(
+      "通知設定失敗："+friendlyError(error)
+    );
+
+  }
 
 }
 
 
 async function initForegroundMessaging(){
 
-try{
+  try{
 
-if(
-messagingReady||
-!(await isSupported())
-)
-return;
+    if(
+      messagingReady ||
+      !(await isSupported())
+    ){
 
-onMessage(
-getMessaging(app),
-p=>toast(
-p?.notification?.body||
-p?.data?.body||
-"該記錄了！"
-)
-);
+      return;
 
-messagingReady=
-true;
+    }
 
-}catch(e){
 
-console.warn(e);
+    onMessage(
+      getMessaging(app),
+      payload => {
 
-}
+        toast(
+          payload?.notification?.body ||
+          payload?.data?.body ||
+          "該記錄了！"
+        );
+
+      }
+    );
+
+
+    messagingReady =
+      true;
+
+  }catch(error){
+
+    console.warn(
+      error
+    );
+
+  }
 
 }
 
 
 async function invite(){
 
-const text=
-`加入 MomentLog「${room?.meta?.name||"MomentLog"}」\n房間碼：${roomId}`;
+  const text =
+    `加入 MomentLog「${room?.meta?.name || "MomentLog"}」\n房間碼：${roomId}`;
 
-try{
 
-await navigator.clipboard.writeText(
-text
-);
+  try{
 
-toast(
-"邀請資訊已複製"
-);
+    await navigator
+      .clipboard
+      .writeText(
+        text
+      );
 
-}catch{
 
-prompt(
-"複製邀請資訊",
-text
-);
+    toast(
+      "邀請資訊已複製"
+    );
 
-}
+  }catch{
+
+    prompt(
+      "複製邀請資訊",
+      text
+    );
+
+  }
 
 }
 
 
 /*
-=====================================================
-離開房間
-=====================================================
-*/
+ * =====================================================
+ * 離開房間
+ * =====================================================
+ */
 
 async function leaveRoom(){
 
-if(
-!user||
-!roomId
-){
+  if(
+    !user ||
+    !roomId
+  ){
 
-toast(
-"目前沒有加入房間"
-);
+    toast(
+      "目前沒有加入房間"
+    );
 
-return;
+    return;
 
-}
+  }
 
-if(
-!confirm(
-"確定要離開這個房間嗎？"
-)
-){
 
-return;
+  if(
+    !confirm(
+      "確定要離開這個房間嗎？"
+    )
+  ){
 
-}
+    return;
 
-const id=
-roomId;
+  }
 
-try{
 
-/*
-先取得最新房間資料。
-*/
+  const id =
+    roomId;
 
-const metaSnapshot=
-await get(
-ref(
-db,
-`rooms/${id}/meta`
-)
-);
 
-if(
-!metaSnapshot.exists()
-){
+  const roomName =
+    room?.meta?.name ||
+    "MomentLog";
 
-leaveLocal();
 
-toast(
-"房間已不存在"
-);
+  /*
+   * 在刪除 localStorage 目前房間前，
+   * 先保留最近房間紀錄。
+   */
 
-return;
+  rememberRoom(
+    id,
+    roomName
+  );
 
-}
 
-const meta=
-metaSnapshot.val()||
-{};
+  localStorage.setItem(
+    "momentlog_last_room",
+    id
+  );
 
-const amOwner=
-meta.ownerUid===
-user.uid;
 
+  try{
 
-/*
-如果成員清單目前無法讀，
-直接使用目前房間已同步的 members。
-*/
+    const metaSnapshot =
+      await get(
+        ref(
+          db,
+          `rooms/${id}/meta`
+        )
+      );
 
-let members=
-room?.members||
-{};
 
-try{
+    if(
+      !metaSnapshot.exists()
+    ){
 
-const membersSnapshot=
-await get(
-ref(
-db,
-`rooms/${id}/members`
-)
-);
+      markRecentRoomLeft(
+        id
+      );
 
-if(
-membersSnapshot.exists()
-){
+      leaveLocal();
 
-members=
-membersSnapshot.val()||
-{};
+      toast(
+        "房間已不存在"
+      );
 
-}
+      return;
 
-}catch(error){
+    }
 
-console.warn(
-"members snapshot:",
-error
-);
 
-}
+    const meta =
+      metaSnapshot.val() ||
+      {};
 
 
-const memberIds=
-Object.keys(
-members
-);
+    const amOwner =
+      meta.ownerUid ===
+      user.uid;
 
 
-/*
-自己已經不在房間。
-*/
+    let members =
+      room?.members ||
+      {};
 
-if(
-!members[user.uid]
-){
 
-leaveLocal();
+    try{
 
-toast(
-"你已經不在這個房間"
-);
+      const membersSnapshot =
+        await get(
+          ref(
+            db,
+            `rooms/${id}/members`
+          )
+        );
 
-return;
 
-}
+      if(
+        membersSnapshot.exists()
+      ){
 
+        members =
+          membersSnapshot.val() ||
+          {};
 
-/*
-只有自己：
-房主直接刪除房間。
-*/
+      }
 
-if(
-memberIds.length===1
-){
+    }catch(error){
 
-if(!amOwner){
+      console.warn(
+        "members snapshot:",
+        error
+      );
 
-await remove(
-ref(
-db,
-`rooms/${id}/members/${user.uid}`
-)
-);
+    }
 
-leaveLocal();
 
-toast(
-"已離開房間"
-);
+    const memberIds =
+      Object.keys(
+        members
+      );
 
-return;
 
-}
+    /*
+     * 自己已經不在成員清單。
+     */
 
+    if(
+      !members[user.uid]
+    ){
 
-/*
-依序刪除房間。
-*/
+      markRecentRoomLeft(
+        id
+      );
 
-try{
+      leaveLocal();
 
-await remove(
-ref(
-db,
-`rooms/${id}/records`
-)
-);
+      toast(
+        "你已經不在這個房間"
+      );
 
-}catch(e){
+      return;
 
-console.warn(
-"records cleanup:",
-e
-);
+    }
 
-}
 
-try{
+    /*
+     * =================================================
+     * 只有自己：
+     * 如果我是房主，刪房間。
+     * =================================================
+     */
 
-await remove(
-ref(
-db,
-`rooms/${id}/notificationSettings`
-)
-);
+    if(
+      memberIds.length ===
+      1
+    ){
 
-}catch(e){
+      if(
+        !amOwner
+      ){
 
-console.warn(
-"notification cleanup:",
-e
-);
+        await remove(
+          ref(
+            db,
+            `rooms/${id}/members/${user.uid}`
+          )
+        );
 
-}
 
-await remove(
-ref(
-db,
-`rooms/${id}/members`
-)
-);
+        try{
 
-await remove(
-ref(
-db,
-`rooms/${id}/meta`
-)
-);
+          await remove(
+            ref(
+              db,
+              `rooms/${id}/notificationSettings/${user.uid}`
+            )
+          );
 
-leaveLocal();
+        }catch(error){
 
-toast(
-"你是最後一位成員，房間已刪除"
-);
+          console.warn(
+            "notification cleanup:",
+            error
+          );
 
-return;
+        }
 
-}
 
+        markRecentRoomLeft(
+          id
+        );
 
-/*
-房主離開：
-找下一位成員。
-*/
+        leaveLocal();
 
-if(amOwner){
+        toast(
+          "已離開房間"
+        );
 
-const newOwnerUid=
-memberIds.find(
-uid=>
-uid!==user.uid
-);
+        return;
 
-if(!newOwnerUid){
+      }
 
-throw new Error(
-"找不到可以接任的成員"
-);
 
-}
+      /*
+       * 最後一位房主：
+       * 刪除整個房間。
+       */
 
-const newOwnerName=
-members?.[
-newOwnerUid
-]?.displayName||
-"下一位成員";
+      try{
 
+        await remove(
+          ref(
+            db,
+            `rooms/${id}/records`
+          )
+        );
 
-/*
-先轉移房主。
-*/
+      }catch(error){
 
-await update(
-ref(
-db,
-`rooms/${id}/meta`
-),
-{
-ownerUid:
-newOwnerUid,
+        console.warn(
+          "records cleanup:",
+          error
+        );
 
-updatedAt:
-Date.now()
-}
-);
+      }
 
 
-/*
-再刪自己的 member。
-*/
+      try{
 
-await remove(
-ref(
-db,
-`rooms/${id}/members/${user.uid}`
-)
-);
+        await remove(
+          ref(
+            db,
+            `rooms/${id}/notificationSettings`
+          )
+        );
 
+      }catch(error){
 
-/*
-通知設定不是離開房間的核心。
-失敗也不影響房主轉移。
-*/
+        console.warn(
+          "notification cleanup:",
+          error
+        );
 
-try{
+      }
 
-await remove(
-ref(
-db,
-`rooms/${id}/notificationSettings/${user.uid}`
-)
-);
 
-}catch(e){
+      await remove(
+        ref(
+          db,
+          `rooms/${id}/members`
+        )
+      );
 
-console.warn(
-"notification cleanup:",
-e
-);
 
-}
+      await remove(
+        ref(
+          db,
+          `rooms/${id}/meta`
+        )
+      );
 
-leaveLocal();
 
-toast(
-`已離開房間，${newOwnerName} 成為新房主`
-);
+      markRecentRoomLeft(
+        id
+      );
 
-return;
+      leaveLocal();
 
-}
+      toast(
+        "你是最後一位成員，房間已刪除"
+      );
 
+      return;
 
-/*
-一般成員離開。
-*/
+    }
 
-await remove(
-ref(
-db,
-`rooms/${id}/members/${user.uid}`
-)
-);
 
-try{
+    /*
+     * =================================================
+     * 房主離開：
+     * 自動選下一位房主。
+     * =================================================
+     */
 
-await remove(
-ref(
-db,
-`rooms/${id}/notificationSettings/${user.uid}`
-)
-);
+    if(
+      amOwner
+    ){
 
-}catch(e){
+      const newOwnerUid =
+        memberIds.find(
+          uid =>
+            uid !==
+            user.uid
+        );
 
-console.warn(
-"notification cleanup:",
-e
-);
 
-}
+      if(
+        !newOwnerUid
+      ){
 
-leaveLocal();
+        throw new Error(
+          "找不到可以接任的成員"
+        );
 
-toast(
-"已離開房間"
-);
+      }
 
-}catch(e){
 
-console.error(
-"leaveRoom failed:",
-e
-);
+      const newOwnerName =
+        members?.[
+          newOwnerUid
+        ]?.displayName ||
+        "下一位成員";
 
-toast(
-"離開房間失敗："+friendlyError(e)
-);
 
-}
+      await update(
+        ref(
+          db,
+          `rooms/${id}/meta`
+        ),
+        {
+
+          ownerUid:
+            newOwnerUid,
+
+          updatedAt:
+            Date.now()
+
+        }
+      );
+
+
+      await remove(
+        ref(
+          db,
+          `rooms/${id}/members/${user.uid}`
+        )
+      );
+
+
+      try{
+
+        await remove(
+          ref(
+            db,
+            `rooms/${id}/notificationSettings/${user.uid}`
+          )
+        );
+
+      }catch(error){
+
+        console.warn(
+          "notification cleanup:",
+          error
+        );
+
+      }
+
+
+      markRecentRoomLeft(
+        id
+      );
+
+      leaveLocal();
+
+
+      toast(
+        `已離開房間，${newOwnerName} 成為新房主`
+      );
+
+
+      return;
+
+    }
+
+
+    /*
+     * =================================================
+     * 一般成員離開。
+     * =================================================
+     */
+
+    await remove(
+      ref(
+        db,
+        `rooms/${id}/members/${user.uid}`
+      )
+    );
+
+
+    try{
+
+      await remove(
+        ref(
+          db,
+          `rooms/${id}/notificationSettings/${user.uid}`
+        )
+      );
+
+    }catch(error){
+
+      console.warn(
+        "notification cleanup:",
+        error
+      );
+
+    }
+
+
+    markRecentRoomLeft(
+      id
+    );
+
+    leaveLocal();
+
+
+    toast(
+      "已離開房間"
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "leaveRoom failed:",
+      error
+    );
+
+
+    toast(
+      "離開房間失敗："+friendlyError(error)
+    );
+
+  }
 
 }
 
 
 function leaveLocal(){
 
-clearListeners();
+  clearListeners();
 
-room=
-null;
+  room =
+    null;
 
-roomId=
-"";
+  roomId =
+    "";
 
-currentDate=
-new Date();
+  currentDate =
+    new Date();
 
-lastRenderedHour=
-null;
+  lastRenderedHour =
+    null;
 
-localStorage.removeItem(
-"momentlog_room"
-);
 
-$("room")
-.classList
-.add(
-"hide"
-);
+  localStorage.removeItem(
+    "momentlog_room"
+  );
 
-$("setup")
-.classList
-.remove(
-"hide"
-);
+
+  renderRecentRooms();
+
+
+  $("room")
+    .classList
+    .add(
+      "hide"
+    );
+
+
+  $("setup")
+    .classList
+    .remove(
+      "hide"
+    );
 
 }
 
 
 function showYesterday(){
 
-currentDate=
-addDays(
-new Date(),
--1
-);
+  currentDate =
+    addDays(
+      new Date(),
+      -1
+    );
 
-lastRenderedHour=
-null;
 
-loadRecordsListener();
+  lastRenderedHour =
+    null;
 
-render();
+
+  loadRecordsListener();
+
+  render();
 
 }
 
 
 function showToday(){
 
-currentDate=
-new Date();
+  currentDate =
+    new Date();
 
-lastRenderedHour=
-null;
 
-loadRecordsListener();
+  lastRenderedHour =
+    null;
 
-render();
+
+  loadRecordsListener();
+
+  render();
 
 }
 
 
 function changeDate(
-offset
+  offset
 ){
 
-const next=
-addDays(
-currentDate,
-offset
-);
-
-if(
-dateKey(next)>
-dateKey(new Date())
-){
-
-return;
-
-}
-
-currentDate=
-next;
-
-lastRenderedHour=
-null;
-
-loadRecordsListener();
-
-render();
-
-}
+  const next =
+    addDays(
+      currentDate,
+      offset
+    );
 
 
-$("googleLogin")
-.onclick=
-loginGoogle;
+  if(
+    dateKey(next) >
+    dateKey(new Date())
+  ){
 
-$("logout")
-.onclick=
-logout;
+    return;
 
-$("saveProfile")
-.onclick=
-saveProfile;
+  }
 
-$("create")
-.onclick=
-createRoom;
 
-$("join")
-.onclick=
-joinRoom;
+  currentDate =
+    next;
 
-$("notify")
-.onclick=
-toggleNotification;
 
-$("invite")
-.onclick=
-invite;
+  lastRenderedHour =
+    null;
 
-$("leave")
-.onclick=
-leaveRoom;
 
-$("now")
-.onclick=
-()=>{
+  loadRecordsListener();
 
-currentDate=
-new Date();
-
-lastRenderedHour=
-null;
-
-loadRecordsListener();
-
-openRecord(
-Number(
-taipeiParts(
-new Date()
-).hour
-)
-);
-
-};
-
-$("yesterday")
-.onclick=
-showYesterday;
-
-$("today")
-.onclick=
-showToday;
-
-$("prevDate")
-.onclick=
-()=>changeDate(-1);
-
-$("nextDate")
-.onclick=
-()=>changeDate(1);
-
-$("recordClose")
-.onclick=
-closeRecord;
-
-$("cancelRecord")
-.onclick=
-closeRecord;
-
-$("saveRecord")
-.onclick=
-saveRecord;
-
-$("remove")
-.onclick=
-removeMedia;
-
-$("photo")
-.onclick=
-()=>
-$("photoInput")
-.click();
-
-$("video")
-.onclick=
-()=>
-$("videoInput")
-.click();
-
-$("album")
-.onclick=
-()=>
-$("albumInput")
-.click();
-
-$("photoInput")
-.onchange=
-e=>{
-
-chooseFile(
-e.target.files?.[0]
-);
-
-e.target.value=
-"";
-
-};
-
-$("videoInput")
-.onchange=
-e=>{
-
-chooseFile(
-e.target.files?.[0]
-);
-
-e.target.value=
-"";
-
-};
-
-$("albumInput")
-.onchange=
-e=>{
-
-chooseFile(
-e.target.files?.[0]
-);
-
-e.target.value=
-"";
-
-};
-
-$("theme")
-.onclick=
-()=>
-$("themeModal")
-.classList
-.add(
-"show"
-);
-
-$("themeClose")
-.onclick=
-()=>
-$("themeModal")
-.classList
-.remove(
-"show"
-);
-
-document
-.querySelectorAll(
-".themeOpt"
-)
-.forEach(
-b=>
-b.onclick=
-()=>{
-
-localStorage.setItem(
-"momentlog_theme",
-b.dataset.theme
-);
-
-applyTheme();
-
-$("themeModal")
-.classList
-.remove(
-"show"
-);
+  render();
 
 }
-);
-
-$("recordModal")
-.onclick=
-e=>{
-
-if(
-e.target===
-$("recordModal")
-){
-
-closeRecord();
-
-}
-
-};
-
-$("themeModal")
-.onclick=
-e=>{
-
-if(
-e.target===
-$("themeModal")
-){
-
-$("themeModal")
-.classList
-.remove(
-"show"
-);
-
-}
-
-};
-
-
-window
-.addEventListener(
-"beforeunload",
-clearListeners
-);
-
-applyTheme();
-
-
-setInterval(
-()=>{
-
-const now=
-new Date();
-
-const p=
-taipeiParts(
-now
-);
-
-$("clock")
-.textContent=
-`${p.hour}:${p.minute}:${p.second}`;
 
 
 /*
-今天：
-目前 18:xx
-→ 顯示到 18:00
-→ 不顯示 19:00
-*/
+ * =====================================================
+ * 事件
+ * =====================================================
+ */
 
-if(
-room&&
-isToday(
-currentDate
-)
-){
+$("googleLogin")
+  .onclick =
+  loginGoogle;
 
-const maxHour=
-Number(
-p.hour
+
+$("logout")
+  .onclick =
+  logout;
+
+
+$("saveProfile")
+  .onclick =
+  saveProfile;
+
+
+$("create")
+  .onclick =
+  createRoom;
+
+
+$("join")
+  .onclick =
+  joinRoom;
+
+
+$("notify")
+  .onclick =
+  toggleNotification;
+
+
+$("invite")
+  .onclick =
+  invite;
+
+
+$("leave")
+  .onclick =
+  leaveRoom;
+
+
+$("now")
+  .onclick =
+  () => {
+
+    currentDate =
+      new Date();
+
+    lastRenderedHour =
+      null;
+
+    loadRecordsListener();
+
+
+    openRecord(
+      Number(
+        taipeiParts(
+          new Date()
+        ).hour
+      )
+    );
+
+  };
+
+
+$("yesterday")
+  .onclick =
+  showYesterday;
+
+
+$("today")
+  .onclick =
+  showToday;
+
+
+$("prevDate")
+  .onclick =
+  () =>
+    changeDate(
+      -1
+    );
+
+
+$("nextDate")
+  .onclick =
+  () =>
+    changeDate(
+      1
+    );
+
+
+$("clearRecentRooms")
+  .onclick =
+  () => {
+
+    if(
+      !confirm(
+        "確定要清除所有曾加入的房間紀錄嗎？"
+      )
+    ){
+
+      return;
+
+    }
+
+
+    saveRecentRooms([]);
+
+    renderRecentRooms();
+
+    toast(
+      "已清除房間歷史"
+    );
+
+  };
+
+
+$("recordClose")
+  .onclick =
+  closeRecord;
+
+
+$("cancelRecord")
+  .onclick =
+  closeRecord;
+
+
+$("saveRecord")
+  .onclick =
+  saveRecord;
+
+
+$("remove")
+  .onclick =
+  removeMedia;
+
+
+$("photo")
+  .onclick =
+  () =>
+    $("photoInput")
+      .click();
+
+
+$("video")
+  .onclick =
+  () =>
+    $("videoInput")
+      .click();
+
+
+$("album")
+  .onclick =
+  () =>
+    $("albumInput")
+      .click();
+
+
+$("photoInput")
+  .onchange =
+  event => {
+
+    chooseFile(
+      event.target.files?.[0]
+    );
+
+    event.target.value =
+      "";
+
+  };
+
+
+$("videoInput")
+  .onchange =
+  event => {
+
+    chooseFile(
+      event.target.files?.[0]
+    );
+
+    event.target.value =
+      "";
+
+  };
+
+
+$("albumInput")
+  .onchange =
+  event => {
+
+    chooseFile(
+      event.target.files?.[0]
+    );
+
+    event.target.value =
+      "";
+
+  };
+
+
+$("theme")
+  .onclick =
+  () =>
+    $("themeModal")
+      .classList
+      .add(
+        "show"
+      );
+
+
+$("themeClose")
+  .onclick =
+  () =>
+    $("themeModal")
+      .classList
+      .remove(
+        "show"
+      );
+
+
+document
+  .querySelectorAll(
+    ".themeOpt"
+  )
+  .forEach(
+    button => {
+
+      button.onclick =
+        () => {
+
+          localStorage.setItem(
+            "momentlog_theme",
+            button.dataset.theme
+          );
+
+
+          applyTheme();
+
+
+          $("themeModal")
+            .classList
+            .remove(
+              "show"
+            );
+
+        };
+
+    }
+  );
+
+
+$("recordModal")
+  .onclick =
+  event => {
+
+    if(
+      event.target ===
+      $("recordModal")
+    ){
+
+      closeRecord();
+
+    }
+
+  };
+
+
+$("themeModal")
+  .onclick =
+  event => {
+
+    if(
+      event.target ===
+      $("themeModal")
+    ){
+
+      $("themeModal")
+        .classList
+        .remove(
+          "show"
+        );
+
+    }
+
+  };
+
+
+window
+  .addEventListener(
+    "beforeunload",
+    clearListeners
+  );
+
+
+applyTheme();
+
+renderRecentRooms();
+
+
+/*
+ * =====================================================
+ * 時鐘與今天的時間軸
+ * =====================================================
+ */
+
+setInterval(
+  () => {
+
+    const now =
+      new Date();
+
+
+    const p =
+      taipeiParts(
+        now
+      );
+
+
+    $("clock")
+      .textContent =
+      `${p.hour}:${p.minute}:${p.second}`;
+
+
+    if(
+      room &&
+      isToday(
+        currentDate
+      )
+    ){
+
+      /*
+       * 例如現在 18:xx：
+       * 顯示到 18:00。
+       */
+
+      const maxHour =
+        Number(
+          p.hour
+        );
+
+
+      if(
+        lastRenderedHour !==
+        maxHour
+      ){
+
+        lastRenderedHour =
+          maxHour;
+
+
+        render();
+
+      }
+
+
+      const next =
+        new Date(
+          now
+        );
+
+
+      next.setSeconds(
+        0,
+        0
+      );
+
+
+      next.setMinutes(
+        0,
+        0
+      );
+
+
+      next.setHours(
+        next.getHours() +
+        1
+      );
+
+
+      const np =
+        taipeiParts(
+          next
+        );
+
+
+      $("next")
+        .textContent =
+        `下一個紀錄點 ${np.hour}:00`;
+
+    }
+
+  },
+  1000
 );
 
-if(
-lastRenderedHour!==
-maxHour
-){
 
-lastRenderedHour=
-maxHour;
-
-render();
-
-}
-
-const next=
-new Date(
-now
-);
-
-next.setSeconds(
-0,
-0
-);
-
-next.setMinutes(
-0,
-0
-);
-
-next.setHours(
-next.getHours()+1
-);
-
-const np=
-taipeiParts(
-next
-);
-
-$("next")
-.textContent=
-`下一個紀錄點 ${np.hour}:00`;
-
-}else if(
-room
-){
-
-$("next")
-.textContent=
-"正在查看歷史紀錄";
-
-}
-
-},
-1000
-);
-
+/*
+ * =====================================================
+ * Firebase Auth
+ * =====================================================
+ */
 
 onAuthStateChanged(
-auth,
-async u=>{
+  auth,
+  async currentUser => {
 
-user=
-u;
+    user =
+      currentUser;
 
-if(u){
 
-showSetupStatus(
-"Google 登入成功"
-);
+    renderAccount();
 
-await loadProfile();
 
-renderAccount();
+    if(
+      !currentUser
+    ){
 
-await initForegroundMessaging();
+      clearListeners();
 
-if(roomId){
+      room =
+        null;
 
-connectRoom();
 
-}
+      $("room")
+        .classList
+        .add(
+          "hide"
+        );
 
-}else{
 
-clearListeners();
+      $("setup")
+        .classList
+        .remove(
+          "hide"
+        );
 
-room=
-null;
 
-$("room")
-.classList
-.add(
-"hide"
-);
+      showSetupStatus(
+        "請先登入 Google 帳號"
+      );
 
-$("setup")
-.classList
-.remove(
-"hide"
-);
 
-showSetupStatus(
-"請先登入 Google 帳號"
-);
+      renderRecentRooms();
 
-}
 
-}
+      return;
+
+    }
+
+
+    showSetupStatus(
+      "Google 登入成功"
+    );
+
+
+    await loadProfile();
+
+
+    renderAccount();
+
+
+    await initForegroundMessaging();
+
+
+    /*
+     * 如果瀏覽器還記著目前房間，
+     * 嘗試自動恢復。
+     */
+
+    const savedRoom =
+      localStorage.getItem(
+        "momentlog_room"
+      );
+
+
+    if(
+      savedRoom
+    ){
+
+      roomId =
+        savedRoom;
+
+      connectRoom();
+
+    }
+
+
+    renderRecentRooms();
+
+  }
 );
 
 </script>
