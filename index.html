@@ -10,41 +10,63 @@
 <title>MomentLog</title>
 
 <style>
-*{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+
+:root{
+  --bg:linear-gradient(135deg,#eef2ff,#f8fafc);
+  --text:#172033;
+  --muted:#718096;
+  --border:#e6eaf0;
+  --card:#fff;
+  --primary:#4f46e5;
+}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  background:#f8fafc
 }
 
 body{
-  margin:0;
   min-height:100vh;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","Microsoft JhengHei",sans-serif;
-  color:#172033;
-  background:var(--bg,linear-gradient(135deg,#eef2ff,#f8fafc));
+  color:var(--text);
+  background:var(--bg);
   transition:.25s
 }
 
-button,input,textarea{
-  font:inherit
+body.dark{
+  --text:#e5e7eb;
+  --muted:#94a3b8;
+  --border:#334155;
+  --card:#172033;
+  background:#0f172a
 }
 
-button{
-  cursor:pointer
+body.dark .btn,
+body.dark .field input,
+body.dark .field textarea,
+body.dark .field select,
+body.dark .slotBox,
+body.dark .member,
+body.dark .stat,
+body.dark .modalCard,
+body.dark .loginStatus,
+body.dark .status{
+  background:#172033;
+  color:#e5e7eb;
+  border-color:#334155
 }
 
-button:disabled{
-  opacity:.55;
-  cursor:not-allowed
-}
-
-.hide{
-  display:none!important
-}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.55;cursor:not-allowed}
+.hide{display:none!important}
 
 .app{
-  width:min(1160px,100%);
+  width:min(1180px,100%);
   margin:auto;
-  padding:16px
+  padding:16px 16px 90px
 }
 
 .top{
@@ -69,7 +91,8 @@ button:disabled{
   color:#fff;
   display:grid;
   place-items:center;
-  font-size:22px
+  font-size:22px;
+  flex:none
 }
 
 .brand h1{
@@ -79,7 +102,7 @@ button:disabled{
 
 .brand small,
 .muted{
-  color:#718096
+  color:var(--muted)
 }
 
 .actions{
@@ -90,18 +113,18 @@ button:disabled{
 }
 
 .btn{
-  border:1px solid #e6eaf0;
-  background:#fff;
-  color:#172033;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
   border-radius:12px;
   padding:10px 13px;
   min-height:40px
 }
 
 .btn.primary{
-  background:#4f46e5;
+  background:var(--primary);
   color:#fff;
-  border-color:#4f46e5
+  border-color:var(--primary)
 }
 
 .btn.danger{
@@ -116,6 +139,12 @@ button:disabled{
   border-color:#86efac
 }
 
+.btn.small{
+  padding:7px 9px;
+  min-height:34px;
+  font-size:12px
+}
+
 .card{
   background:rgba(255,255,255,.96);
   border-radius:20px;
@@ -123,8 +152,8 @@ button:disabled{
 }
 
 .setup{
-  max-width:540px;
-  margin:8vh auto;
+  max-width:560px;
+  margin:6vh auto;
   padding:28px
 }
 
@@ -134,7 +163,7 @@ button:disabled{
 
 .setup p{
   line-height:1.7;
-  color:#718096
+  color:var(--muted)
 }
 
 .field{
@@ -149,17 +178,20 @@ button:disabled{
 }
 
 .field input,
-.field textarea{
+.field textarea,
+.field select{
   width:100%;
   padding:12px;
-  border:1px solid #e6eaf0;
+  border:1px solid var(--border);
   border-radius:12px;
-  background:#fff;
+  background:var(--card);
+  color:var(--text);
   outline:none
 }
 
 .field input:focus,
-.field textarea:focus{
+.field textarea:focus,
+.field select:focus{
   border-color:#818cf8;
   box-shadow:0 0 0 3px rgba(99,102,241,.1)
 }
@@ -170,17 +202,21 @@ button:disabled{
   margin-top:14px
 }
 
-.googleBtn{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:9px;
-  font-weight:700
+.loginStatus,
+.status{
+  margin-top:10px;
+  padding:10px;
+  border-radius:12px;
+  background:#f8fafc;
+  border:1px solid var(--border);
+  font-size:13px
 }
 
-.googleIcon{
-  width:20px;
-  height:20px
+.privacy{
+  margin-top:10px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.6
 }
 
 .account{
@@ -188,17 +224,21 @@ button:disabled{
   align-items:center;
   gap:10px;
   padding:10px;
-  border:1px solid #e6eaf0;
+  border:1px solid var(--border);
   border-radius:13px;
   background:#f8fafc;
   margin-top:12px
 }
 
-.account img{
-  width:38px;
-  height:38px;
+.accountAvatar{
+  width:40px;
+  height:40px;
   border-radius:50%;
-  object-fit:cover
+  object-fit:cover;
+  background:#e0e7ff;
+  display:grid;
+  place-items:center;
+  flex:none
 }
 
 .accountInfo{
@@ -215,7 +255,7 @@ button:disabled{
 
 .accountEmail{
   font-size:12px;
-  color:#718096;
+  color:var(--muted);
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap
@@ -245,7 +285,7 @@ button:disabled{
 
 .next{
   font-size:12px;
-  color:#718096;
+  color:var(--muted);
   text-align:right;
   margin-top:2px
 }
@@ -259,14 +299,14 @@ button:disabled{
 
 .stat{
   padding:12px;
-  border:1px solid #e6eaf0;
+  border:1px solid var(--border);
   border-radius:13px;
-  background:#fff
+  background:var(--card)
 }
 
 .statTitle{
   font-size:12px;
-  color:#718096
+  color:var(--muted)
 }
 
 .statValue{
@@ -278,14 +318,15 @@ button:disabled{
 
 .grid{
   display:grid;
-  grid-template-columns:280px 1fr;
+  grid-template-columns:290px 1fr;
   gap:14px
 }
 
 .side{
   padding:15px;
   position:sticky;
-  top:12px
+  top:12px;
+  align-self:start
 }
 
 .sideTitle{
@@ -303,23 +344,24 @@ button:disabled{
   justify-content:space-between;
   gap:8px;
   align-items:center;
-  border:1px solid #e6eaf0;
+  border:1px solid var(--border);
   border-radius:12px;
   padding:9px;
-  background:#fff
+  background:var(--card)
 }
 
 .memberName{
+  min-width:0;
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap
 }
 
-.ownerMark{
-  font-size:11px;
-  color:#4f46e5;
-  font-weight:800;
-  margin-left:4px
+.memberRight{
+  display:flex;
+  gap:5px;
+  align-items:center;
+  flex:none
 }
 
 .badge{
@@ -330,14 +372,19 @@ button:disabled{
   white-space:nowrap
 }
 
-.done{
+.badge.done{
   background:#dcfce7;
   color:#166534
 }
 
-.wait{
+.badge.wait{
   background:#fef3c7;
   color:#92400e
+}
+
+.badge.owner{
+  background:#e0e7ff;
+  color:#3730a3
 }
 
 .sideButtons{
@@ -347,18 +394,33 @@ button:disabled{
 }
 
 .timeline{
-  padding:16px
+  padding:16px;
+  min-width:0
 }
 
 .timelineHead{
   display:flex;
   justify-content:space-between;
-  align-items:center;
+  gap:10px;
+  align-items:flex-start;
   margin-bottom:12px
 }
 
 .timelineHead h3{
   margin:0
+}
+
+.dateTools{
+  display:flex;
+  gap:6px
+}
+
+.dateBtn{
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+  border-radius:10px;
+  padding:8px 10px
 }
 
 .slots{
@@ -367,10 +429,10 @@ button:disabled{
 }
 
 .emptyTimeline{
-  padding:25px 15px;
+  padding:28px 15px;
   text-align:center;
-  color:#718096;
-  border:1px dashed #d9dee8;
+  color:var(--muted);
+  border:1px dashed var(--border);
   border-radius:14px;
   background:#f8fafc
 }
@@ -384,16 +446,16 @@ button:disabled{
 .time{
   font-size:12px;
   font-weight:800;
-  color:#718096;
+  color:var(--muted);
   text-align:right;
   padding-top:11px
 }
 
 .slotBox{
-  border:1px solid #e6eaf0;
+  border:1px solid var(--border);
   border-radius:14px;
   padding:11px;
-  background:#fff
+  background:var(--card)
 }
 
 .slotTitle{
@@ -460,7 +522,8 @@ button:disabled{
 
 .modalCard{
   width:min(620px,100%);
-  background:#fff;
+  background:var(--card);
+  color:var(--text);
   border-radius:20px;
   padding:17px;
   max-height:90vh;
@@ -470,15 +533,17 @@ button:disabled{
 .modalHead{
   display:flex;
   justify-content:space-between;
-  align-items:center
+  align-items:center;
+  gap:10px
 }
 
 .close{
   width:38px;
   height:38px;
-  border:1px solid #e6eaf0;
+  border:1px solid var(--border);
   border-radius:50%;
-  background:#fff
+  background:var(--card);
+  color:var(--text)
 }
 
 .mediaBtns{
@@ -505,15 +570,16 @@ button:disabled{
 }
 
 .themeOpt{
-  border:2px solid #e6eaf0;
-  background:#fff;
+  border:2px solid var(--border);
+  background:var(--card);
+  color:var(--text);
   border-radius:12px;
   padding:8px;
   text-align:left
 }
 
 .themeOpt.selected{
-  border-color:#4f46e5
+  border-color:var(--primary)
 }
 
 .swatch{
@@ -527,7 +593,7 @@ button:disabled{
   left:50%;
   bottom:22px;
   transform:translateX(-50%);
-  z-index:2000;
+  z-index:3000;
   display:none;
   background:#111827;
   color:#fff;
@@ -538,28 +604,43 @@ button:disabled{
   text-align:center
 }
 
-.status{
-  margin-top:12px;
-  padding:10px;
-  border-radius:12px;
-  background:#f8fafc;
-  font-size:13px
+.progress{
+  height:8px;
+  background:#e5e7eb;
+  border-radius:999px;
+  overflow:hidden;
+  margin-top:8px
 }
 
-.loginNote{
-  font-size:12px;
-  line-height:1.6;
-  color:#718096;
-  margin-top:10px
+.progressBar{
+  height:100%;
+  width:0;
+  background:#4f46e5;
+  transition:.2s
 }
 
-@media(max-width:820px){
+@media(max-width:940px){
   .grid{
     grid-template-columns:1fr
   }
 
   .side{
     position:static
+  }
+
+  .stats{
+    grid-template-columns:1fr 1fr 1fr
+  }
+}
+
+@media(max-width:720px){
+  .top{
+    align-items:flex-start
+  }
+
+  .actions{
+    display:grid;
+    grid-template-columns:1fr 1fr
   }
 
   .heroRow{
@@ -598,6 +679,7 @@ button:disabled{
 </head>
 
 <body>
+
 <div class="app">
 
 <section id="setup" class="setup card">
@@ -607,20 +689,19 @@ button:disabled{
   <h2>MomentLog</h2>
 
   <p>
-    真正的多人雲端版：登入 Google 帳號後，
-    建立房間或加入朋友的房間，一起記錄每個時刻。
+    登入 Google 帳號後建立房間，
+    與朋友一起即時記錄每個時刻。
   </p>
 
   <div id="loginArea">
 
-    <button id="googleLogin" class="btn primary googleBtn">
-      <span class="googleIcon">G</span>
-      使用 Google 帳號登入
+    <button id="googleLogin" class="btn primary">
+      🔐 使用 Google 帳號登入
     </button>
 
-    <div class="loginNote">
-      Google 帳號只用來確認你的登入身分。
-      MomentLog 不會把你的 Google 密碼交給網站。
+    <div class="privacy">
+      Google 帳號只用來驗證你的身份。
+      房間內顯示的是你設定的 MomentLog 暱稱。
     </div>
 
   </div>
@@ -628,16 +709,39 @@ button:disabled{
   <div id="profileArea" class="hide">
 
     <div class="account">
-      <img id="accountPhoto" src="" alt="">
+
+      <img
+        id="accountAvatar"
+        class="accountAvatar"
+        alt=""
+      >
+
       <div class="accountInfo">
-        <div id="accountName" class="accountName"></div>
-        <div id="accountEmail" class="accountEmail"></div>
+
+        <div
+          id="accountName"
+          class="accountName"
+        ></div>
+
+        <div
+          id="accountEmail"
+          class="accountEmail"
+        ></div>
+
       </div>
-      <button id="logout" class="btn">登出</button>
+
+      <button id="logout" class="btn">
+        登出
+      </button>
+
     </div>
 
     <div class="field">
-      <label for="name">你的暱稱</label>
+
+      <label for="name">
+        你的暱稱
+      </label>
+
       <input
         id="name"
         maxlength="30"
@@ -645,10 +749,15 @@ button:disabled{
         autocomplete="nickname"
         translate="no"
       >
+
     </div>
 
     <div class="field">
-      <label for="log">Log 名稱</label>
+
+      <label for="log">
+        Log 名稱
+      </label>
+
       <input
         id="log"
         maxlength="60"
@@ -656,22 +765,37 @@ button:disabled{
         autocomplete="off"
         translate="no"
       >
+
     </div>
 
     <div class="setupActions">
-      <button id="saveProfile" class="btn">
+
+      <button
+        id="saveProfile"
+        class="btn"
+      >
         保存個人資料
       </button>
 
-      <button id="create" class="btn primary">
+      <button
+        id="create"
+        class="btn primary"
+      >
         建立新房間
       </button>
+
     </div>
 
-    <hr style="border:0;border-top:1px solid #e6eaf0;margin:18px 0">
+    <hr
+      style="border:0;border-top:1px solid #e6eaf0;margin:18px 0"
+    >
 
     <div class="field">
-      <label for="joinCode">加入房間碼</label>
+
+      <label for="joinCode">
+        加入房間碼
+      </label>
+
       <input
         id="joinCode"
         maxlength="12"
@@ -679,12 +803,18 @@ button:disabled{
         autocomplete="off"
         translate="no"
       >
+
     </div>
 
     <div class="setupActions">
-      <button id="join" class="btn">
+
+      <button
+        id="join"
+        class="btn"
+      >
         加入房間
       </button>
+
     </div>
 
   </div>
@@ -705,29 +835,50 @@ button:disabled{
 <header class="top">
 
   <div class="brand">
-    <div class="icon">⏱️</div>
+
+    <div class="icon">
+      ⏱️
+    </div>
 
     <div>
+
       <h1>MomentLog</h1>
-      <small>一起記錄每個時刻</small>
+
+      <small>
+        一起記錄每個時刻
+      </small>
+
     </div>
+
   </div>
 
   <div class="actions">
 
-    <button id="notify" class="btn">
+    <button
+      id="notify"
+      class="btn"
+    >
       🔕 通知：關閉
     </button>
 
-    <button id="theme" class="btn">
+    <button
+      id="theme"
+      class="btn"
+    >
       🎨 主題
     </button>
 
-    <button id="invite" class="btn">
+    <button
+      id="invite"
+      class="btn"
+    >
       邀請
     </button>
 
-    <button id="leave" class="btn danger">
+    <button
+      id="leave"
+      class="btn danger"
+    >
       離開房間
     </button>
 
@@ -741,16 +892,32 @@ button:disabled{
   <div class="heroRow">
 
     <div>
-      <h2 id="title">MomentLog</h2>
-      <div id="sub" class="muted"></div>
+
+      <h2 id="title">
+        MomentLog
+      </h2>
+
+      <div
+        id="sub"
+        class="muted"
+      ></div>
+
     </div>
 
     <div>
-      <div id="clock" class="clock">
+
+      <div
+        id="clock"
+        class="clock"
+      >
         00:00:00
       </div>
 
-      <div id="next" class="next"></div>
+      <div
+        id="next"
+        class="next"
+      ></div>
+
     </div>
 
   </div>
@@ -758,18 +925,46 @@ button:disabled{
   <div class="stats">
 
     <div class="stat">
-      <div class="statTitle">已到時段</div>
-      <div id="available" class="statValue">0</div>
+
+      <div class="statTitle">
+        已到時段
+      </div>
+
+      <div
+        id="available"
+        class="statValue"
+      >
+        0
+      </div>
+
     </div>
 
     <div class="stat">
-      <div class="statTitle">今日已完成</div>
-      <div id="doneCount" class="statValue">0</div>
+
+      <div class="statTitle">
+        今日已完成
+      </div>
+
+      <div
+        id="doneCount"
+        class="statValue"
+      >
+        0
+      </div>
+
     </div>
 
     <div class="stat">
-      <div class="statTitle">房間碼</div>
-      <div id="roomCode" class="statValue"></div>
+
+      <div class="statTitle">
+        房間碼
+      </div>
+
+      <div
+        id="roomCode"
+        class="statValue"
+      ></div>
+
     </div>
 
   </div>
@@ -785,19 +980,31 @@ button:disabled{
     房間成員
   </div>
 
-  <div id="members" class="members"></div>
+  <div
+    id="members"
+    class="members"
+  ></div>
 
   <div class="sideButtons">
 
-    <button id="now" class="btn primary">
+    <button
+      id="now"
+      class="btn primary"
+    >
       📍 記錄現在
     </button>
 
-    <button id="yesterday" class="btn">
+    <button
+      id="yesterday"
+      class="btn"
+    >
       查看昨天
     </button>
 
-    <button id="today" class="btn hide">
+    <button
+      id="today"
+      class="btn hide"
+    >
       ↩ 返回今天
     </button>
 
@@ -811,18 +1018,43 @@ button:disabled{
   <div class="timelineHead">
 
     <div>
-      <h3>時間軸</h3>
+
+      <h3>
+        時間軸
+      </h3>
 
       <div
         id="dateLabel"
         class="muted"
         style="font-size:13px;margin-top:4px"
       ></div>
+
+    </div>
+
+    <div class="dateTools">
+
+      <button
+        id="prevDate"
+        class="dateBtn"
+      >
+        ‹
+      </button>
+
+      <button
+        id="nextDate"
+        class="dateBtn"
+      >
+        ›
+      </button>
+
     </div>
 
   </div>
 
-  <div id="slots" class="slots"></div>
+  <div
+    id="slots"
+    class="slots"
+  ></div>
 
 </section>
 
@@ -833,18 +1065,32 @@ button:disabled{
 </div>
 
 
-<div id="recordModal" class="modal">
+<div
+  id="recordModal"
+  class="modal"
+>
 
 <div class="modalCard">
 
   <div class="modalHead">
 
     <div>
-      <h3>記錄這個時刻</h3>
-      <div id="recordWhen" class="muted"></div>
+
+      <h3>
+        記錄這個時刻
+      </h3>
+
+      <div
+        id="recordWhen"
+        class="muted"
+      ></div>
+
     </div>
 
-    <button id="recordClose" class="close">
+    <button
+      id="recordClose"
+      class="close"
+    >
       ×
     </button>
 
@@ -868,19 +1114,31 @@ button:disabled{
 
   <div class="mediaBtns">
 
-    <button id="photo" class="btn">
+    <button
+      id="photo"
+      class="btn"
+    >
       📷 拍照
     </button>
 
-    <button id="video" class="btn">
+    <button
+      id="video"
+      class="btn"
+    >
       🎥 錄影
     </button>
 
-    <button id="album" class="btn">
+    <button
+      id="album"
+      class="btn"
+    >
       🖼️ 相簿
     </button>
 
-    <button id="remove" class="btn danger">
+    <button
+      id="remove"
+      class="btn danger"
+    >
       🗑️ 移除媒體
     </button>
 
@@ -911,15 +1169,37 @@ button:disabled{
 
   <div id="preview"></div>
 
-  <div id="uploadStatus" class="status hide"></div>
+  <div
+    id="uploadStatus"
+    class="status hide"
+  >
+
+    <div id="uploadText">
+      準備中…
+    </div>
+
+    <div class="progress">
+      <div
+        id="progressBar"
+        class="progressBar"
+      ></div>
+    </div>
+
+  </div>
 
   <div class="modalActions">
 
-    <button id="cancelRecord" class="btn">
+    <button
+      id="cancelRecord"
+      class="btn"
+    >
       取消
     </button>
 
-    <button id="saveRecord" class="btn primary">
+    <button
+      id="saveRecord"
+      class="btn primary"
+    >
       儲存
     </button>
 
@@ -930,15 +1210,23 @@ button:disabled{
 </div>
 
 
-<div id="themeModal" class="modal">
+<div
+  id="themeModal"
+  class="modal"
+>
 
 <div class="modalCard">
 
   <div class="modalHead">
 
-    <h3>🎨 背景主題</h3>
+    <h3>
+      🎨 背景主題
+    </h3>
 
-    <button id="themeClose" class="close">
+    <button
+      id="themeClose"
+      class="close"
+    >
       ×
     </button>
 
@@ -946,7 +1234,10 @@ button:disabled{
 
   <div class="themeGrid">
 
-    <button class="themeOpt" data-theme="default">
+    <button
+      class="themeOpt"
+      data-theme="default"
+    >
       <div
         class="swatch"
         style="background:linear-gradient(135deg,#eef2ff,#f8fafc)"
@@ -954,7 +1245,10 @@ button:disabled{
       🌤️ 預設
     </button>
 
-    <button class="themeOpt" data-theme="blue">
+    <button
+      class="themeOpt"
+      data-theme="blue"
+    >
       <div
         class="swatch"
         style="background:linear-gradient(135deg,#dbeafe,#eff6ff)"
@@ -962,7 +1256,10 @@ button:disabled{
       🌊 藍色
     </button>
 
-    <button class="themeOpt" data-theme="green">
+    <button
+      class="themeOpt"
+      data-theme="green"
+    >
       <div
         class="swatch"
         style="background:linear-gradient(135deg,#dcfce7,#f0fdf4)"
@@ -970,7 +1267,10 @@ button:disabled{
       🌿 綠色
     </button>
 
-    <button class="themeOpt" data-theme="pink">
+    <button
+      class="themeOpt"
+      data-theme="pink"
+    >
       <div
         class="swatch"
         style="background:linear-gradient(135deg,#fce7f3,#fff1f2)"
@@ -978,7 +1278,10 @@ button:disabled{
       🌸 粉色
     </button>
 
-    <button class="themeOpt" data-theme="purple">
+    <button
+      class="themeOpt"
+      data-theme="purple"
+    >
       <div
         class="swatch"
         style="background:linear-gradient(135deg,#ede9fe,#f5f3ff)"
@@ -986,7 +1289,10 @@ button:disabled{
       💜 紫色
     </button>
 
-    <button class="themeOpt" data-theme="sunset">
+    <button
+      class="themeOpt"
+      data-theme="sunset"
+    >
       <div
         class="swatch"
         style="background:linear-gradient(135deg,#ffedd5,#fef3c7)"
@@ -994,7 +1300,10 @@ button:disabled{
       🌅 日落
     </button>
 
-    <button class="themeOpt" data-theme="dark">
+    <button
+      class="themeOpt"
+      data-theme="dark"
+    >
       <div
         class="swatch"
         style="background:linear-gradient(135deg,#1e293b,#0f172a)"
@@ -1009,7 +1318,10 @@ button:disabled{
 </div>
 
 
-<div id="toast" class="toast"></div>
+<div
+  id="toast"
+  class="toast"
+></div>
 
 
 <script type="module">
@@ -1040,7 +1352,7 @@ import {
 import {
   getStorage,
   ref as storageRef,
-  uploadBytes,
+  uploadBytesResumable,
   getDownloadURL,
   deleteObject
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-storage.js";
@@ -1055,122 +1367,168 @@ import {
 import firebaseConfig from "./firebase-config.js";
 
 
-const VAPID_PUBLIC_KEY =
+const VAPID_PUBLIC_KEY=
 "BN4k0ivU8J1bzyVlUncMDqgJnQKpzO33wwOJW4PbKvjGBHhBlc74bo_LmRw6lfsjREcjqH5YUfmCBMegeMMr83c";
 
 
-const app=initializeApp(firebaseConfig);
+const app=
+  initializeApp(firebaseConfig);
 
-const auth=getAuth(app);
+const auth=
+  getAuth(app);
 
-const db=getDatabase(app);
+const db=
+  getDatabase(app);
 
-const storage=getStorage(app);
+const storage=
+  getStorage(app);
 
-const googleProvider=new GoogleAuthProvider();
+const googleProvider=
+  new GoogleAuthProvider();
 
-const $=id=>document.getElementById(id);
+const $=
+  id=>document.getElementById(id);
 
 
 const themes={
-  default:"linear-gradient(135deg,#eef2ff,#f8fafc)",
-  blue:"linear-gradient(135deg,#dbeafe,#eff6ff)",
-  green:"linear-gradient(135deg,#dcfce7,#f0fdf4)",
-  pink:"linear-gradient(135deg,#fce7f3,#fff1f2)",
-  purple:"linear-gradient(135deg,#ede9fe,#f5f3ff)",
-  sunset:"linear-gradient(135deg,#ffedd5,#fef3c7)",
-  dark:"linear-gradient(135deg,#1e293b,#0f172a)"
+
+  default:
+    "linear-gradient(135deg,#eef2ff,#f8fafc)",
+
+  blue:
+    "linear-gradient(135deg,#dbeafe,#eff6ff)",
+
+  green:
+    "linear-gradient(135deg,#dcfce7,#f0fdf4)",
+
+  pink:
+    "linear-gradient(135deg,#fce7f3,#fff1f2)",
+
+  purple:
+    "linear-gradient(135deg,#ede9fe,#f5f3ff)",
+
+  sunset:
+    "linear-gradient(135deg,#ffedd5,#fef3c7)",
+
+  dark:
+    "linear-gradient(135deg,#1e293b,#0f172a)"
+
 };
 
 
-const pad=n=>String(n).padStart(2,"0");
+const pad=
+  n=>String(n).padStart(2,"0");
 
 
-const taipeiParts=date=>
-  new Intl.DateTimeFormat(
-    "zh-TW",
-    {
-      timeZone:"Asia/Taipei",
-      year:"numeric",
-      month:"2-digit",
-      day:"2-digit",
-      hour:"2-digit",
-      minute:"2-digit",
-      second:"2-digit",
-      hourCycle:"h23"
-    }
-  )
-  .formatToParts(date)
-  .reduce(
-    (o,p)=>{
-      o[p.type]=p.value;
-      return o;
-    },
-    {}
-  );
+const taipeiParts=
+  date=>
+    new Intl.DateTimeFormat(
+      "zh-TW",
+      {
+        timeZone:"Asia/Taipei",
+        year:"numeric",
+        month:"2-digit",
+        day:"2-digit",
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit",
+        hourCycle:"h23"
+      }
+    )
+    .formatToParts(date)
+    .reduce(
+      (o,p)=>{
+        o[p.type]=p.value;
+        return o;
+      },
+      {}
+    );
 
 
-const dateKey=d=>{
-  const p=taipeiParts(d);
+const dateKey=
+  d=>{
+    const p=
+      taipeiParts(d);
 
-  return `${p.year}-${p.month}-${p.day}`;
-};
-
-
-const hourKey=h=>pad(h);
-
-
-const isToday=d=>
-  dateKey(d)===dateKey(new Date());
+    return `${p.year}-${p.month}-${p.day}`;
+  };
 
 
-const addDays=(d,n)=>{
-  const x=new Date(d);
-  x.setDate(x.getDate()+n);
-  return x;
-};
+const hourKey=
+  h=>pad(h);
 
 
-const escapeHtml=s=>
-  String(s??"")
-  .replace(
-    /[&<>"']/g,
-    m=>({
-      "&":"&amp;",
-      "<":"&lt;",
-      ">":"&gt;",
-      '"':"&quot;",
-      "'":"&#039;"
-    }[m])
-  );
+const isToday=
+  d=>dateKey(d)===dateKey(new Date());
 
 
-const safeFileName=n=>
-  String(n||"file")
-  .replace(/[^a-zA-Z0-9._-]/g,"_")
-  .slice(0,120);
+const addDays=
+  (d,n)=>{
+    const x=
+      new Date(d);
+
+    x.setDate(
+      x.getDate()+n
+    );
+
+    return x;
+  };
 
 
-const tokenKey=token=>{
-  const bytes=new TextEncoder().encode(token);
+const escapeHtml=
+  s=>
+    String(s??"")
+    .replace(
+      /[&<>"']/g,
+      m=>({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+      }[m])
+    );
 
-  let s="";
 
-  bytes.forEach(
-    b=>s+=String.fromCharCode(b)
-  );
+const safeFileName=
+  n=>
+    String(n||"file")
+    .replace(
+      /[^a-zA-Z0-9._-]/g,
+      "_"
+    )
+    .slice(0,120);
 
-  return btoa(s)
-    .replace(/\+/g,"-")
-    .replace(/\//g,"_")
-    .replace(/=+$/,"");
-};
+
+const tokenKey=
+  token=>{
+
+    const bytes=
+      new TextEncoder()
+      .encode(token);
+
+    let s="";
+
+    bytes.forEach(
+      b=>{
+        s+=String.fromCharCode(b);
+      }
+    );
+
+    return btoa(s)
+      .replace(/\+/g,"-")
+      .replace(/\//g,"_")
+      .replace(/=+$/,"");
+
+  };
 
 
 let user=null;
 
 let roomId=
-  localStorage.getItem("momentlog_room")||"";
+  localStorage.getItem(
+    "momentlog_room"
+  )||"";
 
 let room=null;
 
@@ -1178,7 +1536,8 @@ let selectedFile=null;
 
 let activeHour=null;
 
-let currentDate=new Date();
+let currentDate=
+  new Date();
 
 let unsubMeta=null;
 
@@ -1190,60 +1549,90 @@ let unsubRecords=null;
 
 let messagingReady=false;
 
-let renderTimer=null;
+let lastRenderedHour=null;
 
 
 function toast(message){
 
-  const t=$("toast");
+  const t=
+    $("toast");
 
-  t.textContent=message;
+  t.textContent=
+    message;
 
-  t.style.display="block";
+  t.style.display=
+    "block";
 
-  clearTimeout(window.__momentToast);
+  clearTimeout(
+    window.__toast
+  );
 
-  window.__momentToast=
+  window.__toast=
     setTimeout(
       ()=>{
-        t.style.display="none";
+        t.style.display=
+          "none";
       },
       2800
     );
+
 }
 
 
 function applyTheme(){
 
   const theme=
-    localStorage.getItem("momentlog_theme")||
-    "default";
+    localStorage.getItem(
+      "momentlog_theme"
+    )||"default";
 
-  document.documentElement.style.setProperty(
-    "--bg",
-    themes[theme]||themes.default
-  );
+  document.documentElement
+    .style
+    .setProperty(
+      "--bg",
+      themes[theme]||
+      themes.default
+    );
+
+  document.body
+    .classList
+    .toggle(
+      "dark",
+      theme==="dark"
+    );
 
   document
-    .querySelectorAll(".themeOpt")
+    .querySelectorAll(
+      ".themeOpt"
+    )
     .forEach(
-      b=>b.classList.toggle(
-        "selected",
-        b.dataset.theme===theme
-      )
+      b=>{
+        b.classList.toggle(
+          "selected",
+          b.dataset.theme===theme
+        );
+      }
     );
+
 }
 
 
 function showSetupStatus(message){
 
-  $("setupStatus").textContent=message;
+  $("setupStatus")
+    .textContent=
+    message;
+
 }
 
 
-function memberPath(uid,id=roomId){
+function memberPath(
+  uid,
+  id=roomId
+){
 
   return `rooms/${id}/members/${uid}`;
+
 }
 
 
@@ -1254,7 +1643,13 @@ function recordPath(
   id=roomId
 ){
 
-  return `rooms/${id}/records/${dateKey(d)}/${hourKey(h)}/${uid}`;
+  return `
+    rooms/${id}/records/
+    ${dateKey(d)}/
+    ${hourKey(h)}/
+    ${uid}
+  `.replace(/\s+/g,"");
+
 }
 
 
@@ -1278,68 +1673,107 @@ function clearListeners(){
   unsubMembers=null;
   unsubSettings=null;
   unsubRecords=null;
+
 }
 
 
-function friendlyError(e){
+function friendlyError(error){
 
-  const code=e?.code||"";
+  const code=
+    error?.code||"";
 
   if(
-    code.includes("permission-denied")||
-    code.includes("PERMISSION_DENIED")
+    code.includes(
+      "permission-denied"
+    )||
+    code.includes(
+      "PERMISSION_DENIED"
+    )
   ){
-    return "Firebase 權限被拒絕，請檢查 Realtime Database Rules";
+
+    return(
+      "Firebase 權限被拒絕，請檢查 Realtime Database Rules"
+    );
+
   }
 
-  if(code.includes("storage/unauthorized")){
-    return "Storage 權限被拒絕，請檢查 Storage Rules";
+  if(
+    code.includes(
+      "storage/unauthorized"
+    )
+  ){
+
+    return(
+      "Storage 權限被拒絕，請檢查 Storage Rules"
+    );
+
   }
 
-  if(code.includes("storage/bucket-not-found")){
-    return "Storage 尚未建立";
+  if(
+    code.includes(
+      "storage/bucket-not-found"
+    )
+  ){
+
+    return(
+      "Storage 尚未建立"
+    );
+
   }
 
-  if(code.includes("storage/unknown")){
-    return "Storage 尚未啟用或設定有問題";
+  if(
+    code.includes(
+      "auth/unauthorized-domain"
+    )
+  ){
+
+    return(
+      "目前網站網域尚未加入 Firebase 授權網域"
+    );
+
   }
 
-  if(code==="auth/popup-closed-by-user"){
-    return "你關閉了 Google 登入視窗";
+  if(
+    code.includes(
+      "auth/operation-not-allowed"
+    )
+  ){
+
+    return(
+      "Firebase 尚未啟用 Google 登入"
+    );
+
   }
 
-  if(code==="auth/popup-blocked"){
-    return "瀏覽器阻擋了登入視窗，請允許彈出視窗";
+  if(
+    code.includes(
+      "auth/popup-blocked"
+    )
+  ){
+
+    return(
+      "瀏覽器阻擋 Google 登入視窗"
+    );
+
   }
 
-  if(code==="auth/unauthorized-domain"){
-    return "目前網站網域尚未加入 Firebase Authentication 授權網域";
+  if(
+    code.includes(
+      "auth/popup-closed-by-user"
+    )
+  ){
+
+    return(
+      "你關閉了 Google 登入視窗"
+    );
+
   }
 
-  if(code==="auth/operation-not-allowed"){
-    return "Firebase 尚未啟用 Google 登入";
-  }
-
-  return e?.message||"未知錯誤";
-}
-
-
-function renderNotify(){
-
-  const enabled=
-    room?.myNotification?.enabled===true;
-
-  const button=$("notify");
-
-  button.textContent=
-    enabled
-      ?"🔔 通知：開啟"
-      :"🔕 通知：關閉";
-
-  button.classList.toggle(
-    "active",
-    enabled
+  return(
+    error?.message||
+    "未知錯誤"
   );
+
 }
 
 
@@ -1349,105 +1783,132 @@ function isOwner(){
     user &&
     room?.meta?.ownerUid===user.uid
   );
+
 }
 
 
 function validateName(){
 
-  const name=$("name").value.trim();
+  const name=
+    $("name")
+      .value
+      .trim();
 
   if(!name){
 
-    toast("請輸入暱稱");
+    toast(
+      "請輸入暱稱"
+    );
 
     $("name").focus();
 
     return null;
+
   }
 
-  if(name.length>30){
+  if(
+    name.length>30
+  ){
 
-    toast("暱稱最多 30 個字");
+    toast(
+      "暱稱最多 30 個字"
+    );
 
     return null;
+
   }
 
   return name;
+
 }
 
 
-function validateLogName(){
+function validateLog(){
 
-  const log=$("log").value.trim();
+  const log=
+    $("log")
+      .value
+      .trim();
 
   if(!log){
 
-    toast("請輸入 Log 名稱");
+    toast(
+      "請輸入 Log 名稱"
+    );
 
     $("log").focus();
 
     return null;
+
   }
 
-  if(log.length>60){
+  if(
+    log.length>60
+  ){
 
-    toast("Log 名稱最多 60 個字");
+    toast(
+      "Log 名稱最多 60 個字"
+    );
 
     return null;
+
   }
 
   return log;
+
 }
 
 
-function renderLoginState(){
+function renderAccount(){
 
-  const loggedIn=Boolean(user);
+  if(!user){
 
-  $("loginArea")
-    .classList.toggle(
-      "hide",
-      loggedIn
-    );
+    $("loginArea")
+      .classList
+      .remove("hide");
 
-  $("profileArea")
-    .classList.toggle(
-      "hide",
-      !loggedIn
-    );
-
-  if(!loggedIn){
-
-    $("accountPhoto").src="";
-
-    $("accountName").textContent="";
-
-    $("accountEmail").textContent="";
-
-    $("name").value="";
+    $("profileArea")
+      .classList
+      .add("hide");
 
     return;
+
   }
 
-  const photo=user.photoURL||"";
+  $("loginArea")
+    .classList
+    .add("hide");
+
+  $("profileArea")
+    .classList
+    .remove("hide");
+
+
+  const photo=
+    user.photoURL||"";
 
   if(photo){
 
-    $("accountPhoto").src=photo;
-
-    $("accountPhoto").classList.remove("hide");
+    $("accountAvatar").src=
+      photo;
 
   }else{
 
-    $("accountPhoto").classList.add("hide");
+    $("accountAvatar").removeAttribute(
+      "src"
+    );
 
   }
 
-  $("accountName").textContent=
+
+  $("accountName")
+    .textContent=
     user.displayName||
     "Google 使用者";
 
-  $("accountEmail").textContent=
+
+  $("accountEmail")
+    .textContent=
     user.email||
     "已登入";
 
@@ -1458,381 +1919,28 @@ async function saveProfile(){
 
   if(!user){
 
-    toast("請先登入 Google 帳號");
+    toast(
+      "請先登入 Google 帳號"
+    );
 
     return false;
+
   }
 
-  const name=validateName();
+  const name=
+    validateName();
 
   if(!name){
-    return false;
-  }
-
-  try{
-
-    const now=Date.now();
-
-    await set(
-      ref(db,`users/${user.uid}`),
-      {
-        displayName:name,
-        updatedAt:now,
-        createdAt:
-          room?.profile?.createdAt||
-          now
-      }
-    );
-
-    localStorage.setItem(
-      "momentlog_name",
-      name
-    );
-
-    toast("個人資料已保存");
-
-    return true;
-
-  }catch(error){
-
-    console.error(
-      "saveProfile error:",
-      error
-    );
-
-    toast(
-      "保存個人資料失敗："+friendlyError(error)
-    );
 
     return false;
-  }
-}
 
-
-async function loadProfile(){
-
-  if(!user)return;
-
-  try{
-
-    const snapshot=
-      await get(
-        ref(db,`users/${user.uid}`)
-      );
-
-    if(snapshot.exists()){
-
-      const profile=snapshot.val();
-
-      room=room||{};
-
-      room.profile=profile;
-
-      if(
-        profile.displayName &&
-        !$("name").value.trim()
-      ){
-
-        $("name").value=
-          profile.displayName;
-
-      }
-
-      localStorage.setItem(
-        "momentlog_name",
-        profile.displayName||""
-      );
-
-    }else{
-
-      const fallback=
-        localStorage.getItem(
-          "momentlog_name"
-        )||"";
-
-      if(fallback){
-
-        $("name").value=fallback;
-
-      }
-
-    }
-
-  }catch(error){
-
-    console.error(
-      "loadProfile error:",
-      error
-    );
-
-    toast(
-      "個人資料讀取失敗："+friendlyError(error)
-    );
-  }
-}
-
-
-async function googleLogin(){
-
-  try{
-
-    $("googleLogin").disabled=true;
-
-    showSetupStatus(
-      "正在開啟 Google 登入…"
-    );
-
-    await signInWithPopup(
-      auth,
-      googleProvider
-    );
-
-  }catch(error){
-
-    console.error(
-      "Google login error:",
-      error
-    );
-
-    toast(
-      "Google 登入失敗："+friendlyError(error)
-    );
-
-    showSetupStatus(
-      "尚未登入"
-    );
-
-  }finally{
-
-    $("googleLogin").disabled=false;
-
-  }
-}
-
-
-async function logout(){
-
-  if(
-    roomId &&
-    !confirm(
-      "你目前還在房間中。\n確定要登出嗎？"
-    )
-  ){
-
-    return;
   }
 
   try{
 
-    clearListeners();
+    const now=
+      Date.now();
 
-    room=null;
-
-    roomId="";
-
-    currentDate=new Date();
-
-    localStorage.removeItem(
-      "momentlog_room"
-    );
-
-    await signOut(auth);
-
-    $("room").classList.add("hide");
-
-    $("setup").classList.remove("hide");
-
-    showSetupStatus(
-      "已登出"
-    );
-
-    toast("已登出");
-
-  }catch(error){
-
-    console.error(
-      "logout error:",
-      error
-    );
-
-    toast(
-      "登出失敗："+friendlyError(error)
-    );
-  }
-}
-
-
-async function createRoom(){
-
-  if(!user){
-
-    toast("請先登入 Google 帳號");
-
-    return;
-  }
-
-  const name=validateName();
-
-  if(!name)return;
-
-  const log=validateLogName();
-
-  if(!log)return;
-
-  try{
-
-    await saveProfile();
-
-    let id="";
-
-    for(
-      let i=0;
-      i<8&&!id;
-      i++
-    ){
-
-      const candidate=
-        crypto.randomUUID()
-          .replace(/-/g,"")
-          .slice(0,8)
-          .toUpperCase();
-
-      const tx=
-        await runTransaction(
-          ref(
-            db,
-            `rooms/${candidate}/meta`
-          ),
-          current=>
-            current===null
-              ?{
-                roomId:candidate,
-                name:log,
-                ownerUid:user.uid,
-                createdAt:Date.now(),
-                updatedAt:Date.now()
-              }
-              :undefined
-        );
-
-      if(tx.committed){
-
-        id=candidate;
-
-      }
-
-    }
-
-    if(!id){
-
-      throw new Error(
-        "房間碼建立失敗，請再試一次"
-      );
-    }
-
-    const now=Date.now();
-
-    await set(
-      ref(
-        db,
-        memberPath(user.uid,id)
-      ),
-      {
-        displayName:name,
-        joinedAt:now,
-        updatedAt:now
-      }
-    );
-
-    localStorage.setItem(
-      "momentlog_room",
-      id
-    );
-
-    localStorage.setItem(
-      "momentlog_name",
-      name
-    );
-
-    roomId=id;
-
-    currentDate=new Date();
-
-    connectRoom();
-
-    toast(
-      "房間建立成功"
-    );
-
-  }catch(error){
-
-    console.error(
-      "createRoom error:",
-      error
-    );
-
-    toast(
-      "建立房間失敗："+friendlyError(error)
-    );
-  }
-}
-
-
-async function joinRoom(){
-
-  if(!user){
-
-    toast("請先登入 Google 帳號");
-
-    return;
-  }
-
-  const name=validateName();
-
-  if(!name)return;
-
-  const id=
-    $("joinCode")
-      .value
-      .trim()
-      .toUpperCase();
-
-  if(!/^[A-Z0-9]{8,12}$/.test(id)){
-
-    toast("房間碼格式不正確");
-
-    return;
-  }
-
-  try{
-
-    const metaSnapshot=
-      await get(
-        ref(db,`rooms/${id}/meta`)
-      );
-
-    if(!metaSnapshot.exists()){
-
-      toast("找不到這個房間");
-
-      return;
-    }
-
-    const meta=metaSnapshot.val();
-
-    const now=Date.now();
-
-    await set(
-      ref(
-        db,
-        memberPath(user.uid,id)
-      ),
-      {
-        displayName:name,
-        joinedAt:now,
-        updatedAt:now
-      }
-    );
 
     await set(
       ref(
@@ -1848,37 +1956,558 @@ async function joinRoom(){
       }
     );
 
-    localStorage.setItem(
-      "momentlog_room",
-      id
-    );
 
     localStorage.setItem(
       "momentlog_name",
       name
     );
 
-    roomId=id;
 
-    currentDate=new Date();
+    room=room||{};
 
-    connectRoom();
+    room.profile={
+      ...(room.profile||{}),
+      displayName:name,
+      updatedAt:now
+    };
+
 
     toast(
-      `已加入「${meta.name||"MomentLog"}」`
+      "個人資料已保存"
+    );
+
+
+    return true;
+
+  }catch(error){
+
+    console.error(
+      "saveProfile:",
+      error
+    );
+
+    toast(
+      "保存個人資料失敗："+friendlyError(error)
+    );
+
+    return false;
+
+  }
+
+}
+
+
+async function loadProfile(){
+
+  if(!user)return;
+
+  try{
+
+    const snapshot=
+      await get(
+        ref(
+          db,
+          `users/${user.uid}`
+        )
+      );
+
+
+    room=room||{};
+
+
+    if(snapshot.exists()){
+
+      room.profile=
+        snapshot.val()||{};
+
+
+      const saved=
+        room.profile.displayName||
+        "";
+
+      if(saved){
+
+        $("name").value=
+          saved;
+
+        localStorage.setItem(
+          "momentlog_name",
+          saved
+        );
+
+      }
+
+    }else{
+
+      const saved=
+        localStorage.getItem(
+          "momentlog_name"
+        )||"";
+
+      if(saved){
+
+        $("name").value=
+          saved;
+
+      }
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "loadProfile:",
+      error
+    );
+
+    const saved=
+      localStorage.getItem(
+        "momentlog_name"
+      )||"";
+
+    if(saved){
+
+      $("name").value=
+        saved;
+
+    }
+
+  }
+
+}
+
+
+async function loginGoogle(){
+
+  try{
+
+    $("googleLogin")
+      .disabled=true;
+
+    showSetupStatus(
+      "正在開啟 Google 登入…"
+    );
+
+
+    await signInWithPopup(
+      auth,
+      googleProvider
+    );
+
+    toast(
+      "Google 登入成功"
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "Google login:",
+      error
+    );
+
+    toast(
+      "Google 登入失敗："+friendlyError(error)
+    );
+
+    showSetupStatus(
+      "尚未登入"
+    );
+
+  }finally{
+
+    $("googleLogin")
+      .disabled=false;
+
+  }
+
+}
+
+
+async function logout(){
+
+  if(
+    roomId
+  ){
+
+    if(
+      !confirm(
+        "你目前仍在房間中。\n確定要登出嗎？"
+      )
+    ){
+
+      return;
+
+    }
+
+  }
+
+
+  try{
+
+    clearListeners();
+
+    room=null;
+
+    roomId="";
+
+    localStorage.removeItem(
+      "momentlog_room"
+    );
+
+    await signOut(
+      auth
+    );
+
+    $("room")
+      .classList
+      .add("hide");
+
+    $("setup")
+      .classList
+      .remove("hide");
+
+    showSetupStatus(
+      "已登出"
     );
 
   }catch(error){
 
     console.error(
-      "joinRoom error:",
+      "logout:",
+      error
+    );
+
+    toast(
+      "登出失敗："+friendlyError(error)
+    );
+
+  }
+
+}
+
+
+async function createRoom(){
+
+  if(!user){
+
+    toast(
+      "請先登入 Google 帳號"
+    );
+
+    return;
+
+  }
+
+
+  const name=
+    validateName();
+
+  if(!name)return;
+
+
+  const log=
+    validateLog();
+
+  if(!log)return;
+
+
+  const profileSaved=
+    await saveProfile();
+
+  if(!profileSaved){
+
+    return;
+
+  }
+
+
+  try{
+
+    let id="";
+
+
+    for(
+      let i=0;
+      i<8&&!id;
+      i++
+    ){
+
+      const candidate=
+        crypto.randomUUID()
+          .replace(/-/g,"")
+          .slice(
+            0,
+            8
+          )
+          .toUpperCase();
+
+
+      const tx=
+        await runTransaction(
+          ref(
+            db,
+            `rooms/${candidate}/meta`
+          ),
+          current=>{
+
+            if(
+              current!==null
+            ){
+
+              return;
+
+            }
+
+
+            return{
+              roomId:candidate,
+              name:log,
+              ownerUid:user.uid,
+              createdAt:Date.now(),
+              updatedAt:Date.now()
+            };
+
+          }
+        );
+
+
+      if(tx.committed){
+
+        id=
+          candidate;
+
+      }
+
+    }
+
+
+    if(!id){
+
+      throw new Error(
+        "房間碼建立失敗"
+      );
+
+    }
+
+
+    await set(
+      ref(
+        db,
+        memberPath(
+          user.uid,
+          id
+        )
+      ),
+      {
+        displayName:name,
+        joinedAt:Date.now(),
+        updatedAt:Date.now()
+      }
+    );
+
+
+    localStorage.setItem(
+      "momentlog_room",
+      id
+    );
+
+
+    localStorage.setItem(
+      "momentlog_name",
+      name
+    );
+
+
+    roomId=
+      id;
+
+    currentDate=
+      new Date();
+
+
+    connectRoom();
+
+
+    toast(
+      "房間建立成功"
+    );
+
+  }catch(error){
+
+    console.error(
+      "createRoom:",
+      error
+    );
+
+    toast(
+      "建立房間失敗："+friendlyError(error)
+    );
+
+  }
+
+}
+
+
+async function joinRoom(){
+
+  if(!user){
+
+    toast(
+      "請先登入 Google 帳號"
+    );
+
+    return;
+
+  }
+
+
+  const name=
+    validateName();
+
+  if(!name)return;
+
+
+  const id=
+    $("joinCode")
+      .value
+      .trim()
+      .toUpperCase();
+
+
+  if(
+    !/^[A-Z0-9]{8,12}$/.test(id)
+  ){
+
+    toast(
+      "房間碼格式不正確"
+    );
+
+    return;
+
+  }
+
+
+  try{
+
+    const metaSnapshot=
+      await get(
+        ref(
+          db,
+          `rooms/${id}/meta`
+        )
+      );
+
+
+    if(
+      !metaSnapshot.exists()
+    ){
+
+      toast(
+        "找不到這個房間"
+      );
+
+      return;
+
+    }
+
+
+    const now=
+      Date.now();
+
+
+    /*
+     * 先建立 member。
+     *
+     * 注意：
+     * 不在這裡先讀 records。
+     * connectRoom 會處理後續 listener。
+     */
+
+    await set(
+      ref(
+        db,
+        memberPath(
+          user.uid,
+          id
+        )
+      ),
+      {
+        displayName:name,
+        joinedAt:now,
+        updatedAt:now
+      }
+    );
+
+
+    /*
+     * 個人資料保存失敗不應該讓已加入的房間
+     * 被誤判成「加入失敗」。
+     */
+
+    try{
+
+      await set(
+        ref(
+          db,
+          `users/${user.uid}`
+        ),
+        {
+          displayName:name,
+          updatedAt:now
+        }
+      );
+
+    }catch(profileError){
+
+      console.warn(
+        "users profile save:",
+        profileError
+      );
+
+    }
+
+
+    localStorage.setItem(
+      "momentlog_room",
+      id
+    );
+
+
+    localStorage.setItem(
+      "momentlog_name",
+      name
+    );
+
+
+    roomId=
+      id;
+
+    currentDate=
+      new Date();
+
+
+    connectRoom();
+
+
+    toast(
+      "已加入房間"
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "joinRoom:",
       error
     );
 
     toast(
       "加入房間失敗："+friendlyError(error)
     );
+
   }
+
 }
 
 
@@ -1886,9 +2515,24 @@ function connectRoom(){
 
   clearListeners();
 
-  if(!roomId||!user)return;
 
-  room=room||{};
+  if(
+    !roomId||
+    !user
+  ){
+
+    return;
+
+  }
+
+
+  room=
+    room||{};
+
+
+  /*
+   * meta listener
+   */
 
   unsubMeta=
     onValue(
@@ -1898,7 +2542,9 @@ function connectRoom(){
       ),
       snapshot=>{
 
-        if(!snapshot.exists()){
+        if(
+          !snapshot.exists()
+        ){
 
           toast(
             "房間不存在或已被刪除"
@@ -1907,12 +2553,17 @@ function connectRoom(){
           leaveLocal();
 
           return;
+
         }
 
-        room=room||{};
+
+        room=
+          room||{};
+
 
         room.meta=
           snapshot.val()||{};
+
 
         render();
 
@@ -1920,7 +2571,7 @@ function connectRoom(){
       error=>{
 
         console.error(
-          "meta listener error:",
+          "META LISTENER:",
           error
         );
 
@@ -1932,6 +2583,10 @@ function connectRoom(){
     );
 
 
+  /*
+   * Members listener
+   */
+
   unsubMembers=
     onValue(
       ref(
@@ -1940,10 +2595,52 @@ function connectRoom(){
       ),
       snapshot=>{
 
-        room=room||{};
+        room=
+          room||{};
+
 
         room.members=
           snapshot.val()||{};
+
+
+        /*
+         * 到這裡之後才啟動 records。
+         *
+         * 同一使用者加入後，
+         * members 成功同步時才開始讀 records。
+         */
+
+        if(
+          room.members[user.uid]
+        ){
+
+          loadRecordsListener();
+
+        }else{
+
+          /*
+           * 如果房主剛把自己移除，
+           * 不要把剩餘 listener 留著。
+           */
+
+          if(
+            room?.meta?.ownerUid!==user.uid
+          ){
+
+            clearListeners();
+
+            leaveLocal();
+
+            toast(
+              "你已離開這個房間"
+            );
+
+            return;
+
+          }
+
+        }
+
 
         render();
 
@@ -1951,7 +2648,7 @@ function connectRoom(){
       error=>{
 
         console.error(
-          "members listener error:",
+          "MEMBERS LISTENER:",
           error
         );
 
@@ -1963,6 +2660,10 @@ function connectRoom(){
     );
 
 
+  /*
+   * Notification listener
+   */
+
   unsubSettings=
     onValue(
       ref(
@@ -1971,7 +2672,8 @@ function connectRoom(){
       ),
       snapshot=>{
 
-        room=room||{};
+        room=
+          room||{};
 
         room.myNotification=
           snapshot.val()||{};
@@ -1981,35 +2683,49 @@ function connectRoom(){
       },
       error=>{
 
-        console.error(
-          "notification listener error:",
+        console.warn(
+          "NOTIFICATION LISTENER:",
           error
         );
 
       }
     );
 
-
-  loadRecordsListener();
-
 }
 
 
 function loadRecordsListener(){
 
-  if(unsubRecords){
+  if(
+    unsubRecords
+  ){
 
     try{
       unsubRecords();
     }catch{}
 
-    unsubRecords=null;
+    unsubRecords=
+      null;
+
   }
 
-  if(!roomId||!user)return;
+
+  if(
+    !roomId||
+    !user||
+    !room?.members?.[user.uid]
+  ){
+
+    return;
+
+  }
+
 
   const targetDate=
-    dateKey(currentDate);
+    dateKey(
+      currentDate
+    );
+
 
   unsubRecords=
     onValue(
@@ -2019,10 +2735,12 @@ function loadRecordsListener(){
       ),
       snapshot=>{
 
-        room=room||{};
+        room=
+          room||{};
 
         room.records=
           snapshot.val()||{};
+
 
         render();
 
@@ -2030,8 +2748,9 @@ function loadRecordsListener(){
       error=>{
 
         console.error(
-          "records listener error:",
-          error
+          "RECORDS LISTENER:",
+          error,
+          `rooms/${roomId}/records/${targetDate}`
         );
 
         toast(
@@ -2046,25 +2765,46 @@ function loadRecordsListener(){
 
 function render(){
 
-  if(!room?.meta)return;
+  if(
+    !room?.meta||
+    !user
+  ){
 
-  $("setup").classList.add("hide");
+    return;
 
-  $("room").classList.remove("hide");
+  }
+
+
+  $("setup")
+    .classList
+    .add("hide");
+
+
+  $("room")
+    .classList
+    .remove("hide");
+
 
   $("title").textContent=
     room.meta.name||
     "MomentLog";
 
+
   $("roomCode").textContent=
     roomId;
+
 
   $("sub").textContent=
     `${dateKey(currentDate)} · 房間碼 ${roomId}`;
 
-  const now=new Date();
 
-  const p=taipeiParts(now);
+  const now=
+    new Date();
+
+
+  const p=
+    taipeiParts(now);
+
 
   $("clock").textContent=
     `${p.hour}:${p.minute}:${p.second}`;
@@ -2073,56 +2813,62 @@ function render(){
   const all=
     room.records||{};
 
+
   const entries=[];
 
 
-  /*
-   * 今天：
-   * 不顯示目前小時。
-   *
-   * 例如現在 21:00：
-   * 顯示 00:00 ~ 20:00。
-   *
-   * 歷史日期：
-   * 顯示完整 00:00 ~ 23:00。
-   */
+  let maxHour;
 
-  let max;
 
-  if(isToday(currentDate)){
+  if(
+    isToday(
+      currentDate
+    )
+  ){
 
-    max=
+    /*
+     * 今天：
+     * 不顯示目前小時。
+     *
+     * 21:xx -> 最後 20:00
+     */
+
+    maxHour=
       Number(p.hour)-1;
 
   }else{
 
-    max=23;
+    /*
+     * 歷史日期：
+     * 顯示完整 00~23
+     */
+
+    maxHour=
+      23;
 
   }
 
 
-  if(max>=0){
+  for(
+    let h=0;
+    h<=maxHour;
+    h++
+  ){
 
-    for(
-      let h=0;
-      h<=max;
-      h++
-    ){
-
-      entries.push(
-        [
-          h,
-          all[hourKey(h)]||{}
-        ]
-      );
-
-    }
+    entries.push(
+      [
+        h,
+        all[hourKey(h)]||{}
+      ]
+    );
 
   }
 
 
   $("available").textContent=
-    String(entries.length);
+    String(
+      entries.length
+    );
 
 
   $("doneCount").textContent=
@@ -2137,20 +2883,24 @@ function render(){
 
 
   $("dateLabel").textContent=
-    isToday(currentDate)
+    isToday(
+      currentDate
+    )
       ?"今天"
       :`歷史日期：${dateKey(currentDate)}`;
 
 
   $("yesterday")
-    .classList.toggle(
+    .classList
+    .toggle(
       "hide",
       !isToday(currentDate)
     );
 
 
   $("today")
-    .classList.toggle(
+    .classList
+    .toggle(
       "hide",
       isToday(currentDate)
     );
@@ -2158,7 +2908,9 @@ function render(){
 
   renderMembers();
 
-  renderTimeline(entries);
+  renderTimeline(
+    entries
+  );
 
   renderNotify();
 
@@ -2172,51 +2924,52 @@ function renderMembers(){
   const members=
     room.members||{};
 
-  const entries=
+  const records=
     room.records||{};
 
   const ownerUid=
     room.meta?.ownerUid;
 
 
-  const list=
-    Object.entries(members);
+  const html=
+    Object.entries(
+      members
+    )
+    .map(
+      ([uid,m])=>{
+
+        const done=
+          Object.values(
+            records
+          )
+          .some(
+            slot=>
+              !!slot?.[uid]
+          );
 
 
-  $("members").innerHTML=
-    list
-      .map(
-        ([uid,m])=>{
-
-          const done=
-            Object.values(entries)
-              .some(
-                slot=>Boolean(
-                  slot?.[uid]
-                )
-              );
+        const owner=
+          uid===ownerUid;
 
 
-          const owner=
-            uid===ownerUid;
+        return`
+          <div class="member">
 
+            <span class="memberName">
+              👤
+              ${escapeHtml(
+                m?.displayName||
+                "未命名"
+              )}
+            </span>
 
-          return `
-            <div class="member">
+            <span class="memberRight">
 
-              <span class="memberName">
-                👤
-                ${escapeHtml(
-                  m?.displayName||
-                  "未命名"
-                )}
-
-                ${
-                  owner
-                    ?'<span class="ownerMark">👑 房主</span>'
-                    :""
-                }
-              </span>
+              ${
+                owner
+                  ?'<span class="badge owner">房主</span>'
+                  :""
+              }
 
               <span class="badge ${
                 done
@@ -2230,37 +2983,45 @@ function renderMembers(){
                 }
               </span>
 
-            </div>
-          `;
+            </span>
 
-        }
-      )
-      .join("")
-      ||
-      "<div class='muted'>沒有成員</div>";
+          </div>
+        `;
+
+      }
+    )
+    .join("");
+
+
+  $("members").innerHTML=
+    html||
+    "<div class='muted'>沒有成員</div>";
 
 }
 
 
 function renderTimeline(entries){
 
-  const p=
-    taipeiParts(new Date());
-
-
   if(!entries.length){
 
     $("slots").innerHTML=
       `
       <div class="emptyTimeline">
-        今天還沒有已到達的紀錄點。
+        目前還沒有已到達的紀錄點。
         <br>
-        可以按「📍 記錄現在」記錄目前時刻。
+        按「📍 記錄現在」可以記錄目前時刻。
       </div>
       `;
 
     return;
+
   }
+
+
+  const p=
+    taipeiParts(
+      new Date()
+    );
 
 
   $("slots").innerHTML=
@@ -2272,9 +3033,11 @@ function renderTimeline(entries){
             users?.[user.uid]||
             null;
 
-          const current=
-            isToday(currentDate)&&
+
+          const isCurrent=
+            isToday(currentDate) &&
             h===Number(p.hour);
+
 
           let media="";
 
@@ -2283,38 +3046,51 @@ function renderTimeline(entries){
             mine?.media?.downloadURL
           ){
 
+            const type=
+              mine.media.contentType||
+              "";
+
+
             if(
-              (mine.media.contentType||"")
-                .startsWith("image/")
+              type.startsWith(
+                "image/"
+              )
             ){
 
               media=
                 `
                 <div class="media">
+
                   <img
                     src="${escapeHtml(
                       mine.media.downloadURL
                     )}"
                     alt="圖片"
+                    loading="lazy"
                   >
+
                 </div>
                 `;
 
             }else if(
-              (mine.media.contentType||"")
-                .startsWith("video/")
+              type.startsWith(
+                "video/"
+              )
             ){
 
               media=
                 `
                 <div class="media">
+
                   <video
                     src="${escapeHtml(
                       mine.media.downloadURL
                     )}"
                     controls
                     playsinline
+                    preload="metadata"
                   ></video>
+
                 </div>
                 `;
 
@@ -2323,7 +3099,7 @@ function renderTimeline(entries){
           }
 
 
-          return `
+          return`
             <div class="slot">
 
               <div class="time">
@@ -2338,7 +3114,7 @@ function renderTimeline(entries){
                     ${
                       mine
                         ?"📌 已記錄"
-                        :current
+                        :isCurrent
                           ?"⏰ 現在"
                           :"尚未紀錄"
                     }
@@ -2353,7 +3129,7 @@ function renderTimeline(entries){
                 }
 
                 ${
-                  current
+                  isCurrent
                     ?'<div class="pill now">🔔 現在要記錄</div>'
                     :""
                 }
@@ -2362,7 +3138,9 @@ function renderTimeline(entries){
                   mine?.text
                     ?`
                       <div class="caption">
-                        ${escapeHtml(mine.text)}
+                        ${escapeHtml(
+                          mine.text
+                        )}
                       </div>
                     `
                     :""
@@ -2400,9 +3178,12 @@ function renderTimeline(entries){
 
 
   document
-    .querySelectorAll("[data-hour]")
+    .querySelectorAll(
+      "[data-hour]"
+    )
     .forEach(
       button=>{
+
         button.onclick=()=>{
           openRecord(
             Number(
@@ -2410,32 +3191,46 @@ function renderTimeline(entries){
             )
           );
         };
+
       }
     );
 
 }
 
 
-function openRecord(h){
+function openRecord(hour){
 
-  if(!user){
+  if(
+    !user||
+    !roomId
+  ){
 
-    toast("請先登入");
+    toast(
+      "請先加入房間"
+    );
 
     return;
+
   }
 
-  activeHour=h;
 
-  selectedFile=null;
+  activeHour=
+    hour;
+
+
+  selectedFile=
+    null;
+
 
   const mine=
-    room?.records?.[hourKey(h)]?.[user.uid]||
+    room?.records?.[
+      hourKey(hour)
+    ]?.[user.uid]||
     null;
 
 
   $("recordWhen").textContent=
-    `${dateKey(currentDate)} · ${pad(h)}:00`;
+    `${dateKey(currentDate)} · ${pad(hour)}:00`;
 
 
   $("caption").value=
@@ -2444,7 +3239,12 @@ function openRecord(h){
 
 
   $("uploadStatus")
-    .classList.add("hide");
+    .classList
+    .add("hide");
+
+
+  $("progressBar").style.width=
+    "0%";
 
 
   renderPreview(
@@ -2454,7 +3254,8 @@ function openRecord(h){
 
 
   $("recordModal")
-    .classList.add("show");
+    .classList
+    .add("show");
 
 }
 
@@ -2471,17 +3272,31 @@ function closeRecord(){
 
   }
 
+
   $("recordModal")
-    .classList.remove("show");
+    .classList
+    .remove("show");
 
-  selectedFile=null;
 
-  activeHour=null;
+  selectedFile=
+    null;
 
-  $("preview").innerHTML="";
+
+  activeHour=
+    null;
+
+
+  $("preview").innerHTML=
+    "";
+
 
   $("uploadStatus")
-    .classList.add("hide");
+    .classList
+    .add("hide");
+
+
+  $("progressBar").style.width=
+    "0%";
 
 }
 
@@ -2499,24 +3314,30 @@ function renderPreview(
 
   if(!src){
 
-    $("preview").innerHTML="";
+    $("preview").innerHTML=
+      "";
 
     return;
+
   }
 
 
   if(
     (type||"")
-      .startsWith("image/")
+      .startsWith(
+        "image/"
+      )
   ){
 
     $("preview").innerHTML=
       `
       <div class="media">
+
         <img
           src="${escapeHtml(src)}"
           alt="預覽"
         >
+
       </div>
       `;
 
@@ -2525,11 +3346,13 @@ function renderPreview(
     $("preview").innerHTML=
       `
       <div class="media">
+
         <video
           src="${escapeHtml(src)}"
           controls
           playsinline
         ></video>
+
       </div>
       `;
 
@@ -2544,9 +3367,10 @@ function chooseFile(file){
 
 
   if(
-    !/^(image|video)\//.test(
-      file.type
-    )
+    !/^(image|video)\//
+      .test(
+        file.type
+      )
   ){
 
     toast(
@@ -2554,6 +3378,7 @@ function chooseFile(file){
     );
 
     return;
+
   }
 
 
@@ -2567,6 +3392,7 @@ function chooseFile(file){
     );
 
     return;
+
   }
 
 
@@ -2584,7 +3410,9 @@ function chooseFile(file){
   selectedFile={
     file,
     previewUrl:
-      URL.createObjectURL(file)
+      URL.createObjectURL(
+        file
+      )
   };
 
 
@@ -2599,11 +3427,13 @@ function chooseFile(file){
 
 function setUploadStatus(text){
 
-  $("uploadStatus").textContent=
+  $("uploadStatus")
+    .textContent=
     text;
 
   $("uploadStatus")
-    .classList.remove("hide");
+    .classList
+    .remove("hide");
 
 }
 
@@ -2616,9 +3446,8 @@ async function saveRecord(){
     !roomId
   ){
 
-    toast("目前無法儲存紀錄");
-
     return;
+
   }
 
 
@@ -2642,10 +3471,15 @@ async function saveRecord(){
     null;
 
 
-  let newStoragePath=null;
+  let newStoragePath=
+    null;
 
 
   try{
+
+    $("saveRecord")
+      .disabled=true;
+
 
     setUploadStatus(
       selectedFile
@@ -2660,38 +3494,118 @@ async function saveRecord(){
         selectedFile.file;
 
 
+      if(
+        file.size>
+        250*1024*1024
+      ){
+
+        throw new Error(
+          "單檔不能超過 250MB"
+        );
+
+      }
+
+
       newStoragePath=
         `room-media/${roomId}/${user.uid}/${dateKey(currentDate)}_${pad(activeHour)}/${crypto.randomUUID()}-${safeFileName(file.name)}`;
 
 
-      const sr=
-        storageRef(
-          storage,
-          newStoragePath
+      const uploadTask=
+        uploadBytesResumable(
+          storageRef(
+            storage,
+            newStoragePath
+          ),
+          file,
+          {
+            contentType:file.type,
+            customMetadata:{
+              roomId,
+              uid:user.uid
+            }
+          }
         );
 
 
-      await uploadBytes(
-        sr,
-        file,
-        {
-          contentType:file.type,
-          customMetadata:{
-            roomId,
-            uid:user.uid
-          }
+      await new Promise(
+        (resolve,reject)=>{
+
+          uploadTask.on(
+            "state_changed",
+
+            snapshot=>{
+
+              const percent=
+                snapshot.totalBytes
+                  ?Math.round(
+                    snapshot.bytesTransferred/
+                    snapshot.totalBytes*
+                    100
+                  )
+                  :0;
+
+
+              $("uploadStatus")
+                .classList
+                .remove("hide");
+
+
+              $("uploadText")
+                .textContent=
+                `正在上傳媒體… ${percent}%`;
+
+
+              $("progressBar")
+                .style
+                .width=
+                `${percent}%`;
+
+            },
+
+            error=>{
+              reject(error);
+            },
+
+            async()=>{
+
+              try{
+
+                const url=
+                  await getDownloadURL(
+                    uploadTask.snapshot.ref
+                  );
+
+
+                media={
+                  storagePath:
+                    newStoragePath,
+
+                  downloadURL:url,
+
+                  contentType:
+                    file.type,
+
+                  name:
+                    file.name,
+
+                  size:
+                    file.size
+                };
+
+
+                resolve();
+
+              }catch(error){
+
+                reject(error);
+
+              }
+
+            }
+          );
+
         }
       );
-
-
-      media={
-        storagePath:newStoragePath,
-        downloadURL:
-          await getDownloadURL(sr),
-        contentType:file.type,
-        name:file.name,
-        size:file.size
-      };
 
     }
 
@@ -2702,26 +3616,43 @@ async function saveRecord(){
         .trim();
 
 
-    const now=Date.now();
+    const now=
+      Date.now();
+
+
+    const authorName=
+      localStorage.getItem(
+        "momentlog_name"
+      )||
+      $("name")
+        .value
+        .trim()||
+      "我";
 
 
     await set(
       ref(db,path),
       {
-        date:dateKey(currentDate),
-        hour:activeHour,
+        date:
+          dateKey(currentDate),
+
+        hour:
+          activeHour,
+
         text,
-        authorUid:user.uid,
-        authorName:
-          localStorage.getItem(
-            "momentlog_name"
-          )||
-          $("name").value.trim()||
-          "我",
+
+        authorUid:
+          user.uid,
+
+        authorName,
+
         savedAt:
           old?.savedAt||
           now,
-        updatedAt:now,
+
+        updatedAt:
+          now,
+
         media
       }
     );
@@ -2752,6 +3683,7 @@ async function saveRecord(){
       "已同步到雲端"
     );
 
+
   }catch(error){
 
     if(newStoragePath){
@@ -2771,7 +3703,7 @@ async function saveRecord(){
 
 
     console.error(
-      "saveRecord error:",
+      "saveRecord:",
       error
     );
 
@@ -2784,6 +3716,11 @@ async function saveRecord(){
     toast(
       "儲存失敗："+friendlyError(error)
     );
+
+  }finally{
+
+    $("saveRecord")
+      .disabled=false;
 
   }
 
@@ -2798,6 +3735,7 @@ async function removeMedia(){
   ){
 
     return;
+
   }
 
 
@@ -2808,13 +3746,16 @@ async function removeMedia(){
     null;
 
 
-  if(!old?.media?.storagePath){
+  if(
+    !old?.media?.storagePath
+  ){
 
     toast(
       "目前沒有媒體"
     );
 
     return;
+
   }
 
 
@@ -2854,31 +3795,38 @@ async function removeMedia(){
     }catch(error){
 
       console.warn(
-        "Storage delete error:",
+        "Storage delete:",
         error
       );
 
     }
 
 
-    selectedFile=null;
+    selectedFile=
+      null;
 
-    $("preview").innerHTML="";
+
+    $("preview").innerHTML=
+      "";
+
 
     toast(
       "媒體已移除"
     );
 
+
   }catch(error){
 
     console.error(
-      "removeMedia error:",
+      "removeMedia:",
       error
     );
+
 
     setUploadStatus(
       "移除失敗："+friendlyError(error)
     );
+
 
     toast(
       "移除失敗："+friendlyError(error)
@@ -2891,19 +3839,27 @@ async function removeMedia(){
 
 async function toggleNotification(){
 
-  if(!user||!roomId){
+  if(
+    !user||
+    !roomId
+  ){
 
-    toast("請先登入並加入房間");
+    toast(
+      "請先登入並加入房間"
+    );
 
     return;
+
   }
 
 
   try{
 
-    if(
-      room?.myNotification?.enabled===true
-    ){
+    const current=
+      room?.myNotification?.enabled===true;
+
+
+    if(current){
 
       await update(
         ref(
@@ -2916,29 +3872,33 @@ async function toggleNotification(){
         }
       );
 
+
       toast(
         "提醒已關閉"
       );
 
+
       return;
+
     }
 
 
     if(
-      !(await isSupported())||
       !("Notification" in window)
     ){
 
       toast(
-        "這個瀏覽器不支援背景推播"
+        "這個瀏覽器不支援通知"
       );
 
       return;
+
     }
 
 
     if(
-      Notification.permission==="denied"
+      Notification.permission===
+      "denied"
     ){
 
       toast(
@@ -2946,11 +3906,13 @@ async function toggleNotification(){
       );
 
       return;
+
     }
 
 
     if(
-      Notification.permission==="default"
+      Notification.permission===
+      "default"
     ){
 
       const permission=
@@ -2966,18 +3928,34 @@ async function toggleNotification(){
         );
 
         return;
+
       }
 
     }
 
 
-    const registration=
-      await navigator.serviceWorker.register(
-        "./firebase-messaging-sw.js",
-        {
-          scope:"./"
-        }
+    if(
+      !(await isSupported())
+    ){
+
+      toast(
+        "這個瀏覽器不支援 Firebase 推播"
       );
+
+      return;
+
+    }
+
+
+    const registration=
+      await navigator
+        .serviceWorker
+        .register(
+          "./firebase-messaging-sw.js",
+          {
+            scope:"./"
+          }
+        );
 
 
     const messaging=
@@ -2988,7 +3966,9 @@ async function toggleNotification(){
       await getToken(
         messaging,
         {
-          vapidKey:VAPID_PUBLIC_KEY,
+          vapidKey:
+            VAPID_PUBLIC_KEY,
+
           serviceWorkerRegistration:
             registration
         }
@@ -3000,6 +3980,7 @@ async function toggleNotification(){
       throw new Error(
         "無法取得推播 token"
       );
+
     }
 
 
@@ -3012,8 +3993,7 @@ async function toggleNotification(){
         token,
         createdAt:Date.now(),
         updatedAt:Date.now(),
-        userAgent:
-          navigator.userAgent
+        userAgent:navigator.userAgent
       }
     );
 
@@ -3035,12 +4015,14 @@ async function toggleNotification(){
       "提醒已開啟"
     );
 
+
   }catch(error){
 
     console.error(
-      "notification error:",
+      "notification:",
       error
     );
+
 
     toast(
       "通知設定失敗："+friendlyError(error)
@@ -3061,6 +4043,7 @@ async function initForegroundMessaging(){
     ){
 
       return;
+
     }
 
 
@@ -3078,12 +4061,13 @@ async function initForegroundMessaging(){
     );
 
 
-    messagingReady=true;
+    messagingReady=
+      true;
 
   }catch(error){
 
     console.warn(
-      "FCM init error:",
+      "messaging:",
       error
     );
 
@@ -3097,11 +4081,13 @@ async function invite(){
   if(!room?.meta){
 
     return;
+
   }
 
 
   const text=
-    `加入 MomentLog「${room.meta.name}」\n房間碼：${roomId}`;
+    `加入 MomentLog「${room.meta.name||"MomentLog"}」\n`+
+    `房間碼：${roomId}`;
 
 
   try{
@@ -3128,13 +4114,17 @@ async function invite(){
 
 async function leaveRoom(){
 
-  if(!user||!roomId){
+  if(
+    !user||
+    !roomId
+  ){
 
     toast(
       "目前沒有加入房間"
     );
 
     return;
+
   }
 
 
@@ -3145,25 +4135,30 @@ async function leaveRoom(){
   ){
 
     return;
+
   }
 
 
-  const oldRoomId=roomId;
+  const oldRoomId=
+    roomId;
 
 
   try{
 
-    const members=
-      room?.members||{};
+    const memberData=
+      room?.members||
+      {};
 
 
     const memberIds=
-      Object.keys(members);
+      Object.keys(
+        memberData
+      );
 
 
     /*
-     * 只有自己：
-     * 整個房間刪除。
+     * 情況 1：
+     * 只有房主自己。
      */
 
     if(
@@ -3182,66 +4177,150 @@ async function leaveRoom(){
       clearListeners();
 
       room=null;
-
       roomId="";
-
       currentDate=new Date();
 
       localStorage.removeItem(
         "momentlog_room"
       );
 
+
       $("room")
-        .classList.add("hide");
+        .classList
+        .add("hide");
 
       $("setup")
-        .classList.remove("hide");
+        .classList
+        .remove("hide");
+
 
       toast(
         "你是最後一位成員，房間已刪除"
       );
 
+
       return;
+
     }
 
 
     /*
-     * 房主：
-     * 從其他成員選一位新的房主。
+     * 情況 2：
+     * 房主且有其他人。
      */
 
-    if(isOwner()){
+    if(
+      isOwner()
+    ){
 
-      const newOwnerUid=
+      let newOwnerUid=
         memberIds.find(
           uid=>uid!==user.uid
         );
 
 
-      if(!newOwnerUid){
+      if(
+        !newOwnerUid
+      ){
 
-        throw new Error(
-          "找不到新的房主"
-        );
+        /*
+         * 防止資料異常時卡死。
+         * 重新讀一次 members。
+         */
+
+        const snapshot=
+          await get(
+            ref(
+              db,
+              `rooms/${oldRoomId}/members`
+            )
+          );
+
+
+        const freshMembers=
+          snapshot.val()||
+          {};
+
+
+        const freshIds=
+          Object.keys(
+            freshMembers
+          );
+
+
+        newOwnerUid=
+          freshIds.find(
+            uid=>uid!==user.uid
+          );
+
+
+        if(
+          !newOwnerUid
+        ){
+
+          /*
+           * 真的只剩自己。
+           */
+
+          await remove(
+            ref(
+              db,
+              `rooms/${oldRoomId}`
+            )
+          );
+
+
+          clearListeners();
+
+          room=null;
+          roomId="";
+          currentDate=new Date();
+
+          localStorage.removeItem(
+            "momentlog_room"
+          );
+
+
+          $("room")
+            .classList
+            .add("hide");
+
+          $("setup")
+            .classList
+            .remove("hide");
+
+
+          toast(
+            "你是最後一位成員，房間已刪除"
+          );
+
+
+          return;
+
+        }
+
       }
 
 
       const newOwnerName=
-        members[newOwnerUid]
-          ?.displayName||
-        "下一位成員";
+        (
+          memberData[newOwnerUid]||
+          {}
+        ).displayName||
+        "新房主";
 
 
       /*
-       * 多位置原子更新：
-       * 1. 換房主
-       * 2. 移除舊房主
-       * 3. 移除舊房主通知設定
+       * 一次更新：
+       * ownerUid 改成新房主
+       * 舊房主 member 移除
+       * 舊房主通知設定移除
        */
 
       await update(
         ref(db),
         {
+
           [`rooms/${oldRoomId}/meta/ownerUid`]:
             newOwnerUid,
 
@@ -3253,6 +4332,7 @@ async function leaveRoom(){
 
           [`rooms/${oldRoomId}/notificationSettings/${user.uid}`]:
             null
+
         }
       );
 
@@ -3260,33 +4340,36 @@ async function leaveRoom(){
       clearListeners();
 
       room=null;
-
       roomId="";
-
       currentDate=new Date();
 
       localStorage.removeItem(
         "momentlog_room"
       );
 
+
       $("room")
-        .classList.add("hide");
+        .classList
+        .add("hide");
 
       $("setup")
-        .classList.remove("hide");
+        .classList
+        .remove("hide");
 
 
       toast(
         `已離開房間，${newOwnerName} 成為新房主`
       );
 
+
       return;
+
     }
 
 
     /*
-     * 一般成員：
-     * 只移除自己。
+     * 情況 3：
+     * 一般成員。
      */
 
     await remove(
@@ -3309,7 +4392,7 @@ async function leaveRoom(){
     }catch(error){
 
       console.warn(
-        "notification setting remove error:",
+        "notification remove:",
         error
       );
 
@@ -3319,9 +4402,7 @@ async function leaveRoom(){
     clearListeners();
 
     room=null;
-
     roomId="";
-
     currentDate=new Date();
 
     localStorage.removeItem(
@@ -3330,10 +4411,12 @@ async function leaveRoom(){
 
 
     $("room")
-      .classList.add("hide");
+      .classList
+      .add("hide");
 
     $("setup")
-      .classList.remove("hide");
+      .classList
+      .remove("hide");
 
 
     toast(
@@ -3344,7 +4427,7 @@ async function leaveRoom(){
   }catch(error){
 
     console.error(
-      "leaveRoom error:",
+      "leaveRoom:",
       error
     );
 
@@ -3366,17 +4449,22 @@ function leaveLocal(){
 
   roomId="";
 
-  currentDate=new Date();
+  currentDate=
+    new Date();
 
   localStorage.removeItem(
     "momentlog_room"
   );
 
+
   $("room")
-    .classList.add("hide");
+    .classList
+    .add("hide");
+
 
   $("setup")
-    .classList.remove("hide");
+    .classList
+    .remove("hide");
 
 }
 
@@ -3389,6 +4477,11 @@ function showYesterday(){
       -1
     );
 
+
+  lastRenderedHour=
+    null;
+
+
   loadRecordsListener();
 
   render();
@@ -3398,7 +4491,46 @@ function showYesterday(){
 
 function showToday(){
 
-  currentDate=new Date();
+  currentDate=
+    new Date();
+
+
+  lastRenderedHour=
+    null;
+
+
+  loadRecordsListener();
+
+  render();
+
+}
+
+
+function changeDate(offset){
+
+  const next=
+    addDays(
+      currentDate,
+      offset
+    );
+
+
+  if(
+    next>new Date()
+  ){
+
+    return;
+
+  }
+
+
+  currentDate=
+    next;
+
+
+  lastRenderedHour=
+    null;
+
 
   loadRecordsListener();
 
@@ -3409,9 +4541,12 @@ function showToday(){
 
 function tick(){
 
-  const now=new Date();
+  const now=
+    new Date();
 
-  const p=taipeiParts(now);
+
+  const p=
+    taipeiParts(now);
 
 
   $("clock").textContent=
@@ -3419,77 +4554,52 @@ function tick(){
 
 
   if(
-    !room?.meta||
-    !isToday(currentDate)
+    !room?.meta
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    !isToday(
+      currentDate
+    )
   ){
 
     $("next").textContent=
       "正在查看歷史紀錄";
 
     return;
+
   }
 
-
-  /*
-   * 時間軸只顯示已經結束的整點。
-   *
-   * 例如：
-   * 21:00 ~ 21:59
-   * 時間軸最多顯示 20:00。
-   */
 
   const currentHour=
     Number(p.hour);
 
 
-  const max=
+  /*
+   * 不顯示目前小時。
+   */
+
+  const maxHour=
     currentHour-1;
 
 
-  const all=
-    room.records||{};
-
-
-  const entries=[];
-
-
-  for(
-    let h=0;
-    h<=max;
-    h++
-  ){
-
-    entries.push(
-      [
-        h,
-        all[hourKey(h)]||{}
-      ]
-    );
-
-  }
-
+  /*
+   * 跨整點後重新 render。
+   */
 
   if(
-    renderTimer===null||
-    renderTimer!==max
+    lastRenderedHour!==maxHour
   ){
 
-    renderTimer=max;
+    lastRenderedHour=
+      maxHour;
 
-    renderTimeline(entries);
-
-    $("available").textContent=
-      String(entries.length);
-
-    $("doneCount").textContent=
-      String(
-        entries.reduce(
-          (count,[,slot])=>
-            count+
-            (slot?.[user?.uid]?1:0),
-          0
-        )
-      );
+    render();
 
   }
 
@@ -3498,9 +4608,15 @@ function tick(){
     new Date(now);
 
 
-  next.setSeconds(0,0);
+  next.setSeconds(
+    0,
+    0
+  );
 
-  next.setMinutes(0,0);
+  next.setMinutes(
+    0,
+    0
+  );
 
   next.setHours(
     next.getHours()+1
@@ -3517,171 +4633,212 @@ function tick(){
 }
 
 
-$("googleLogin").onclick=
+$("googleLogin")
+  .onclick=
   googleLogin;
 
 
-$("logout").onclick=
+$("logout")
+  .onclick=
   logout;
 
 
-$("saveProfile").onclick=
+$("saveProfile")
+  .onclick=
   saveProfile;
 
 
-$("create").onclick=
+$("create")
+  .onclick=
   createRoom;
 
 
-$("join").onclick=
+$("join")
+  .onclick=
   joinRoom;
 
 
-$("notify").onclick=
+$("notify")
+  .onclick=
   toggleNotification;
 
 
-$("invite").onclick=
+$("invite")
+  .onclick=
   invite;
 
 
-$("leave").onclick=
+$("leave")
+  .onclick=
   leaveRoom;
 
 
-$("now").onclick=()=>{
+$("now")
+  .onclick=
+  ()=>{
 
-  if(!user){
+    currentDate=
+      new Date();
 
-    toast("請先登入");
+    lastRenderedHour=
+      null;
 
-    return;
-  }
+    loadRecordsListener();
 
+    const hour=
+      Number(
+        taipeiParts(
+          new Date()
+        ).hour
+      );
 
-  currentDate=new Date();
-
-  loadRecordsListener();
-
-  const hour=
-    Number(
-      taipeiParts(
-        new Date()
-      ).hour
+    openRecord(
+      hour
     );
 
-
-  openRecord(hour);
-
-};
+  };
 
 
-$("yesterday").onclick=
+$("yesterday")
+  .onclick=
   showYesterday;
 
 
-$("today").onclick=
+$("today")
+  .onclick=
   showToday;
 
 
-$("recordClose").onclick=
+$("prevDate")
+  .onclick=
+  ()=>changeDate(-1);
+
+
+$("nextDate")
+  .onclick=
+  ()=>changeDate(1);
+
+
+$("recordClose")
+  .onclick=
   closeRecord;
 
 
-$("cancelRecord").onclick=
+$("cancelRecord")
+  .onclick=
   closeRecord;
 
 
-$("saveRecord").onclick=
+$("saveRecord")
+  .onclick=
   saveRecord;
 
 
-$("remove").onclick=
+$("remove")
+  .onclick=
   removeMedia;
 
 
-$("photo").onclick=
+$("photo")
+  .onclick=
   ()=>$("photoInput").click();
 
 
-$("video").onclick=
+$("video")
+  .onclick=
   ()=>$("videoInput").click();
 
 
-$("album").onclick=
+$("album")
+  .onclick=
   ()=>$("albumInput").click();
 
 
-$("photoInput").onchange=
+$("photoInput")
+  .onchange=
   event=>{
 
     chooseFile(
       event.target.files?.[0]
     );
 
-    event.target.value="";
+    event.target.value=
+      "";
 
   };
 
 
-$("videoInput").onchange=
+$("videoInput")
+  .onchange=
   event=>{
 
     chooseFile(
       event.target.files?.[0]
     );
 
-    event.target.value="";
+    event.target.value=
+      "";
 
   };
 
 
-$("albumInput").onchange=
+$("albumInput")
+  .onchange=
   event=>{
 
     chooseFile(
       event.target.files?.[0]
     );
 
-    event.target.value="";
+    event.target.value=
+      "";
 
   };
 
 
-$("theme").onclick=
+$("theme")
+  .onclick=
   ()=>$("themeModal")
-    .classList.add("show");
+    .classList
+    .add("show");
 
 
-$("themeClose").onclick=
+$("themeClose")
+  .onclick=
   ()=>$("themeModal")
-    .classList.remove("show");
+    .classList
+    .remove("show");
 
 
 document
-  .querySelectorAll(".themeOpt")
+  .querySelectorAll(
+    ".themeOpt"
+  )
   .forEach(
     button=>{
 
-      button.onclick=()=>{
+      button.onclick=
+        ()=>{
 
-        localStorage.setItem(
-          "momentlog_theme",
-          button.dataset.theme
-        );
+          localStorage.setItem(
+            "momentlog_theme",
+            button.dataset.theme
+          );
 
-        applyTheme();
+          applyTheme();
 
-        $("themeModal")
-          .classList.remove("show");
+          $("themeModal")
+            .classList
+            .remove("show");
 
-      };
+        };
 
     }
   );
 
 
-$("recordModal").onclick=
+$("recordModal")
+  .onclick=
   event=>{
 
     if(
@@ -3696,7 +4853,8 @@ $("recordModal").onclick=
   };
 
 
-$("themeModal").onclick=
+$("themeModal")
+  .onclick=
   event=>{
 
     if(
@@ -3705,17 +4863,19 @@ $("themeModal").onclick=
     ){
 
       $("themeModal")
-        .classList.remove("show");
+        .classList
+        .remove("show");
 
     }
 
   };
 
 
-window.addEventListener(
-  "beforeunload",
-  clearListeners
-);
+window
+  .addEventListener(
+    "beforeunload",
+    clearListeners
+  );
 
 
 applyTheme();
@@ -3731,18 +4891,38 @@ onAuthStateChanged(
   auth,
   async currentUser=>{
 
-    user=currentUser;
+    user=
+      currentUser;
 
-    renderLoginState();
+
+    renderAccount();
 
 
     if(!currentUser){
 
+      $("room")
+        .classList
+        .add("hide");
+
+
+      $("setup")
+        .classList
+        .remove("hide");
+
+
+      clearListeners();
+
+      room=null;
+      roomId="";
+
+
       showSetupStatus(
-        "請使用 Google 帳號登入"
+        "請先登入 Google 帳號"
       );
 
+
       return;
+
     }
 
 
@@ -3753,23 +4933,32 @@ onAuthStateChanged(
 
     await loadProfile();
 
-    await initForegroundMessaging();
-
 
     /*
-     * 如果 localStorage 還留著房間，
-     * 嘗試重新連回房間。
+     * 如果有舊房間：
+     * 重新嘗試進入。
      */
 
-    if(roomId){
+    const savedRoom=
+      localStorage.getItem(
+        "momentlog_room"
+      );
+
+
+    if(savedRoom){
+
+      roomId=
+        savedRoom;
 
       connectRoom();
 
     }
 
+
+    initForegroundMessaging();
+
   }
 );
-
 
 </script>
 
