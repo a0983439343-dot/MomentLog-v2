@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#111827">
 <meta name="google" content="notranslate">
+<meta name="description" content="MomentLog Admin">
 <title>MomentLog Admin</title>
 
 <style>
@@ -25,6 +26,7 @@
   --green:#16a34a;
   --red:#dc2626;
   --yellow:#ca8a04;
+  --orange:#ea580c;
 }
 
 html,
@@ -263,6 +265,10 @@ button:disabled{
   background:var(--red);
 }
 
+.status.warn .statusDot{
+  background:var(--yellow);
+}
+
 .page{
   display:none;
 }
@@ -472,6 +478,11 @@ td code{
   color:#991b1b;
 }
 
+.badge.yellow{
+  background:#fef3c7;
+  color:#92400e;
+}
+
 .empty{
   text-align:center;
   color:#9ca3af;
@@ -507,6 +518,28 @@ td code{
 
 .broadcastBox input{
   flex:1;
+}
+
+.errorItem{
+  padding:13px 18px;
+  border-bottom:1px solid #f0f2f5;
+}
+
+.errorItem:last-child{
+  border-bottom:0;
+}
+
+.errorTitle{
+  color:#991b1b;
+  font-weight:800;
+  margin-bottom:4px;
+}
+
+.errorMessage{
+  white-space:pre-wrap;
+  word-break:break-word;
+  font-size:13px;
+  color:#475569;
 }
 
 @media(max-width:1050px){
@@ -577,9 +610,7 @@ td code{
 
   <div class="loginCard">
 
-    <div class="loginIcon">
-      🛠️
-    </div>
+    <div class="loginIcon">🛠️</div>
 
     <h1>MomentLog Admin</h1>
 
@@ -596,19 +627,13 @@ td code{
       使用 Google 登入
     </button>
 
-    <div
-      id="loginError"
-      class="loginError"
-    ></div>
+    <div id="loginError" class="loginError"></div>
 
   </div>
 
 </section>
 
-<div
-  id="adminApp"
-  class="app hide"
->
+<div id="adminApp" class="app hide">
 
   <aside class="sidebar">
 
@@ -619,71 +644,43 @@ td code{
 
     <div class="adminInfo">
 
-      <div
-        id="adminName"
-        class="adminName"
-      >
+      <div id="adminName" class="adminName">
         管理員
       </div>
 
-      <div id="adminEmail">
-        —
-      </div>
+      <div id="adminEmail">—</div>
 
     </div>
 
     <nav class="nav">
 
-      <button
-        class="active"
-        data-page="dashboard"
-        type="button"
-      >
+      <button class="active" data-page="dashboard" type="button">
         📊 總覽
       </button>
 
-      <button
-        data-page="users"
-        type="button"
-      >
+      <button data-page="users" type="button">
         👤 使用者
       </button>
 
-      <button
-        data-page="rooms"
-        type="button"
-      >
+      <button data-page="rooms" type="button">
         🏠 房間
       </button>
 
-      <button
-        data-page="records"
-        type="button"
-      >
+      <button data-page="records" type="button">
         📝 紀錄
       </button>
 
-      <button
-        data-page="activity"
-        type="button"
-      >
+      <button data-page="activity" type="button">
         📡 活動監控
       </button>
 
-      <button
-        data-page="errors"
-        type="button"
-      >
+      <button data-page="errors" type="button">
         🚨 錯誤監控
       </button>
 
     </nav>
 
-    <button
-      id="logout"
-      class="logoutBtn"
-      type="button"
-    >
+    <button id="logout" class="logoutBtn" type="button">
       登出管理後台
     </button>
 
@@ -693,17 +690,11 @@ td code{
 
     <div class="topbar">
 
-      <h1
-        id="pageTitle"
-        class="pageTitle"
-      >
+      <h1 id="pageTitle" class="pageTitle">
         總覽
       </h1>
 
-      <div
-        id="firebaseStatus"
-        class="status"
-      >
+      <div id="firebaseStatus" class="status">
 
         <span class="statusDot"></span>
 
@@ -715,28 +706,15 @@ td code{
 
     </div>
 
-    <section
-      id="page-dashboard"
-      class="page active"
-    >
+    <section id="page-dashboard" class="page active">
 
-      <div
-        class="card"
-        style="margin-bottom:16px"
-      >
+      <div class="card" style="margin-bottom:16px">
 
         <div class="cardHeader">
-
-          <h2>
-            📢 發送全站廣播通知
-          </h2>
-
+          <h2>📢 發送全站廣播通知</h2>
         </div>
 
-        <div
-          class="cardBody"
-          style="padding:18px"
-        >
+        <div class="cardBody" style="padding:18px">
 
           <div class="broadcastBox">
 
@@ -765,63 +743,23 @@ td code{
       <div class="statsGrid">
 
         <div class="statCard">
-
-          <div class="statLabel">
-            使用者
-          </div>
-
-          <div
-            id="statUsers"
-            class="statNumber"
-          >
-            0
-          </div>
-
+          <div class="statLabel">使用者</div>
+          <div id="statUsers" class="statNumber">0</div>
         </div>
 
         <div class="statCard">
-
-          <div class="statLabel">
-            房間
-          </div>
-
-          <div
-            id="statRooms"
-            class="statNumber"
-          >
-            0
-          </div>
-
+          <div class="statLabel">房間</div>
+          <div id="statRooms" class="statNumber">0</div>
         </div>
 
         <div class="statCard">
-
-          <div class="statLabel">
-            總紀錄
-          </div>
-
-          <div
-            id="statRecords"
-            class="statNumber"
-          >
-            0
-          </div>
-
+          <div class="statLabel">總紀錄</div>
+          <div id="statRecords" class="statNumber">0</div>
         </div>
 
         <div class="statCard">
-
-          <div class="statLabel">
-            今日紀錄
-          </div>
-
-          <div
-            id="statToday"
-            class="statNumber"
-          >
-            0
-          </div>
-
+          <div class="statLabel">今日紀錄</div>
+          <div id="statToday" class="statNumber">0</div>
         </div>
 
       </div>
@@ -834,15 +772,8 @@ td code{
             <h2>最近活動</h2>
           </div>
 
-          <div
-            id="dashboardActivity"
-            class="cardBody"
-          >
-
-            <div class="empty">
-              尚未有活動紀錄
-            </div>
-
+          <div id="dashboardActivity" class="cardBody">
+            <div class="empty">尚未有活動紀錄</div>
           </div>
 
         </div>
@@ -856,78 +787,32 @@ td code{
           <div class="cardBody">
 
             <div class="detailLine">
-
-              <span class="detailLabel">
-                Firebase 專案
-              </span>
-
-              <span
-                id="firebaseProject"
-                class="detailValue"
-              >
+              <span class="detailLabel">Firebase 專案</span>
+              <span id="firebaseProject" class="detailValue">
                 momentlog-afcbf
               </span>
-
             </div>
 
             <div class="detailLine">
-
-              <span class="detailLabel">
-                管理員 UID
-              </span>
-
-              <span
-                id="firebaseAdminUid"
-                class="detailValue"
-              >
-                —
-              </span>
-
+              <span class="detailLabel">管理員 UID</span>
+              <span id="firebaseAdminUid" class="detailValue">—</span>
             </div>
 
             <div class="detailLine">
-
-              <span class="detailLabel">
-                管理員權限
-              </span>
-
-              <span
-                id="adminClaimStatus"
-                class="detailValue"
-              >
-                —
-              </span>
-
+              <span class="detailLabel">管理員權限</span>
+              <span id="adminClaimStatus" class="detailValue">—</span>
             </div>
 
             <div class="detailLine">
-
-              <span class="detailLabel">
-                認證狀態
-              </span>
-
-              <span
-                id="authStatus"
-                class="detailValue"
-              >
-                —
-              </span>
-
+              <span class="detailLabel">認證狀態</span>
+              <span id="authStatus" class="detailValue">—</span>
             </div>
 
             <div class="detailLine">
-
-              <span class="detailLabel">
-                資料庫
-              </span>
-
-              <span
-                id="databaseStatus"
-                class="detailValue"
-              >
+              <span class="detailLabel">資料庫</span>
+              <span id="databaseStatus" class="detailValue">
                 尚未讀取
               </span>
-
             </div>
 
           </div>
@@ -938,10 +823,7 @@ td code{
 
     </section>
 
-    <section
-      id="page-users"
-      class="page"
-    >
+    <section id="page-users" class="page">
 
       <div class="tableCard">
 
@@ -961,34 +843,16 @@ td code{
           <table>
 
             <thead>
-
               <tr>
-
                 <th>Google 名稱</th>
                 <th>Email</th>
                 <th>UID</th>
                 <th>更新時間</th>
                 <th>狀態</th>
-
               </tr>
-
             </thead>
 
-            <tbody id="usersBody">
-
-              <tr>
-
-                <td colspan="5">
-
-                  <div class="empty">
-                    尚未有資料
-                  </div>
-
-                </td>
-
-              </tr>
-
-            </tbody>
+            <tbody id="usersBody"></tbody>
 
           </table>
 
@@ -998,10 +862,7 @@ td code{
 
     </section>
 
-    <section
-      id="page-rooms"
-      class="page"
-    >
+    <section id="page-rooms" class="page">
 
       <div class="tableCard">
 
@@ -1021,34 +882,16 @@ td code{
           <table>
 
             <thead>
-
               <tr>
-
                 <th>房間名稱</th>
                 <th>房間 ID</th>
                 <th>房主 UID</th>
                 <th>成員數</th>
                 <th>建立時間</th>
-
               </tr>
-
             </thead>
 
-            <tbody id="roomsBody">
-
-              <tr>
-
-                <td colspan="5">
-
-                  <div class="empty">
-                    尚未有資料
-                  </div>
-
-                </td>
-
-              </tr>
-
-            </tbody>
+            <tbody id="roomsBody"></tbody>
 
           </table>
 
@@ -1058,10 +901,7 @@ td code{
 
     </section>
 
-    <section
-      id="page-records"
-      class="page"
-    >
+    <section id="page-records" class="page">
 
       <div class="tableCard">
 
@@ -1081,34 +921,16 @@ td code{
           <table>
 
             <thead>
-
               <tr>
-
                 <th>日期</th>
                 <th>時間</th>
                 <th>房間</th>
                 <th>作者</th>
                 <th>內容</th>
-
               </tr>
-
             </thead>
 
-            <tbody id="recordsBody">
-
-              <tr>
-
-                <td colspan="5">
-
-                  <div class="empty">
-                    尚未有資料
-                  </div>
-
-                </td>
-
-              </tr>
-
-            </tbody>
+            <tbody id="recordsBody"></tbody>
 
           </table>
 
@@ -1118,60 +940,32 @@ td code{
 
     </section>
 
-    <section
-      id="page-activity"
-      class="page"
-    >
+    <section id="page-activity" class="page">
 
       <div class="card">
 
         <div class="cardHeader">
-
-          <h2>
-            即時活動
-          </h2>
-
+          <h2>即時活動</h2>
         </div>
 
-        <div
-          id="activityBody"
-          class="cardBody"
-        >
-
-          <div class="empty">
-            目前尚未寫入活動日誌。
-          </div>
-
+        <div id="activityBody" class="cardBody">
+          <div class="empty">目前沒有活動。</div>
         </div>
 
       </div>
 
     </section>
 
-    <section
-      id="page-errors"
-      class="page"
-    >
+    <section id="page-errors" class="page">
 
       <div class="card">
 
         <div class="cardHeader">
-
-          <h2>
-            系統錯誤
-          </h2>
-
+          <h2>系統錯誤</h2>
         </div>
 
-        <div
-          id="errorsBody"
-          class="cardBody"
-        >
-
-          <div class="empty">
-            目前尚未寫入錯誤日誌。
-          </div>
-
+        <div id="errorsBody" class="cardBody">
+          <div class="empty">目前沒有錯誤。</div>
         </div>
 
       </div>
@@ -1211,12 +1005,11 @@ const googleProvider =
   new GoogleAuthProvider();
 
 googleProvider.setCustomParameters({
-  prompt: "select_account"
+  prompt:"select_account"
 });
 
-const $ = function(id){
-  return document.getElementById(id);
-};
+const $ = id =>
+  document.getElementById(id);
 
 let allUsers = [];
 let allRooms = [];
@@ -1225,14 +1018,27 @@ let allRecords = [];
 let listenersStarted = false;
 let unsubscribeFns = [];
 
+const localErrors = [];
+
 function esc(value){
 
-  return String(value == null ? "" : value)
+  return String(
+    value == null ? "" : value
+  )
     .replace(/&/g,"&amp;")
     .replace(/</g,"&lt;")
     .replace(/>/g,"&gt;")
     .replace(/"/g,"&quot;")
     .replace(/'/g,"&#039;");
+
+}
+
+function safeObject(value){
+
+  return value &&
+    typeof value === "object"
+      ? value
+      : {};
 
 }
 
@@ -1246,28 +1052,95 @@ function formatTime(value){
     return "—";
   }
 
-  const number =
-    Number(value);
+  const number = Number(value);
 
   if(!Number.isFinite(number)){
-    return esc(String(value));
+
+    return String(value);
+
   }
 
-  return new Intl.DateTimeFormat(
-    "zh-TW",
-    {
-      timeZone:"Asia/Taipei",
-      year:"numeric",
-      month:"2-digit",
-      day:"2-digit",
-      hour:"2-digit",
-      minute:"2-digit",
-      second:"2-digit",
-      hourCycle:"h23"
-    }
-  ).format(
-    new Date(number)
-  );
+  try{
+
+    return new Intl.DateTimeFormat(
+      "zh-TW",
+      {
+        timeZone:"Asia/Taipei",
+        year:"numeric",
+        month:"2-digit",
+        day:"2-digit",
+        hour:"2-digit",
+        minute:"2-digit",
+        second:"2-digit",
+        hourCycle:"h23"
+      }
+    ).format(new Date(number));
+
+  }catch{
+
+    return String(value);
+
+  }
+
+}
+
+function addLocalError(title,error){
+
+  const message =
+    error?.message ||
+    String(error || "未知錯誤");
+
+  localErrors.unshift({
+    title,
+    message,
+    time:Date.now()
+  });
+
+  if(localErrors.length > 100){
+    localErrors.length = 100;
+  }
+
+  renderErrors();
+}
+
+function renderErrors(){
+
+  const container =
+    $("errorsBody");
+
+  if(!container){
+    return;
+  }
+
+  if(!localErrors.length){
+
+    container.innerHTML =
+      '<div class="empty">目前沒有錯誤。</div>';
+
+    return;
+
+  }
+
+  container.innerHTML =
+    localErrors
+      .map(item => {
+
+        return (
+          '<div class="errorItem">' +
+            '<div class="errorTitle">' +
+              esc(item.title) +
+            '</div>' +
+            '<div class="errorMessage">' +
+              esc(item.message) +
+            '</div>' +
+            '<div class="activityTime">' +
+              formatTime(item.time) +
+            '</div>' +
+          '</div>'
+        );
+
+      })
+      .join("");
 
 }
 
@@ -1277,8 +1150,10 @@ function showLoginError(message){
     $("loginError");
 
   if(!box){
+
     console.error(message);
     return;
+
   }
 
   box.textContent =
@@ -1315,7 +1190,8 @@ function setFirebaseStatus(type,text){
 
     status.classList.remove(
       "ok",
-      "error"
+      "error",
+      "warn"
     );
 
     if(type === "ok"){
@@ -1324,6 +1200,10 @@ function setFirebaseStatus(type,text){
 
     if(type === "error"){
       status.classList.add("error");
+    }
+
+    if(type === "warn"){
+      status.classList.add("warn");
     }
 
   }
@@ -1337,86 +1217,82 @@ function setFirebaseStatus(type,text){
 function authErrorMessage(error){
 
   const code =
-    error && error.code
-      ? error.code
-      : "unknown";
+    error?.code || "unknown";
 
   const message =
-    error && error.message
-      ? error.message
-      : "未知錯誤";
+    error?.message || "未知錯誤";
 
-  if(code === "auth/popup-blocked"){
+  switch(code){
 
-    return [
-      "Google 登入視窗被瀏覽器阻擋。",
-      "",
-      "請允許此網站的彈出式視窗後再試。",
-      "",
-      "目前網域：",
-      window.location.hostname
-    ].join("\n");
+    case "auth/popup-blocked":
+
+      return [
+        "Google 登入視窗被瀏覽器阻擋。",
+        "",
+        "請允許此網站的彈出式視窗。",
+        "",
+        "目前網域：",
+        window.location.hostname
+      ].join("\n");
+
+    case "auth/popup-closed-by-user":
+
+      return "Google 登入視窗已關閉。";
+
+    case "auth/unauthorized-domain":
+
+      return [
+        "目前網站網域尚未加入 Firebase Authentication 授權網域。",
+        "",
+        "目前網域：",
+        window.location.hostname
+      ].join("\n");
+
+    case "auth/operation-not-allowed":
+
+      return [
+        "Firebase 尚未啟用 Google 登入。",
+        "",
+        "請到 Firebase Console → Authentication → Sign-in method → Google 啟用。"
+      ].join("\n");
+
+    case "auth/invalid-api-key":
+
+      return [
+        "Firebase API Key 無效。",
+        "",
+        "請檢查 firebase-config.js。"
+      ].join("\n");
+
+    case "auth/network-request-failed":
+
+      return [
+        "Firebase 網路連線失敗。",
+        "",
+        "請檢查網路後再試。"
+      ].join("\n");
+
+    case "auth/account-exists-with-different-credential":
+
+      return [
+        "這個 Email 已存在，但目前登入方式不同。",
+        "",
+        "請使用原本註冊的登入方式。"
+      ].join("\n");
+
+    default:
+
+      return [
+        "Google 登入失敗。",
+        "",
+        "錯誤代碼：",
+        code,
+        "",
+        "錯誤訊息：",
+        message
+      ].join("\n");
 
   }
-
-  if(code === "auth/popup-closed-by-user"){
-
-    return "Google 登入視窗被關閉。";
-
-  }
-
-  if(code === "auth/unauthorized-domain"){
-
-    return [
-      "目前網站網域尚未加入 Firebase Authentication 授權網域。",
-      "",
-      "目前網域：",
-      window.location.hostname,
-      "",
-      "請到 Firebase Console → Authentication → Settings → Authorized domains 加入此網域。"
-    ].join("\n");
-
-  }
-
-  if(code === "auth/operation-not-allowed"){
-
-    return [
-      "Firebase 尚未啟用 Google 登入。",
-      "",
-      "請到 Firebase Console → Authentication → Sign-in method → Google 啟用。"
-    ].join("\n");
-
-  }
-
-  if(code === "auth/invalid-api-key"){
-
-    return [
-      "Firebase API Key 無效。",
-      "",
-      "請檢查 firebase-config.js。"
-    ].join("\n");
-
-  }
-
-  if(code === "auth/network-request-failed"){
-
-    return [
-      "Firebase 網路連線失敗。",
-      "",
-      "請檢查網路連線後再試。"
-    ].join("\n");
-
-  }
-
-  return [
-    "Google 登入失敗。",
-    "",
-    "錯誤代碼：",
-    code,
-    "",
-    "錯誤訊息：",
-    message
-  ].join("\n");
 
 }
 
@@ -1434,12 +1310,7 @@ async function loginWithGoogle(){
   try{
 
     button.disabled = true;
-    button.textContent =
-      "Google 登入中…";
-
-    console.log(
-      "[MomentLog Admin] Google login start"
-    );
+    button.textContent = "Google 登入中…";
 
     const result =
       await signInWithPopup(
@@ -1449,14 +1320,18 @@ async function loginWithGoogle(){
 
     console.log(
       "[MomentLog Admin] Google login success",
-      result.user.uid,
-      result.user.email
+      result.user.uid
     );
 
   }catch(error){
 
     console.error(
       "[MomentLog Admin] Google login failed",
+      error
+    );
+
+    addLocalError(
+      "Google 登入失敗",
       error
     );
 
@@ -1476,23 +1351,117 @@ async function loginWithGoogle(){
 
 function stopRealtimeListeners(){
 
-  unsubscribeFns.forEach(
-    function(unsubscribe){
+  unsubscribeFns.forEach(unsubscribe => {
 
-      try{
-        unsubscribe();
-      }catch(error){
-        console.error(
-          "Listener cleanup:",
-          error
-        );
-      }
+    try{
+
+      unsubscribe();
+
+    }catch(error){
+
+      console.error(
+        "Listener cleanup:",
+        error
+      );
 
     }
-  );
+
+  });
 
   unsubscribeFns = [];
   listenersStarted = false;
+
+}
+
+function renderUsers(){
+
+  const body =
+    $("usersBody");
+
+  if(!body){
+    return;
+  }
+
+  const keyword =
+    (
+      $("userSearch")?.value || ""
+    )
+      .trim()
+      .toLowerCase();
+
+  const rows =
+    allUsers
+      .filter(user => {
+
+        const text = [
+          user.displayName,
+          user.email,
+          user.uid
+        ]
+          .join(" ")
+          .toLowerCase();
+
+        return text.includes(keyword);
+
+      })
+      .sort((a,b) => {
+
+        return String(
+          a.displayName || ""
+        ).localeCompare(
+          String(b.displayName || ""),
+          "zh-Hant"
+        );
+
+      });
+
+  if(!rows.length){
+
+    body.innerHTML =
+      '<tr><td colspan="5">' +
+      '<div class="empty">沒有符合的使用者</div>' +
+      '</td></tr>';
+
+    return;
+
+  }
+
+  body.innerHTML =
+    rows
+      .map(user => {
+
+        return (
+          "<tr>" +
+            "<td><strong>" +
+              esc(
+                user.displayName ||
+                "未設定"
+              ) +
+            "</strong></td>" +
+
+            "<td>" +
+              esc(user.email || "—") +
+            "</td>" +
+
+            "<td><code>" +
+              esc(user.uid) +
+            "</code></td>" +
+
+            "<td>" +
+              formatTime(user.updatedAt) +
+            "</td>" +
+
+            "<td>" +
+              '<span class="badge green">' +
+              "已建立" +
+              "</span>" +
+            "</td>" +
+
+          "</tr>"
+        );
+
+      })
+      .join("");
 
 }
 
@@ -1502,42 +1471,51 @@ function loadUsers(){
     onValue(
       ref(db,"users"),
 
-      function(snapshot){
+      snapshot => {
 
-        const data =
-          snapshot.val() || {};
+        try{
 
-        allUsers =
-          Object.entries(data)
-            .map(
-              function(entry){
+          const data =
+            safeObject(snapshot.val());
 
-                const uid = entry[0];
-                const value = entry[1];
+          allUsers =
+            Object.entries(data)
+              .map(([uid,value]) => {
 
                 return Object.assign(
-                  {
-                    uid:uid
-                  },
-                  value || {}
+                  {uid},
+                  safeObject(value)
                 );
 
-              }
-            );
+              });
 
-        $("statUsers").textContent =
-          String(
-            allUsers.length
+          $("statUsers").textContent =
+            String(allUsers.length);
+
+          renderUsers();
+
+          $("databaseStatus").textContent =
+            "正常";
+
+        }catch(error){
+
+          console.error("users:",error);
+
+          addLocalError(
+            "Users 資料處理失敗",
+            error
           );
 
-        renderUsers();
+        }
 
       },
 
-      function(error){
+      error => {
 
-        console.error(
-          "users:",
+        console.error("users:",error);
+
+        addLocalError(
+          "Users 讀取失敗",
           error
         );
 
@@ -1555,9 +1533,7 @@ function loadUsers(){
       }
     );
 
-  unsubscribeFns.push(
-    unsubscribe
-  );
+  unsubscribeFns.push(unsubscribe);
 
 }
 
@@ -1567,58 +1543,55 @@ function loadRooms(){
     onValue(
       ref(db,"rooms"),
 
-      function(snapshot){
+      snapshot => {
 
-        const data =
-          snapshot.val() || {};
+        try{
 
-        allRooms = [];
-        allRecords = [];
+          const data =
+            safeObject(snapshot.val());
 
-        Object.entries(data)
-          .forEach(
-            function(entry){
+          allRooms = [];
+          allRecords = [];
 
-              const roomId = entry[0];
-              const roomValue = entry[1];
+          Object.entries(data)
+            .forEach(([roomId,rawRoom]) => {
 
               const room =
-                roomValue &&
-                typeof roomValue === "object"
-                  ? roomValue
-                  : {};
+                safeObject(rawRoom);
 
               const meta =
-                room.meta &&
-                typeof room.meta === "object"
-                  ? room.meta
-                  : {};
+                safeObject(room.meta);
 
               const members =
-                room.members &&
-                typeof room.members === "object"
-                  ? room.members
-                  : {};
+                safeObject(room.members);
 
               allRooms.push({
 
-                roomId:roomId,
+                roomId,
 
                 name:
                   meta.name ||
+                  room.name ||
                   "未命名",
 
                 ownerUid:
                   meta.ownerUid ||
+                  room.ownerUid ||
                   "",
 
                 createdAt:
-                  meta.createdAt ||
-                  0,
+                  Number(
+                    meta.createdAt ||
+                    room.createdAt ||
+                    0
+                  ),
 
                 updatedAt:
-                  meta.updatedAt ||
-                  0,
+                  Number(
+                    meta.updatedAt ||
+                    room.updatedAt ||
+                    0
+                  ),
 
                 memberCount:
                   Object.keys(members).length
@@ -1626,135 +1599,132 @@ function loadRooms(){
               });
 
               const records =
-                room.records &&
-                typeof room.records === "object"
-                  ? room.records
-                  : {};
+                safeObject(room.records);
 
               Object.entries(records)
-                .forEach(
-                  function(dateEntry){
+                .forEach(([date,hourValue]) => {
 
-                    const date =
-                      dateEntry[0];
+                  const hours =
+                    safeObject(hourValue);
 
-                    const hoursValue =
-                      dateEntry[1];
+                  Object.entries(hours)
+                    .forEach(([hour,userValue]) => {
 
-                    const hours =
-                      hoursValue &&
-                      typeof hoursValue === "object"
-                        ? hoursValue
-                        : {};
+                      const users =
+                        safeObject(userValue);
 
-                    Object.entries(hours)
-                      .forEach(
-                        function(hourEntry){
+                      Object.entries(users)
+                        .forEach(([uid,recordValue]) => {
 
-                          const hour =
-                            hourEntry[0];
+                          let record;
 
-                          const usersValue =
-                            hourEntry[1];
+                          if(
+                            recordValue &&
+                            typeof recordValue === "object"
+                          ){
 
-                          const users =
-                            usersValue &&
-                            typeof usersValue === "object"
-                              ? usersValue
-                              : {};
+                            record =
+                              Object.assign(
+                                {},
+                                recordValue
+                              );
 
-                          Object.entries(users)
-                            .forEach(
-                              function(userEntry){
+                          }else{
 
-                                const uid =
-                                  userEntry[0];
+                            record = {
+                              value:recordValue
+                            };
 
-                                const recordValue =
-                                  userEntry[1];
+                          }
 
-                                const record =
-                                  recordValue &&
-                                  typeof recordValue === "object"
-                                    ? recordValue
-                                    : {
-                                        value:recordValue
-                                      };
+                          allRecords.push(
+                            Object.assign(
+                              {
+                                roomId,
+                                date,
+                                hour,
+                                uid
+                              },
+                              record
+                            )
+                          );
 
-                                allRecords.push(
-                                  Object.assign(
-                                    {
-                                      roomId:roomId,
-                                      date:date,
-                                      hour:hour,
-                                      uid:uid
-                                    },
-                                    record
-                                  )
-                                );
+                        });
 
-                              }
-                            );
+                    });
 
-                        }
-                      );
+                });
 
-                  }
-                );
+            });
 
-            }
-          );
+          $("statRooms").textContent =
+            String(allRooms.length);
 
-        $("statRooms").textContent =
-          String(
-            allRooms.length
-          );
+          $("statRecords").textContent =
+            String(allRecords.length);
 
-        $("statRecords").textContent =
-          String(
-            allRecords.length
-          );
-
-        const today =
-          new Intl.DateTimeFormat(
-            "en-CA",
-            {
-              timeZone:"Asia/Taipei"
-            }
-          ).format(
-            new Date()
-          );
-
-        $("statToday").textContent =
-          String(
-            allRecords.filter(
-              function(record){
-                return record.date === today;
+          const today =
+            new Intl.DateTimeFormat(
+              "en-CA",
+              {
+                timeZone:"Asia/Taipei"
               }
-            ).length
+            ).format(new Date());
+
+          $("statToday").textContent =
+            String(
+              allRecords.filter(
+                record =>
+                  String(record.date) === today
+              ).length
+            );
+
+          renderRooms();
+          renderRecords();
+          renderDashboardActivity();
+          renderActivity();
+
+          $("databaseStatus").textContent =
+            "正常";
+
+          $("databaseStatus").style.color =
+            "#16a34a";
+
+          setFirebaseStatus(
+            "ok",
+            "Firebase 即時連線"
           );
 
-        renderRooms();
-        renderRecords();
-        renderDashboardActivity();
+        }catch(error){
 
-        $("databaseStatus").textContent =
-          "正常";
+          console.error("rooms:",error);
 
-        $("databaseStatus").style.color =
-          "#16a34a";
+          addLocalError(
+            "Rooms 資料處理失敗",
+            error
+          );
 
-        setFirebaseStatus(
-          "ok",
-          "Firebase 即時連線"
-        );
+          $("databaseStatus").textContent =
+            "資料處理失敗";
+
+          $("databaseStatus").style.color =
+            "#dc2626";
+
+          setFirebaseStatus(
+            "error",
+            "資料處理失敗"
+          );
+
+        }
 
       },
 
-      function(error){
+      error => {
 
-        console.error(
-          "rooms:",
+        console.error("rooms:",error);
+
+        addLocalError(
+          "Rooms 讀取失敗",
           error
         );
 
@@ -1772,9 +1742,7 @@ function loadRooms(){
       }
     );
 
-  unsubscribeFns.push(
-    unsubscribe
-  );
+  unsubscribeFns.push(unsubscribe);
 
 }
 
@@ -1791,124 +1759,6 @@ function loadRealtimeData(){
 
 }
 
-function renderUsers(){
-
-  const body =
-    $("usersBody");
-
-  if(!body){
-    return;
-  }
-
-  const searchInput =
-    $("userSearch");
-
-  const keyword =
-    (
-      searchInput
-        ? searchInput.value
-        : ""
-    )
-      .trim()
-      .toLowerCase();
-
-  const rows =
-    allUsers
-      .filter(
-        function(user){
-
-          const text =
-            [
-              user.displayName,
-              user.email,
-              user.uid
-            ]
-              .join(" ")
-              .toLowerCase();
-
-          return text.includes(
-            keyword
-          );
-
-        }
-      )
-      .sort(
-        function(a,b){
-
-          return String(
-            a.displayName || ""
-          ).localeCompare(
-            String(
-              b.displayName || ""
-            ),
-            "zh-Hant"
-          );
-
-        }
-      );
-
-  if(!rows.length){
-
-    body.innerHTML =
-      "<tr>" +
-      "<td colspan=\"5\">" +
-      "<div class=\"empty\">" +
-      "沒有符合的使用者" +
-      "</div>" +
-      "</td>" +
-      "</tr>";
-
-    return;
-
-  }
-
-  body.innerHTML =
-    rows
-      .map(
-        function(user){
-
-          return (
-            "<tr>" +
-              "<td><strong>" +
-                esc(
-                  user.displayName ||
-                  "未設定"
-                ) +
-              "</strong></td>" +
-
-              "<td>" +
-                esc(
-                  user.email ||
-                  "—"
-                ) +
-              "</td>" +
-
-              "<td><code>" +
-                esc(
-                  user.uid
-                ) +
-              "</code></td>" +
-
-              "<td>" +
-                formatTime(
-                  user.updatedAt
-                ) +
-              "</td>" +
-
-              "<td>" +
-                "<span class=\"badge green\">" +
-                  "已建立" +
-                "</span>" +
-              "</td>" +
-            "</tr>"
-          );
-
-        }
-      )
-      .join("");
-
-}
-
 function renderRooms(){
 
   const body =
@@ -1918,63 +1768,42 @@ function renderRooms(){
     return;
   }
 
-  const searchInput =
-    $("roomSearch");
-
   const keyword =
     (
-      searchInput
-        ? searchInput.value
-        : ""
+      $("roomSearch")?.value || ""
     )
       .trim()
       .toLowerCase();
 
   const rows =
     allRooms
-      .filter(
-        function(room){
+      .filter(room => {
 
-          const text =
-            [
-              room.name,
-              room.roomId,
-              room.ownerUid
-            ]
-              .join(" ")
-              .toLowerCase();
+        return [
+          room.name,
+          room.roomId,
+          room.ownerUid
+        ]
+          .join(" ")
+          .toLowerCase()
+          .includes(keyword);
 
-          return text.includes(
-            keyword
-          );
+      })
+      .sort((a,b) => {
 
-        }
-      )
-      .sort(
-        function(a,b){
+        return (
+          Number(b.createdAt || 0) -
+          Number(a.createdAt || 0)
+        );
 
-          return (
-            Number(
-              b.createdAt || 0
-            ) -
-            Number(
-              a.createdAt || 0
-            )
-          );
-
-        }
-      );
+      });
 
   if(!rows.length){
 
     body.innerHTML =
-      "<tr>" +
-      "<td colspan=\"5\">" +
-      "<div class=\"empty\">" +
-      "沒有符合的房間" +
-      "</div>" +
-      "</td>" +
-      "</tr>";
+      '<tr><td colspan="5">' +
+      '<div class="empty">沒有符合的房間</div>' +
+      '</td></tr>';
 
     return;
 
@@ -1982,48 +1811,35 @@ function renderRooms(){
 
   body.innerHTML =
     rows
-      .map(
-        function(room){
+      .map(room => {
 
-          return (
-            "<tr>" +
+        return (
+          "<tr>" +
 
-              "<td><strong>" +
-                esc(
-                  room.name
-                ) +
-              "</strong></td>" +
+            "<td><strong>" +
+              esc(room.name) +
+            "</strong></td>" +
 
-              "<td><code>" +
-                esc(
-                  room.roomId
-                ) +
-              "</code></td>" +
+            "<td><code>" +
+              esc(room.roomId) +
+            "</code></td>" +
 
-              "<td><code>" +
-                esc(
-                  room.ownerUid ||
-                  "—"
-                ) +
-              "</code></td>" +
+            "<td><code>" +
+              esc(room.ownerUid || "—") +
+            "</code></td>" +
 
-              "<td>" +
-                esc(
-                  room.memberCount
-                ) +
-              "</td>" +
+            "<td>" +
+              esc(room.memberCount) +
+            "</td>" +
 
-              "<td>" +
-                formatTime(
-                  room.createdAt
-                ) +
-              "</td>" +
+            "<td>" +
+              formatTime(room.createdAt) +
+            "</td>" +
 
-            "</tr>"
-          );
+          "</tr>"
+        );
 
-        }
-      )
+      })
       .join("");
 
 }
@@ -2037,75 +1853,57 @@ function renderRecords(){
     return;
   }
 
-  const searchInput =
-    $("recordSearch");
-
   const keyword =
     (
-      searchInput
-        ? searchInput.value
-        : ""
+      $("recordSearch")?.value || ""
     )
       .trim()
       .toLowerCase();
 
   const rows =
     allRecords
-      .filter(
-        function(record){
+      .filter(record => {
 
-          const text =
-            [
-              record.text,
-              record.value,
-              record.roomId,
-              record.uid,
-              record.authorName,
-              record.date,
-              record.hour
-            ]
-              .join(" ")
-              .toLowerCase();
+        return [
+          record.text,
+          record.value,
+          record.roomId,
+          record.uid,
+          record.authorName,
+          record.date,
+          record.hour
+        ]
+          .join(" ")
+          .toLowerCase()
+          .includes(keyword);
 
-          return text.includes(
-            keyword
-          );
+      })
+      .sort((a,b) => {
 
-        }
-      )
-      .sort(
-        function(a,b){
+        return (
+          Number(
+            b.updatedAt ||
+            b.savedAt ||
+            b.timestamp ||
+            0
+          ) -
+          Number(
+            a.updatedAt ||
+            a.savedAt ||
+            a.timestamp ||
+            0
+          )
+        );
 
-          return (
-            Number(
-              b.updatedAt ||
-              b.savedAt ||
-              0
-            ) -
-            Number(
-              a.updatedAt ||
-              a.savedAt ||
-              0
-            )
-          );
-
-        }
-      )
-      .slice(
-        0,
-        500
-      );
+      })
+      .slice(0,500);
 
   if(!rows.length){
 
     body.innerHTML =
-      "<tr>" +
-      "<td colspan=\"5\">" +
-      "<div class=\"empty\">" +
-      "沒有符合的紀錄" +
-      "</div>" +
-      "</td>" +
-      "</tr>";
+      '<tr><td colspan="5">' +
+      '<div class="empty">沒有符合的紀錄</div>' +
+      '</td></tr>';
 
     return;
 
@@ -2113,62 +1911,192 @@ function renderRecords(){
 
   body.innerHTML =
     rows
-      .map(
-        function(record){
+      .map(record => {
 
-          const text =
-            record.text != null
-              ? record.text
-              : (
-                  record.value != null
-                    ? record.value
-                    : "（沒有文字）"
-                );
+        const text =
+          record.text != null
+            ? record.text
+            : (
+                record.value != null
+                  ? record.value
+                  : "（沒有文字）"
+              );
 
-          return (
-            "<tr>" +
+        return (
+          "<tr>" +
 
-              "<td>" +
-                esc(
-                  record.date ||
-                  "—"
-                ) +
-              "</td>" +
+            "<td>" +
+              esc(record.date || "—") +
+            "</td>" +
 
-              "<td>" +
-                esc(
-                  String(
-                    record.hour == null
-                      ? ""
-                      : record.hour
-                  )
-                ) +
-                ":00" +
-              "</td>" +
+            "<td>" +
+              esc(
+                record.hour == null
+                  ? "—"
+                  : String(record.hour)
+              ) +
+              (
+                record.hour == null
+                  ? ""
+                  : ":00"
+              ) +
+            "</td>" +
 
-              "<td><code>" +
-                esc(
-                  record.roomId
-                ) +
-              "</code></td>" +
+            "<td><code>" +
+              esc(record.roomId) +
+            "</code></td>" +
 
-              "<td>" +
-                esc(
-                  record.authorName ||
-                  record.uid ||
-                  "—"
-                ) +
-              "</td>" +
+            "<td>" +
+              esc(
+                record.authorName ||
+                record.uid ||
+                "—"
+              ) +
+            "</td>" +
 
-              "<td>" +
-                esc(text) +
-              "</td>" +
+            "<td>" +
+              esc(text) +
+            "</td>" +
 
-            "</tr>"
-          );
+          "</tr>"
+        );
 
-        }
-      )
+      })
+      .join("");
+
+}
+
+function buildActivities(){
+
+  const activity = [];
+
+  allRecords
+    .slice()
+    .sort((a,b) => {
+
+      return (
+        Number(
+          b.updatedAt ||
+          b.savedAt ||
+          b.timestamp ||
+          0
+        ) -
+        Number(
+          a.updatedAt ||
+          a.savedAt ||
+          a.timestamp ||
+          0
+        )
+      );
+
+    })
+    .slice(0,20)
+    .forEach(record => {
+
+      activity.push({
+
+        text:
+          "📝 " +
+          (
+            record.authorName ||
+            record.uid ||
+            "未知使用者"
+          ) +
+          " 在房間 " +
+          record.roomId +
+          " 新增紀錄",
+
+        time:
+          Number(
+            record.updatedAt ||
+            record.savedAt ||
+            record.timestamp ||
+            0
+          )
+
+      });
+
+    });
+
+  allRooms
+    .slice()
+    .sort((a,b) => {
+
+      return (
+        Number(b.createdAt || 0) -
+        Number(a.createdAt || 0)
+      );
+
+    })
+    .slice(0,20)
+    .forEach(room => {
+
+      activity.push({
+
+        text:
+          "🏠 建立房間「" +
+          room.name +
+          "」",
+
+        time:
+          Number(room.createdAt || 0)
+
+      });
+
+    });
+
+  return activity
+    .sort((a,b) => b.time - a.time)
+    .slice(0,30);
+
+}
+
+function renderActivity(){
+
+  const container =
+    $("activityBody");
+
+  if(!container){
+    return;
+  }
+
+  const activity =
+    buildActivities();
+
+  if(!activity.length){
+
+    container.innerHTML =
+      '<div class="empty">目前沒有活動。</div>';
+
+    return;
+
+  }
+
+  container.innerHTML =
+    activity
+      .map(item => {
+
+        return (
+          '<div class="activityItem">' +
+
+            '<div class="activityDot"></div>' +
+
+            '<div>' +
+
+              '<div class="activityText">' +
+                esc(item.text) +
+              '</div>' +
+
+              '<div class="activityTime">' +
+                formatTime(item.time) +
+              '</div>' +
+
+            '</div>' +
+
+          '</div>'
+        );
+
+      })
       .join("");
 
 }
@@ -2182,233 +2110,187 @@ function renderDashboardActivity(){
     return;
   }
 
-  const activity = [];
+  const activity =
+    buildActivities()
+      .slice(0,12);
 
-  allRecords
-    .slice()
-    .sort(
-      function(a,b){
-
-        return (
-          Number(
-            b.updatedAt ||
-            b.savedAt ||
-            0
-          ) -
-          Number(
-            a.updatedAt ||
-            a.savedAt ||
-            0
-          )
-        );
-
-      }
-    )
-    .slice(
-      0,
-      12
-    )
-    .forEach(
-      function(record){
-
-        activity.push({
-
-          text:
-            "📝 " +
-            (
-              record.authorName ||
-              record.uid
-            ) +
-            " 在房間 " +
-            record.roomId +
-            " 新增紀錄",
-
-          time:
-            record.updatedAt ||
-            record.savedAt ||
-            0
-
-        });
-
-      }
-    );
-
-  allRooms
-    .slice()
-    .sort(
-      function(a,b){
-
-        return (
-          Number(
-            b.createdAt || 0
-          ) -
-          Number(
-            a.createdAt || 0
-          )
-        );
-
-      }
-    )
-    .slice(
-      0,
-      8
-    )
-    .forEach(
-      function(room){
-
-        activity.push({
-
-          text:
-            "🏠 建立房間「" +
-            room.name +
-            "」",
-
-          time:
-            room.createdAt ||
-            0
-
-        });
-
-      }
-    );
-
-  activity.sort(
-    function(a,b){
-
-      return (
-        Number(
-          b.time || 0
-        ) -
-        Number(
-          a.time || 0
-        )
-      );
-
-    }
-  );
-
-  const limited =
-    activity.slice(
-      0,
-      12
-    );
-
-  if(!limited.length){
+  if(!activity.length){
 
     container.innerHTML =
-      "<div class=\"empty\">" +
-      "目前沒有活動" +
-      "</div>";
+      '<div class="empty">目前沒有活動。</div>';
 
     return;
 
   }
 
   container.innerHTML =
-    limited
-      .map(
-        function(item){
+    activity
+      .map(item => {
 
-          return (
-            "<div class=\"activityItem\">" +
+        return (
+          '<div class="activityItem">' +
 
-              "<div class=\"activityDot\"></div>" +
+            '<div class="activityDot"></div>' +
 
-              "<div>" +
+            '<div>' +
 
-                "<div class=\"activityText\">" +
-                  esc(
-                    item.text
-                  ) +
-                "</div>" +
+              '<div class="activityText">' +
+                esc(item.text) +
+              '</div>' +
 
-                "<div class=\"activityTime\">" +
-                  formatTime(
-                    item.time
-                  ) +
-                "</div>" +
+              '<div class="activityTime">' +
+                formatTime(item.time) +
+              '</div>' +
 
-              "</div>" +
+            '</div>' +
 
-            "</div>"
-          );
+          '</div>'
+        );
 
-        }
-      )
+      })
       .join("");
 
 }
 
+async function verifyAdmin(user){
+
+  if(!user){
+    return false;
+  }
+
+  if(user.uid !== ADMIN_UID){
+    return false;
+  }
+
+  try{
+
+    const tokenResult =
+      await user.getIdTokenResult();
+
+    const claims =
+      tokenResult.claims || {};
+
+    if(claims.admin === true){
+
+      $("adminClaimStatus").textContent =
+        "Custom Claim ✓";
+
+      $("adminClaimStatus").style.color =
+        "#16a34a";
+
+    }else{
+
+      $("adminClaimStatus").textContent =
+        "UID 管理員 ✓";
+
+      $("adminClaimStatus").style.color =
+        "#16a34a";
+
+    }
+
+    return true;
+
+  }catch(error){
+
+    console.error(
+      "Custom claim check:",
+      error
+    );
+
+    addLocalError(
+      "管理員 Claim 讀取失敗",
+      error
+    );
+
+    $("adminClaimStatus").textContent =
+      "UID 管理員 ✓";
+
+    $("adminClaimStatus").style.color =
+      "#16a34a";
+
+    return true;
+
+  }
+
+}
+
+async function forceLogout(){
+
+  try{
+
+    stopRealtimeListeners();
+
+    await signOut(auth);
+
+  }catch(error){
+
+    console.error(
+      "forceLogout:",
+      error
+    );
+
+  }
+
+}
+
 const pageNames = {
+
   dashboard:"總覽",
   users:"使用者",
   rooms:"房間",
   records:"紀錄",
   activity:"活動監控",
   errors:"錯誤監控"
+
 };
 
 document
   .querySelectorAll(".nav button")
-  .forEach(
-    function(button){
+  .forEach(button => {
 
-      button.addEventListener(
-        "click",
-        function(){
+    button.addEventListener(
+      "click",
+      () => {
 
-          document
-            .querySelectorAll(".nav button")
-            .forEach(
-              function(item){
+        document
+          .querySelectorAll(".nav button")
+          .forEach(item => {
 
-                item.classList.remove(
-                  "active"
-                );
-
-              }
-            );
-
-          document
-            .querySelectorAll(".page")
-            .forEach(
-              function(page){
-
-                page.classList.remove(
-                  "active"
-                );
-
-              }
-            );
-
-          button.classList.add(
-            "active"
-          );
-
-          const page =
-            button.dataset.page;
-
-          const target =
-            $("page-" + page);
-
-          if(target){
-
-            target.classList.add(
+            item.classList.remove(
               "active"
             );
 
-          }
+          });
 
-          $("pageTitle")
-            .textContent =
-            pageNames[page] ||
-            page;
+        document
+          .querySelectorAll(".page")
+          .forEach(page => {
 
+            page.classList.remove(
+              "active"
+            );
+
+          });
+
+        button.classList.add("active");
+
+        const page =
+          button.dataset.page;
+
+        const target =
+          $("page-" + page);
+
+        if(target){
+          target.classList.add("active");
         }
-      );
 
-    }
-  );
+        $("pageTitle").textContent =
+          pageNames[page] || page;
+
+      }
+    );
+
+  });
 
 $("googleLogin")
   .addEventListener(
@@ -2419,26 +2301,7 @@ $("googleLogin")
 $("logout")
   .addEventListener(
     "click",
-    async function(){
-
-      try{
-
-        stopRealtimeListeners();
-
-        await signOut(
-          auth
-        );
-
-      }catch(error){
-
-        console.error(
-          "logout:",
-          error
-        );
-
-      }
-
-    }
+    forceLogout
   );
 
 $("userSearch")
@@ -2462,7 +2325,7 @@ $("recordSearch")
 $("sendBroadcastBtn")
   .addEventListener(
     "click",
-    async function(){
+    async () => {
 
       const input =
         $("broadcastInput");
@@ -2483,9 +2346,7 @@ $("sendBroadcastBtn")
 
       }
 
-      if(
-        text.length > 500
-      ){
+      if(text.length > 500){
 
         alert(
           "廣播內容不能超過 500 字。"
@@ -2508,14 +2369,13 @@ $("sendBroadcastBtn")
 
       }
 
-      if(
-        user.uid !==
-        ADMIN_UID
-      ){
+      if(user.uid !== ADMIN_UID){
 
         alert(
           "目前帳號不是管理員。"
         );
+
+        await forceLogout();
 
         return;
 
@@ -2523,11 +2383,8 @@ $("sendBroadcastBtn")
 
       try{
 
-        button.disabled =
-          true;
-
-        button.textContent =
-          "發送中…";
+        button.disabled = true;
+        button.textContent = "發送中…";
 
         await set(
           ref(
@@ -2535,11 +2392,9 @@ $("sendBroadcastBtn")
             "system/broadcast"
           ),
           {
-            text:text,
-            timestamp:
-              Date.now(),
-            senderUid:
-              user.uid
+            text,
+            timestamp:Date.now(),
+            senderUid:user.uid
           }
         );
 
@@ -2556,21 +2411,22 @@ $("sendBroadcastBtn")
           error
         );
 
+        addLocalError(
+          "廣播發送失敗",
+          error
+        );
+
         alert(
           "發送失敗：\n" +
           (
-            error &&
-            error.message
-              ? error.message
-              : String(error)
+            error?.message ||
+            String(error)
           )
         );
 
       }finally{
 
-        button.disabled =
-          false;
-
+        button.disabled = false;
         button.textContent =
           "發送廣播";
 
@@ -2581,28 +2437,28 @@ $("sendBroadcastBtn")
 
 onAuthStateChanged(
   auth,
-  async function(user){
+  async user => {
 
     if(!user){
 
       stopRealtimeListeners();
 
-      $("loginScreen")
-        .style.display =
+      $("loginScreen").style.display =
         "flex";
 
-      $("adminApp")
-        .classList.add(
-          "hide"
-        );
+      $("adminApp").classList.add("hide");
 
-      $("authStatus")
-        .textContent =
+      $("authStatus").textContent =
         "未登入";
 
-      $("adminClaimStatus")
-        .textContent =
+      $("authStatus").style.color =
+        "#dc2626";
+
+      $("adminClaimStatus").textContent =
         "未驗證";
+
+      $("adminClaimStatus").style.color =
+        "#dc2626";
 
       setFirebaseStatus(
         "error",
@@ -2619,57 +2475,43 @@ onAuthStateChanged(
       user.email
     );
 
-    if(
-      user.uid !==
-      ADMIN_UID
-    ){
+    const isAdmin =
+      await verifyAdmin(user);
+
+    if(!isAdmin){
 
       stopRealtimeListeners();
 
-      $("loginScreen")
-        .style.display =
+      $("loginScreen").style.display =
         "flex";
 
-      $("adminApp")
-        .classList.add(
-          "hide"
-        );
+      $("adminApp").classList.add("hide");
 
-      $("authStatus")
-        .textContent =
+      $("authStatus").textContent =
         "已登入";
 
-      $("adminClaimStatus")
-        .textContent =
+      $("authStatus").style.color =
+        "#ca8a04";
+
+      $("adminClaimStatus").textContent =
         "無管理員權限";
 
-      $("adminClaimStatus")
-        .style.color =
+      $("adminClaimStatus").style.color =
         "#dc2626";
 
       showLoginError(
-        "Google 登入成功，但此 Google 帳號沒有管理員權限。\n\n" +
-        "目前 UID：\n" +
-        user.uid +
-        "\n\n" +
-        "管理員 UID：\n" +
-        ADMIN_UID
+        [
+          "Google 登入成功，但此帳號沒有管理員權限。",
+          "",
+          "目前 UID：",
+          user.uid,
+          "",
+          "管理員 UID：",
+          ADMIN_UID
+        ].join("\n")
       );
 
-      try{
-
-        await signOut(
-          auth
-        );
-
-      }catch(error){
-
-        console.error(
-          "signOut:",
-          error
-        );
-
-      }
+      await forceLogout();
 
       return;
 
@@ -2677,53 +2519,37 @@ onAuthStateChanged(
 
     clearLoginError();
 
-    $("loginScreen")
-      .style.display =
+    $("loginScreen").style.display =
       "none";
 
-    $("adminApp")
-      .classList.remove(
-        "hide"
-      );
+    $("adminApp").classList.remove("hide");
 
-    $("adminName")
-      .textContent =
+    $("adminName").textContent =
       user.displayName ||
       "管理員";
 
-    $("adminEmail")
-      .textContent =
+    $("adminEmail").textContent =
       user.email ||
       user.uid;
 
-    $("firebaseAdminUid")
-      .textContent =
+    $("firebaseAdminUid").textContent =
       user.uid;
 
-    $("adminClaimStatus")
-      .textContent =
-      "管理員 ✓";
-
-    $("adminClaimStatus")
-      .style.color =
-      "#16a34a";
-
-    $("authStatus")
-      .textContent =
+    $("authStatus").textContent =
       "已驗證";
 
-    $("authStatus")
-      .style.color =
+    $("authStatus").style.color =
       "#16a34a";
 
-    $("databaseStatus")
-      .textContent =
+    $("databaseStatus").textContent =
       "讀取中…";
 
     setFirebaseStatus(
       "ok",
       "Firebase 已登入"
     );
+
+    renderErrors();
 
     loadRealtimeData();
 
