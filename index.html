@@ -1336,11 +1336,6 @@ class="toast"
 <script type="module">
 
 import {
-  initializeApp
-} from "https://www.gstatic.com/firebasejs/12.17.0/firebase-app.js";
-
-import {
-  getAuth,
   GoogleAuthProvider,
   signInWithPopup,
   signOut,
@@ -1348,7 +1343,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
 
 import {
-  getDatabase,
   ref,
   get,
   set,
@@ -1380,14 +1374,8 @@ const VAPID_PUBLIC_KEY =
 "BN4k0ivU8J1bzyVlUncMDqgJnQKpzO33wwOJW4PbKvjGBHhBlc74bo_LmRw6lfsjREcjqH5YUfmCBMegeMMr83c";
 
 
-const app =
-initializeApp(firebaseConfig);
-
-const auth =
-getAuth(app);
-
 const db =
-getDatabase(app);
+database;
 
 const storage =
 getStorage(app);
