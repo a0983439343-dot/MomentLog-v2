@@ -21,32 +21,28 @@
       "$roomId": {
         ".read": "auth != null && (auth.uid === 'nJdwA4Heqrbtqdt1atbiOsVi7r23' || data.child('members').child(auth.uid).exists())",
 
-        ".write": "auth != null && !data.exists() && newData.child('meta').child('ownerUid').val() === auth.uid && newData.child('members').child(auth.uid).exists()",
-
-        ".validate": "newData.hasChildren(['meta','members']) && newData.child('meta').hasChildren(['ownerUid']) && newData.child('meta').child('ownerUid').isString() && newData.child('meta').child('ownerUid').val().length > 0 && newData.child('members').child(newData.child('meta').child('ownerUid').val()).exists()",
-
         "meta": {
-          ".read": "auth != null",
+          ".read": "auth != null && (auth.uid === 'nJdwA4Heqrbtqdt1atbiOsVi7r23' || root.child('rooms').child($roomId).child('members').child(auth.uid).exists())",
 
-          ".write": "auth != null && data.exists() && data.child('ownerUid').val() === auth.uid && newData.exists() && newData.child('ownerUid').isString() && (newData.child('ownerUid').val() === data.child('ownerUid').val() || root.child('rooms').child($roomId).child('members').child(newData.child('ownerUid').val()).exists())",
+          ".write": "auth != null && ((!data.exists() && newData.child('ownerUid').val() === auth.uid) || (data.exists() && data.child('ownerUid').val() === auth.uid))",
 
-          ".validate": "newData.hasChildren(['ownerUid']) && newData.child('ownerUid').isString() && newData.child('ownerUid').val().length > 0 && (newData.child('ownerUid').val() === data.child('ownerUid').val() || (data.child('ownerUid').val() === auth.uid && root.child('rooms').child($roomId).child('members').child(newData.child('ownerUid').val()).exists()))"
+          ".validate": "newData.hasChildren(['ownerUid']) && newData.child('ownerUid').isString() && newData.child('ownerUid').val().length > 0"
         },
 
         "members": {
           "$uid": {
             ".read": "auth != null && (auth.uid === 'nJdwA4Heqrbtqdt1atbiOsVi7r23' || root.child('rooms').child($roomId).child('members').child(auth.uid).exists())",
 
-            ".write": "auth != null && ((auth.uid === $uid && (newData.exists() || root.child('rooms').child($roomId).child('meta').child('ownerUid').val() !== auth.uid)) || (root.child('rooms').child($roomId).child('meta').child('ownerUid').val() === auth.uid && auth.uid !== $uid))"
+            ".write": "auth != null && ((auth.uid === $uid && newData.exists()) || (auth.uid === $uid && !newData.exists()) || (root.child('rooms').child($roomId).child('meta').child('ownerUid').val() === auth.uid && auth.uid !== $uid))"
           }
         },
 
         "records": {
+          ".read": "auth != null && (auth.uid === 'nJdwA4Heqrbtqdt1atbiOsVi7r23' || data.parent().parent().parent().child('members').child(auth.uid).exists())",
+
           "$date": {
             "$hour": {
               "$uid": {
-                ".read": "auth != null && (auth.uid === 'nJdwA4Heqrbtqdt1atbiOsVi7r23' || root.child('rooms').child($roomId).child('members').child(auth.uid).exists())",
-
                 ".write": "auth != null && auth.uid === $uid && root.child('rooms').child($roomId).child('members').child(auth.uid).exists()"
               }
             }
