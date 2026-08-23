@@ -605,7 +605,6 @@ td code{
 
 </section>
 
-
 <div
   id="adminApp"
   class="app hide"
@@ -690,7 +689,6 @@ td code{
 
   </aside>
 
-
   <main class="main">
 
     <div class="topbar">
@@ -716,7 +714,6 @@ td code{
       </div>
 
     </div>
-
 
     <section
       id="page-dashboard"
@@ -765,7 +762,6 @@ td code{
 
       </div>
 
-
       <div class="statsGrid">
 
         <div class="statCard">
@@ -783,7 +779,6 @@ td code{
 
         </div>
 
-
         <div class="statCard">
 
           <div class="statLabel">
@@ -799,7 +794,6 @@ td code{
 
         </div>
 
-
         <div class="statCard">
 
           <div class="statLabel">
@@ -814,7 +808,6 @@ td code{
           </div>
 
         </div>
-
 
         <div class="statCard">
 
@@ -832,7 +825,6 @@ td code{
         </div>
 
       </div>
-
 
       <div class="contentGrid">
 
@@ -854,7 +846,6 @@ td code{
           </div>
 
         </div>
-
 
         <div class="card">
 
@@ -879,7 +870,6 @@ td code{
 
             </div>
 
-
             <div class="detailLine">
 
               <span class="detailLabel">
@@ -894,7 +884,6 @@ td code{
               </span>
 
             </div>
-
 
             <div class="detailLine">
 
@@ -911,7 +900,6 @@ td code{
 
             </div>
 
-
             <div class="detailLine">
 
               <span class="detailLabel">
@@ -926,7 +914,6 @@ td code{
               </span>
 
             </div>
-
 
             <div class="detailLine">
 
@@ -951,7 +938,6 @@ td code{
 
     </section>
 
-
     <section
       id="page-users"
       class="page"
@@ -970,7 +956,6 @@ td code{
 
         </div>
 
-
         <div class="tableWrap">
 
           <table>
@@ -978,15 +963,16 @@ td code{
             <thead>
 
               <tr>
+
                 <th>Google 名稱</th>
                 <th>Email</th>
                 <th>UID</th>
                 <th>更新時間</th>
                 <th>狀態</th>
+
               </tr>
 
             </thead>
-
 
             <tbody id="usersBody">
 
@@ -1012,7 +998,6 @@ td code{
 
     </section>
 
-
     <section
       id="page-rooms"
       class="page"
@@ -1031,7 +1016,6 @@ td code{
 
         </div>
 
-
         <div class="tableWrap">
 
           <table>
@@ -1039,15 +1023,16 @@ td code{
             <thead>
 
               <tr>
+
                 <th>房間名稱</th>
                 <th>房間 ID</th>
                 <th>房主 UID</th>
                 <th>成員數</th>
                 <th>建立時間</th>
+
               </tr>
 
             </thead>
-
 
             <tbody id="roomsBody">
 
@@ -1073,7 +1058,6 @@ td code{
 
     </section>
 
-
     <section
       id="page-records"
       class="page"
@@ -1092,7 +1076,6 @@ td code{
 
         </div>
 
-
         <div class="tableWrap">
 
           <table>
@@ -1100,15 +1083,16 @@ td code{
             <thead>
 
               <tr>
+
                 <th>日期</th>
                 <th>時間</th>
                 <th>房間</th>
                 <th>作者</th>
                 <th>內容</th>
+
               </tr>
 
             </thead>
-
 
             <tbody id="recordsBody">
 
@@ -1133,7 +1117,6 @@ td code{
       </div>
 
     </section>
-
 
     <section
       id="page-activity"
@@ -1164,7 +1147,6 @@ td code{
       </div>
 
     </section>
-
 
     <section
       id="page-errors"
@@ -1200,14 +1182,11 @@ td code{
 
 </div>
 
-
 <script type="module">
 
 import {
   GoogleAuthProvider,
   signInWithPopup,
-  signInWithRedirect,
-  getRedirectResult,
   signOut,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
@@ -1223,29 +1202,21 @@ import {
   database
 } from "./firebase-config.js";
 
-
 const db = database;
 
-
-/*
-  目前指定的管理員 UID
-*/
 const ADMIN_UID =
   "nJdwA4Heqrbtqdt1atbiOsVi7r23";
-
 
 const googleProvider =
   new GoogleAuthProvider();
 
-
 googleProvider.setCustomParameters({
-  prompt:"select_account"
+  prompt: "select_account"
 });
 
-
-const $ = id =>
-  document.getElementById(id);
-
+const $ = function(id){
+  return document.getElementById(id);
+};
 
 let allUsers = [];
 let allRooms = [];
@@ -1254,22 +1225,16 @@ let allRecords = [];
 let listenersStarted = false;
 let unsubscribeFns = [];
 
-
-/* =========================
-   基礎工具
-========================= */
-
 function esc(value){
 
-  return String(value ?? "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+  return String(value == null ? "" : value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
-
 
 function formatTime(value){
 
@@ -1278,26 +1243,15 @@ function formatTime(value){
     value === undefined ||
     value === ""
   ){
-
     return "—";
-
   }
-
 
   const number =
     Number(value);
 
-
-  if(
-    !Number.isFinite(number)
-  ){
-
-    return esc(
-      String(value)
-    );
-
+  if(!Number.isFinite(number)){
+    return esc(String(value));
   }
-
 
   return new Intl.DateTimeFormat(
     "zh-TW",
@@ -1317,7 +1271,6 @@ function formatTime(value){
 
 }
 
-
 function showLoginError(message){
 
   const box =
@@ -1336,7 +1289,6 @@ function showLoginError(message){
 
 }
 
-
 function clearLoginError(){
 
   const box =
@@ -1346,175 +1298,148 @@ function clearLoginError(){
     return;
   }
 
-  box.textContent =
-    "";
-
-  box.style.display =
-    "none";
+  box.textContent = "";
+  box.style.display = "none";
 
 }
 
-
-function setFirebaseStatus(
-  type,
-  text
-){
+function setFirebaseStatus(type,text){
 
   const status =
     $("firebaseStatus");
 
-  if(!status){
-    return;
-  }
+  const statusText =
+    $("firebaseStatusText");
 
-  status.classList.remove(
-    "ok",
-    "error"
-  );
+  if(status){
 
-
-  if(
-    type === "ok"
-  ){
-
-    status.classList.add(
-      "ok"
-    );
-
-  }
-
-
-  if(
-    type === "error"
-  ){
-
-    status.classList.add(
+    status.classList.remove(
+      "ok",
       "error"
     );
 
+    if(type === "ok"){
+      status.classList.add("ok");
+    }
+
+    if(type === "error"){
+      status.classList.add("error");
+    }
+
   }
 
-
-  const textElement =
-    $("firebaseStatusText");
-
-  if(textElement){
-
-    textElement.textContent =
-      text;
-
+  if(statusText){
+    statusText.textContent = text;
   }
 
 }
-
-
-/* =========================
-   Firebase Auth 錯誤
-========================= */
 
 function authErrorMessage(error){
 
   const code =
-    error?.code ||
-    "unknown";
+    error && error.code
+      ? error.code
+      : "unknown";
 
   const message =
-    error?.message ||
-    "未知錯誤";
+    error && error.message
+      ? error.message
+      : "未知錯誤";
 
+  if(code === "auth/popup-blocked"){
 
-  switch(code){
-
-    case "auth/popup-blocked":
-
-      return (
-        "Google 登入視窗被瀏覽器阻擋。\n\n" +
-        "請允許此網站的彈出視窗。"
-      );
-
-
-    case "auth/popup-closed-by-user":
-
-      return (
-        "Google 登入視窗被關閉。"
-      );
-
-
-    case "auth/unauthorized-domain":
-
-      return (
-        "目前網站網域尚未加入 Firebase Authentication 授權網域。\n\n" +
-        "目前網域：\n" +
-        window.location.hostname
-      );
-
-
-    case "auth/operation-not-allowed":
-
-      return (
-        "Firebase 尚未啟用 Google 登入。\n\n" +
-        "請到 Firebase Console → Authentication → Sign-in method → Google 啟用。"
-      );
-
-
-    case "auth/invalid-api-key":
-
-      return (
-        "Firebase API Key 無效。\n\n" +
-        "請檢查 firebase-config.js。"
-      );
-
-
-    case "auth/network-request-failed":
-
-      return (
-        "Firebase 網路連線失敗。\n\n" +
-        "請檢查網路後再試。"
-      );
-
-
-    default:
-
-      return (
-        "Google 登入失敗。\n\n" +
-        "錯誤代碼：\n" +
-        code +
-        "\n\n" +
-        "錯誤訊息：\n" +
-        message
-      );
+    return [
+      "Google 登入視窗被瀏覽器阻擋。",
+      "",
+      "請允許此網站的彈出式視窗後再試。",
+      "",
+      "目前網域：",
+      window.location.hostname
+    ].join("\n");
 
   }
 
+  if(code === "auth/popup-closed-by-user"){
+
+    return "Google 登入視窗被關閉。";
+
+  }
+
+  if(code === "auth/unauthorized-domain"){
+
+    return [
+      "目前網站網域尚未加入 Firebase Authentication 授權網域。",
+      "",
+      "目前網域：",
+      window.location.hostname,
+      "",
+      "請到 Firebase Console → Authentication → Settings → Authorized domains 加入此網域。"
+    ].join("\n");
+
+  }
+
+  if(code === "auth/operation-not-allowed"){
+
+    return [
+      "Firebase 尚未啟用 Google 登入。",
+      "",
+      "請到 Firebase Console → Authentication → Sign-in method → Google 啟用。"
+    ].join("\n");
+
+  }
+
+  if(code === "auth/invalid-api-key"){
+
+    return [
+      "Firebase API Key 無效。",
+      "",
+      "請檢查 firebase-config.js。"
+    ].join("\n");
+
+  }
+
+  if(code === "auth/network-request-failed"){
+
+    return [
+      "Firebase 網路連線失敗。",
+      "",
+      "請檢查網路連線後再試。"
+    ].join("\n");
+
+  }
+
+  return [
+    "Google 登入失敗。",
+    "",
+    "錯誤代碼：",
+    code,
+    "",
+    "錯誤訊息：",
+    message
+  ].join("\n");
+
 }
-
-
-/* =========================
-   Google Login
-========================= */
 
 async function loginWithGoogle(){
 
   clearLoginError();
 
-
   const button =
     $("googleLogin");
-
 
   if(!button){
     return;
   }
 
-
   try{
 
-    button.disabled =
-      true;
-
+    button.disabled = true;
     button.textContent =
       "Google 登入中…";
 
+    console.log(
+      "[MomentLog Admin] Google login start"
+    );
 
     const result =
       await signInWithPopup(
@@ -1522,75 +1447,26 @@ async function loginWithGoogle(){
         googleProvider
       );
 
-
     console.log(
-      "Google login success:",
+      "[MomentLog Admin] Google login success",
       result.user.uid,
       result.user.email
     );
 
-
   }catch(error){
 
     console.error(
-      "Google login:",
+      "[MomentLog Admin] Google login failed",
       error
     );
 
-
-    /*
-      Popup 被阻擋時自動使用 redirect
-    */
-
-    if(
-      error?.code ===
-      "auth/popup-blocked"
-    ){
-
-      showLoginError(
-        "登入視窗被瀏覽器阻擋，改用重新導向登入……"
-      );
-
-
-      try{
-
-        await signInWithRedirect(
-          auth,
-          googleProvider
-        );
-
-        return;
-
-      }catch(redirectError){
-
-        console.error(
-          "Redirect login:",
-          redirectError
-        );
-
-        showLoginError(
-          authErrorMessage(
-            redirectError
-          )
-        );
-
-      }
-
-    }else{
-
-      showLoginError(
-        authErrorMessage(
-          error
-        )
-      );
-
-    }
+    showLoginError(
+      authErrorMessage(error)
+    );
 
   }finally{
 
-    button.disabled =
-      false;
-
+    button.disabled = false;
     button.textContent =
       "使用 Google 登入";
 
@@ -1598,63 +1474,952 @@ async function loginWithGoogle(){
 
 }
 
+function stopRealtimeListeners(){
+
+  unsubscribeFns.forEach(
+    function(unsubscribe){
+
+      try{
+        unsubscribe();
+      }catch(error){
+        console.error(
+          "Listener cleanup:",
+          error
+        );
+      }
+
+    }
+  );
+
+  unsubscribeFns = [];
+  listenersStarted = false;
+
+}
+
+function loadUsers(){
+
+  const unsubscribe =
+    onValue(
+      ref(db,"users"),
+
+      function(snapshot){
+
+        const data =
+          snapshot.val() || {};
+
+        allUsers =
+          Object.entries(data)
+            .map(
+              function(entry){
+
+                const uid = entry[0];
+                const value = entry[1];
+
+                return Object.assign(
+                  {
+                    uid:uid
+                  },
+                  value || {}
+                );
+
+              }
+            );
+
+        $("statUsers").textContent =
+          String(
+            allUsers.length
+          );
+
+        renderUsers();
+
+      },
+
+      function(error){
+
+        console.error(
+          "users:",
+          error
+        );
+
+        $("databaseStatus").textContent =
+          "Users 讀取失敗";
+
+        $("databaseStatus").style.color =
+          "#dc2626";
+
+        setFirebaseStatus(
+          "error",
+          "Users 讀取失敗"
+        );
+
+      }
+    );
+
+  unsubscribeFns.push(
+    unsubscribe
+  );
+
+}
+
+function loadRooms(){
+
+  const unsubscribe =
+    onValue(
+      ref(db,"rooms"),
+
+      function(snapshot){
+
+        const data =
+          snapshot.val() || {};
+
+        allRooms = [];
+        allRecords = [];
+
+        Object.entries(data)
+          .forEach(
+            function(entry){
+
+              const roomId = entry[0];
+              const roomValue = entry[1];
+
+              const room =
+                roomValue &&
+                typeof roomValue === "object"
+                  ? roomValue
+                  : {};
+
+              const meta =
+                room.meta &&
+                typeof room.meta === "object"
+                  ? room.meta
+                  : {};
+
+              const members =
+                room.members &&
+                typeof room.members === "object"
+                  ? room.members
+                  : {};
+
+              allRooms.push({
+
+                roomId:roomId,
+
+                name:
+                  meta.name ||
+                  "未命名",
+
+                ownerUid:
+                  meta.ownerUid ||
+                  "",
+
+                createdAt:
+                  meta.createdAt ||
+                  0,
+
+                updatedAt:
+                  meta.updatedAt ||
+                  0,
+
+                memberCount:
+                  Object.keys(members).length
+
+              });
+
+              const records =
+                room.records &&
+                typeof room.records === "object"
+                  ? room.records
+                  : {};
+
+              Object.entries(records)
+                .forEach(
+                  function(dateEntry){
+
+                    const date =
+                      dateEntry[0];
+
+                    const hoursValue =
+                      dateEntry[1];
+
+                    const hours =
+                      hoursValue &&
+                      typeof hoursValue === "object"
+                        ? hoursValue
+                        : {};
+
+                    Object.entries(hours)
+                      .forEach(
+                        function(hourEntry){
+
+                          const hour =
+                            hourEntry[0];
+
+                          const usersValue =
+                            hourEntry[1];
+
+                          const users =
+                            usersValue &&
+                            typeof usersValue === "object"
+                              ? usersValue
+                              : {};
+
+                          Object.entries(users)
+                            .forEach(
+                              function(userEntry){
+
+                                const uid =
+                                  userEntry[0];
+
+                                const recordValue =
+                                  userEntry[1];
+
+                                const record =
+                                  recordValue &&
+                                  typeof recordValue === "object"
+                                    ? recordValue
+                                    : {
+                                        value:recordValue
+                                      };
+
+                                allRecords.push(
+                                  Object.assign(
+                                    {
+                                      roomId:roomId,
+                                      date:date,
+                                      hour:hour,
+                                      uid:uid
+                                    },
+                                    record
+                                  )
+                                );
+
+                              }
+                            );
+
+                        }
+                      );
+
+                  }
+                );
+
+            }
+          );
+
+        $("statRooms").textContent =
+          String(
+            allRooms.length
+          );
+
+        $("statRecords").textContent =
+          String(
+            allRecords.length
+          );
+
+        const today =
+          new Intl.DateTimeFormat(
+            "en-CA",
+            {
+              timeZone:"Asia/Taipei"
+            }
+          ).format(
+            new Date()
+          );
+
+        $("statToday").textContent =
+          String(
+            allRecords.filter(
+              function(record){
+                return record.date === today;
+              }
+            ).length
+          );
+
+        renderRooms();
+        renderRecords();
+        renderDashboardActivity();
+
+        $("databaseStatus").textContent =
+          "正常";
+
+        $("databaseStatus").style.color =
+          "#16a34a";
+
+        setFirebaseStatus(
+          "ok",
+          "Firebase 即時連線"
+        );
+
+      },
+
+      function(error){
+
+        console.error(
+          "rooms:",
+          error
+        );
+
+        $("databaseStatus").textContent =
+          "讀取失敗";
+
+        $("databaseStatus").style.color =
+          "#dc2626";
+
+        setFirebaseStatus(
+          "error",
+          "Firebase 讀取失敗"
+        );
+
+      }
+    );
+
+  unsubscribeFns.push(
+    unsubscribe
+  );
+
+}
+
+function loadRealtimeData(){
+
+  if(listenersStarted){
+    return;
+  }
+
+  listenersStarted = true;
+
+  loadUsers();
+  loadRooms();
+
+}
+
+function renderUsers(){
+
+  const body =
+    $("usersBody");
+
+  if(!body){
+    return;
+  }
+
+  const searchInput =
+    $("userSearch");
+
+  const keyword =
+    (
+      searchInput
+        ? searchInput.value
+        : ""
+    )
+      .trim()
+      .toLowerCase();
+
+  const rows =
+    allUsers
+      .filter(
+        function(user){
+
+          const text =
+            [
+              user.displayName,
+              user.email,
+              user.uid
+            ]
+              .join(" ")
+              .toLowerCase();
+
+          return text.includes(
+            keyword
+          );
+
+        }
+      )
+      .sort(
+        function(a,b){
+
+          return String(
+            a.displayName || ""
+          ).localeCompare(
+            String(
+              b.displayName || ""
+            ),
+            "zh-Hant"
+          );
+
+        }
+      );
+
+  if(!rows.length){
+
+    body.innerHTML =
+      "<tr>" +
+      "<td colspan=\"5\">" +
+      "<div class=\"empty\">" +
+      "沒有符合的使用者" +
+      "</div>" +
+      "</td>" +
+      "</tr>";
+
+    return;
+
+  }
+
+  body.innerHTML =
+    rows
+      .map(
+        function(user){
+
+          return (
+            "<tr>" +
+              "<td><strong>" +
+                esc(
+                  user.displayName ||
+                  "未設定"
+                ) +
+              "</strong></td>" +
+
+              "<td>" +
+                esc(
+                  user.email ||
+                  "—"
+                ) +
+              "</td>" +
+
+              "<td><code>" +
+                esc(
+                  user.uid
+                ) +
+              "</code></td>" +
+
+              "<td>" +
+                formatTime(
+                  user.updatedAt
+                ) +
+              "</td>" +
+
+              "<td>" +
+                "<span class=\"badge green\">" +
+                  "已建立" +
+                "</span>" +
+              "</td>" +
+            "</tr>"
+          );
+
+        }
+      )
+      .join("");
+
+}
+
+function renderRooms(){
+
+  const body =
+    $("roomsBody");
+
+  if(!body){
+    return;
+  }
+
+  const searchInput =
+    $("roomSearch");
+
+  const keyword =
+    (
+      searchInput
+        ? searchInput.value
+        : ""
+    )
+      .trim()
+      .toLowerCase();
+
+  const rows =
+    allRooms
+      .filter(
+        function(room){
+
+          const text =
+            [
+              room.name,
+              room.roomId,
+              room.ownerUid
+            ]
+              .join(" ")
+              .toLowerCase();
+
+          return text.includes(
+            keyword
+          );
+
+        }
+      )
+      .sort(
+        function(a,b){
+
+          return (
+            Number(
+              b.createdAt || 0
+            ) -
+            Number(
+              a.createdAt || 0
+            )
+          );
+
+        }
+      );
+
+  if(!rows.length){
+
+    body.innerHTML =
+      "<tr>" +
+      "<td colspan=\"5\">" +
+      "<div class=\"empty\">" +
+      "沒有符合的房間" +
+      "</div>" +
+      "</td>" +
+      "</tr>";
+
+    return;
+
+  }
+
+  body.innerHTML =
+    rows
+      .map(
+        function(room){
+
+          return (
+            "<tr>" +
+
+              "<td><strong>" +
+                esc(
+                  room.name
+                ) +
+              "</strong></td>" +
+
+              "<td><code>" +
+                esc(
+                  room.roomId
+                ) +
+              "</code></td>" +
+
+              "<td><code>" +
+                esc(
+                  room.ownerUid ||
+                  "—"
+                ) +
+              "</code></td>" +
+
+              "<td>" +
+                esc(
+                  room.memberCount
+                ) +
+              "</td>" +
+
+              "<td>" +
+                formatTime(
+                  room.createdAt
+                ) +
+              "</td>" +
+
+            "</tr>"
+          );
+
+        }
+      )
+      .join("");
+
+}
+
+function renderRecords(){
+
+  const body =
+    $("recordsBody");
+
+  if(!body){
+    return;
+  }
+
+  const searchInput =
+    $("recordSearch");
+
+  const keyword =
+    (
+      searchInput
+        ? searchInput.value
+        : ""
+    )
+      .trim()
+      .toLowerCase();
+
+  const rows =
+    allRecords
+      .filter(
+        function(record){
+
+          const text =
+            [
+              record.text,
+              record.value,
+              record.roomId,
+              record.uid,
+              record.authorName,
+              record.date,
+              record.hour
+            ]
+              .join(" ")
+              .toLowerCase();
+
+          return text.includes(
+            keyword
+          );
+
+        }
+      )
+      .sort(
+        function(a,b){
+
+          return (
+            Number(
+              b.updatedAt ||
+              b.savedAt ||
+              0
+            ) -
+            Number(
+              a.updatedAt ||
+              a.savedAt ||
+              0
+            )
+          );
+
+        }
+      )
+      .slice(
+        0,
+        500
+      );
+
+  if(!rows.length){
+
+    body.innerHTML =
+      "<tr>" +
+      "<td colspan=\"5\">" +
+      "<div class=\"empty\">" +
+      "沒有符合的紀錄" +
+      "</div>" +
+      "</td>" +
+      "</tr>";
+
+    return;
+
+  }
+
+  body.innerHTML =
+    rows
+      .map(
+        function(record){
+
+          const text =
+            record.text != null
+              ? record.text
+              : (
+                  record.value != null
+                    ? record.value
+                    : "（沒有文字）"
+                );
+
+          return (
+            "<tr>" +
+
+              "<td>" +
+                esc(
+                  record.date ||
+                  "—"
+                ) +
+              "</td>" +
+
+              "<td>" +
+                esc(
+                  String(
+                    record.hour == null
+                      ? ""
+                      : record.hour
+                  )
+                ) +
+                ":00" +
+              "</td>" +
+
+              "<td><code>" +
+                esc(
+                  record.roomId
+                ) +
+              "</code></td>" +
+
+              "<td>" +
+                esc(
+                  record.authorName ||
+                  record.uid ||
+                  "—"
+                ) +
+              "</td>" +
+
+              "<td>" +
+                esc(text) +
+              "</td>" +
+
+            "</tr>"
+          );
+
+        }
+      )
+      .join("");
+
+}
+
+function renderDashboardActivity(){
+
+  const container =
+    $("dashboardActivity");
+
+  if(!container){
+    return;
+  }
+
+  const activity = [];
+
+  allRecords
+    .slice()
+    .sort(
+      function(a,b){
+
+        return (
+          Number(
+            b.updatedAt ||
+            b.savedAt ||
+            0
+          ) -
+          Number(
+            a.updatedAt ||
+            a.savedAt ||
+            0
+          )
+        );
+
+      }
+    )
+    .slice(
+      0,
+      12
+    )
+    .forEach(
+      function(record){
+
+        activity.push({
+
+          text:
+            "📝 " +
+            (
+              record.authorName ||
+              record.uid
+            ) +
+            " 在房間 " +
+            record.roomId +
+            " 新增紀錄",
+
+          time:
+            record.updatedAt ||
+            record.savedAt ||
+            0
+
+        });
+
+      }
+    );
+
+  allRooms
+    .slice()
+    .sort(
+      function(a,b){
+
+        return (
+          Number(
+            b.createdAt || 0
+          ) -
+          Number(
+            a.createdAt || 0
+          )
+        );
+
+      }
+    )
+    .slice(
+      0,
+      8
+    )
+    .forEach(
+      function(room){
+
+        activity.push({
+
+          text:
+            "🏠 建立房間「" +
+            room.name +
+            "」",
+
+          time:
+            room.createdAt ||
+            0
+
+        });
+
+      }
+    );
+
+  activity.sort(
+    function(a,b){
+
+      return (
+        Number(
+          b.time || 0
+        ) -
+        Number(
+          a.time || 0
+        )
+      );
+
+    }
+  );
+
+  const limited =
+    activity.slice(
+      0,
+      12
+    );
+
+  if(!limited.length){
+
+    container.innerHTML =
+      "<div class=\"empty\">" +
+      "目前沒有活動" +
+      "</div>";
+
+    return;
+
+  }
+
+  container.innerHTML =
+    limited
+      .map(
+        function(item){
+
+          return (
+            "<div class=\"activityItem\">" +
+
+              "<div class=\"activityDot\"></div>" +
+
+              "<div>" +
+
+                "<div class=\"activityText\">" +
+                  esc(
+                    item.text
+                  ) +
+                "</div>" +
+
+                "<div class=\"activityTime\">" +
+                  formatTime(
+                    item.time
+                  ) +
+                "</div>" +
+
+              "</div>" +
+
+            "</div>"
+          );
+
+        }
+      )
+      .join("");
+
+}
+
+const pageNames = {
+  dashboard:"總覽",
+  users:"使用者",
+  rooms:"房間",
+  records:"紀錄",
+  activity:"活動監控",
+  errors:"錯誤監控"
+};
+
+document
+  .querySelectorAll(".nav button")
+  .forEach(
+    function(button){
+
+      button.addEventListener(
+        "click",
+        function(){
+
+          document
+            .querySelectorAll(".nav button")
+            .forEach(
+              function(item){
+
+                item.classList.remove(
+                  "active"
+                );
+
+              }
+            );
+
+          document
+            .querySelectorAll(".page")
+            .forEach(
+              function(page){
+
+                page.classList.remove(
+                  "active"
+                );
+
+              }
+            );
+
+          button.classList.add(
+            "active"
+          );
+
+          const page =
+            button.dataset.page;
+
+          const target =
+            $("page-" + page);
+
+          if(target){
+
+            target.classList.add(
+              "active"
+            );
+
+          }
+
+          $("pageTitle")
+            .textContent =
+            pageNames[page] ||
+            page;
+
+        }
+      );
+
+    }
+  );
 
 $("googleLogin")
-  ?.addEventListener(
+  .addEventListener(
     "click",
     loginWithGoogle
   );
 
-
-/* =========================
-   Redirect Result
-========================= */
-
-(async function(){
-
-  try{
-
-    const result =
-      await getRedirectResult(
-        auth
-      );
-
-
-    if(result?.user){
-
-      console.log(
-        "Redirect login success:",
-        result.user.uid
-      );
-
-    }
-
-  }catch(error){
-
-    console.error(
-      "Redirect result:",
-      error
-    );
-
-    showLoginError(
-      authErrorMessage(
-        error
-      )
-    );
-
-  }
-
-})();
-
-
-/* =========================
-   Logout
-========================= */
-
 $("logout")
-  ?.addEventListener(
+  .addEventListener(
     "click",
-    async () => {
+    async function(){
 
       try{
 
@@ -1667,7 +2432,7 @@ $("logout")
       }catch(error){
 
         console.error(
-          "Logout:",
+          "logout:",
           error
         );
 
@@ -1676,1036 +2441,37 @@ $("logout")
     }
   );
 
-
-/* =========================
-   Navigation
-========================= */
-
-const pageNames = {
-
-  dashboard:"總覽",
-  users:"使用者",
-  rooms:"房間",
-  records:"紀錄",
-  activity:"活動監控",
-  errors:"錯誤監控"
-
-};
-
-
-document
-  .querySelectorAll(".nav button")
-  .forEach(button => {
-
-    button.addEventListener(
-      "click",
-      () => {
-
-        document
-          .querySelectorAll(".nav button")
-          .forEach(item => {
-
-            item.classList.remove(
-              "active"
-            );
-
-          });
-
-
-        document
-          .querySelectorAll(".page")
-          .forEach(page => {
-
-            page.classList.remove(
-              "active"
-            );
-
-          });
-
-
-        button.classList.add(
-          "active"
-        );
-
-
-        const page =
-          button.dataset.page;
-
-
-        const target =
-          $(`page-${page}`);
-
-
-        if(target){
-
-          target.classList.add(
-            "active"
-          );
-
-        }
-
-
-        $("pageTitle")
-          .textContent =
-          pageNames[page] ||
-          page;
-
-      }
-    );
-
-  });
-
-
-/* =========================
-   Listener cleanup
-========================= */
-
-function stopRealtimeListeners(){
-
-  unsubscribeFns.forEach(
-    unsubscribe => {
-
-      try{
-
-        unsubscribe();
-
-      }catch(error){
-
-        console.error(
-          "unsubscribe:",
-          error
-        );
-
-      }
-
-    }
+$("userSearch")
+  .addEventListener(
+    "input",
+    renderUsers
   );
 
-
-  unsubscribeFns = [];
-
-  listenersStarted = false;
-
-}
-
-
-/* =========================
-   Load Users
-========================= */
-
-function loadUsers(){
-
-  const unsubscribe =
-    onValue(
-      ref(
-        db,
-        "users"
-      ),
-
-      snapshot => {
-
-        const data =
-          snapshot.val() ||
-          {};
-
-
-        allUsers =
-          Object.entries(data)
-            .map(
-              ([uid,value]) => ({
-
-                uid,
-
-                ...(value || {})
-
-              })
-            );
-
-
-        $("statUsers")
-          .textContent =
-          String(
-            allUsers.length
-          );
-
-
-        renderUsers();
-
-      },
-
-      error => {
-
-        console.error(
-          "users:",
-          error
-        );
-
-
-        $("databaseStatus")
-          .textContent =
-          "Users 讀取失敗";
-
-
-        $("databaseStatus")
-          .style.color =
-          "#dc2626";
-
-
-        setFirebaseStatus(
-          "error",
-          "Users 讀取失敗"
-        );
-
-      }
-    );
-
-
-  unsubscribeFns.push(
-    unsubscribe
+$("roomSearch")
+  .addEventListener(
+    "input",
+    renderRooms
   );
 
-}
-
-
-/* =========================
-   Load Rooms + Records
-========================= */
-
-function loadRooms(){
-
-  const unsubscribe =
-    onValue(
-      ref(
-        db,
-        "rooms"
-      ),
-
-      snapshot => {
-
-        const data =
-          snapshot.val() ||
-          {};
-
-
-        allRooms = [];
-        allRecords = [];
-
-
-        for(
-          const [
-            roomId,
-            room
-          ]
-          of Object.entries(data)
-        ){
-
-          const safeRoom =
-            room &&
-            typeof room === "object"
-              ? room
-              : {};
-
-
-          const meta =
-            safeRoom.meta &&
-            typeof safeRoom.meta === "object"
-              ? safeRoom.meta
-              : {};
-
-
-          const members =
-            safeRoom.members &&
-            typeof safeRoom.members === "object"
-              ? safeRoom.members
-              : {};
-
-
-          allRooms.push({
-
-            roomId,
-
-            name:
-              meta.name ||
-              "未命名",
-
-            ownerUid:
-              meta.ownerUid ||
-              "",
-
-            createdAt:
-              meta.createdAt ||
-              0,
-
-            updatedAt:
-              meta.updatedAt ||
-              0,
-
-            memberCount:
-              Object.keys(
-                members
-              ).length
-
-          });
-
-
-          /*
-            實際結構：
-
-            rooms
-              roomId
-                records
-                  date
-                    hour
-                      uid
-                        record
-          */
-
-          const records =
-            safeRoom.records &&
-            typeof safeRoom.records === "object"
-              ? safeRoom.records
-              : {};
-
-
-          for(
-            const [
-              date,
-              hours
-            ]
-            of Object.entries(records)
-          ){
-
-            if(
-              !hours ||
-              typeof hours !== "object"
-            ){
-
-              continue;
-
-            }
-
-
-            for(
-              const [
-                hour,
-                users
-              ]
-              of Object.entries(hours)
-            ){
-
-              if(
-                !users ||
-                typeof users !== "object"
-              ){
-
-                continue;
-
-              }
-
-
-              for(
-                const [
-                  uid,
-                  record
-                ]
-                of Object.entries(users)
-              ){
-
-                const safeRecord =
-                  record &&
-                  typeof record === "object"
-                    ? record
-                    : {
-                        value:record
-                      };
-
-
-                allRecords.push({
-
-                  roomId,
-                  date,
-                  hour,
-                  uid,
-
-                  ...safeRecord
-
-                });
-
-              }
-
-            }
-
-          }
-
-        }
-
-
-        $("statRooms")
-          .textContent =
-          String(
-            allRooms.length
-          );
-
-
-        $("statRecords")
-          .textContent =
-          String(
-            allRecords.length
-          );
-
-
-        const today =
-          new Intl.DateTimeFormat(
-            "en-CA",
-            {
-              timeZone:
-                "Asia/Taipei"
-            }
-          ).format(
-            new Date()
-          );
-
-
-        $("statToday")
-          .textContent =
-          String(
-            allRecords.filter(
-              record =>
-                record.date === today
-            ).length
-          );
-
-
-        renderRooms();
-        renderRecords();
-        renderDashboardActivity();
-
-
-        $("databaseStatus")
-          .textContent =
-          "正常";
-
-
-        $("databaseStatus")
-          .style.color =
-          "#16a34a";
-
-
-        setFirebaseStatus(
-          "ok",
-          "Firebase 即時連線"
-        );
-
-      },
-
-      error => {
-
-        console.error(
-          "rooms:",
-          error
-        );
-
-
-        $("databaseStatus")
-          .textContent =
-          "讀取失敗";
-
-
-        $("databaseStatus")
-          .style.color =
-          "#dc2626";
-
-
-        setFirebaseStatus(
-          "error",
-          "Firebase 讀取失敗"
-        );
-
-      }
-    );
-
-
-  unsubscribeFns.push(
-    unsubscribe
+$("recordSearch")
+  .addEventListener(
+    "input",
+    renderRecords
   );
-
-}
-
-
-/* =========================
-   Start Realtime
-========================= */
-
-function loadRealtimeData(){
-
-  if(listenersStarted){
-
-    return;
-
-  }
-
-
-  listenersStarted =
-    true;
-
-
-  loadUsers();
-  loadRooms();
-
-}
-
-
-/* =========================
-   Render Users
-========================= */
-
-function renderUsers(){
-
-  const body =
-    $("usersBody");
-
-
-  if(!body){
-    return;
-  }
-
-
-  const keyword =
-    (
-      $("userSearch")?.value ||
-      ""
-    )
-      .trim()
-      .toLowerCase();
-
-
-  const rows =
-    allUsers
-      .filter(
-        user =>
-          [
-            user.displayName,
-            user.email,
-            user.uid
-          ]
-            .join(" ")
-            .toLowerCase()
-            .includes(
-              keyword
-            )
-      )
-      .sort(
-        (a,b) =>
-          String(
-            a.displayName || ""
-          ).localeCompare(
-            String(
-              b.displayName || ""
-            ),
-            "zh-Hant"
-          )
-      );
-
-
-  if(!rows.length){
-
-    body.innerHTML = `
-      <tr>
-        <td colspan="5">
-          <div class="empty">
-            沒有符合的使用者
-          </div>
-        </td>
-      </tr>
-    `;
-
-    return;
-
-  }
-
-
-  body.innerHTML =
-    rows
-      .map(
-        user => `
-          <tr>
-
-            <td>
-              <strong>
-                ${esc(
-                  user.displayName ||
-                  "未設定"
-                )}
-              </strong>
-            </td>
-
-            <td>
-              ${esc(
-                user.email ||
-                "—"
-              )}
-            </td>
-
-            <td>
-              <code>
-                ${esc(
-                  user.uid
-                )}
-              </code>
-            </td>
-
-            <td>
-              ${formatTime(
-                user.updatedAt
-              )}
-            </td>
-
-            <td>
-              <span class="badge green">
-                已建立
-              </span>
-            </td>
-
-          </tr>
-        `
-      )
-      .join("");
-
-}
-
-
-/* =========================
-   Render Rooms
-========================= */
-
-function renderRooms(){
-
-  const body =
-    $("roomsBody");
-
-
-  if(!body){
-    return;
-  }
-
-
-  const keyword =
-    (
-      $("roomSearch")?.value ||
-      ""
-    )
-      .trim()
-      .toLowerCase();
-
-
-  const rows =
-    allRooms
-      .filter(
-        room =>
-          [
-            room.name,
-            room.roomId,
-            room.ownerUid
-          ]
-            .join(" ")
-            .toLowerCase()
-            .includes(
-              keyword
-            )
-      )
-      .sort(
-        (a,b) =>
-          Number(
-            b.createdAt || 0
-          ) -
-          Number(
-            a.createdAt || 0
-          )
-      );
-
-
-  if(!rows.length){
-
-    body.innerHTML = `
-      <tr>
-        <td colspan="5">
-          <div class="empty">
-            沒有符合的房間
-          </div>
-        </td>
-      </tr>
-    `;
-
-    return;
-
-  }
-
-
-  body.innerHTML =
-    rows
-      .map(
-        room => `
-          <tr>
-
-            <td>
-              <strong>
-                ${esc(
-                  room.name
-                )}
-              </strong>
-            </td>
-
-            <td>
-              <code>
-                ${esc(
-                  room.roomId
-                )}
-              </code>
-            </td>
-
-            <td>
-              <code>
-                ${esc(
-                  room.ownerUid ||
-                  "—"
-                )}
-              </code>
-            </td>
-
-            <td>
-              ${esc(
-                room.memberCount
-              )}
-            </td>
-
-            <td>
-              ${formatTime(
-                room.createdAt
-              )}
-            </td>
-
-          </tr>
-        `
-      )
-      .join("");
-
-}
-
-
-/* =========================
-   Render Records
-========================= */
-
-function renderRecords(){
-
-  const body =
-    $("recordsBody");
-
-
-  if(!body){
-    return;
-  }
-
-
-  const keyword =
-    (
-      $("recordSearch")?.value ||
-      ""
-    )
-      .trim()
-      .toLowerCase();
-
-
-  const rows =
-    allRecords
-      .filter(
-        record =>
-          [
-            record.text,
-            record.value,
-            record.roomId,
-            record.uid,
-            record.authorName,
-            record.date,
-            record.hour
-          ]
-            .join(" ")
-            .toLowerCase()
-            .includes(
-              keyword
-            )
-      )
-      .sort(
-        (a,b) =>
-          Number(
-            b.updatedAt ||
-            b.savedAt ||
-            0
-          ) -
-          Number(
-            a.updatedAt ||
-            a.savedAt ||
-            0
-          )
-      )
-      .slice(
-        0,
-        500
-      );
-
-
-  if(!rows.length){
-
-    body.innerHTML = `
-      <tr>
-        <td colspan="5">
-          <div class="empty">
-            沒有符合的紀錄
-          </div>
-        </td>
-      </tr>
-    `;
-
-    return;
-
-  }
-
-
-  body.innerHTML =
-    rows
-      .map(
-        record => `
-          <tr>
-
-            <td>
-              ${esc(
-                record.date ||
-                "—"
-              )}
-            </td>
-
-            <td>
-              ${esc(
-                String(
-                  record.hour ??
-                  ""
-                )
-              )}:00
-            </td>
-
-            <td>
-              <code>
-                ${esc(
-                  record.roomId
-                )}
-              </code>
-            </td>
-
-            <td>
-              ${esc(
-                record.authorName ||
-                record.uid ||
-                "—"
-              )}
-            </td>
-
-            <td>
-              ${esc(
-                record.text ??
-                record.value ??
-                "（沒有文字）"
-              )}
-            </td>
-
-          </tr>
-        `
-      )
-      .join("");
-
-}
-
-
-/* =========================
-   Dashboard Activity
-========================= */
-
-function renderDashboardActivity(){
-
-  const container =
-    $("dashboardActivity");
-
-
-  if(!container){
-    return;
-  }
-
-
-  const activity = [];
-
-
-  allRecords
-    .slice()
-    .sort(
-      (a,b) =>
-        Number(
-          b.updatedAt ||
-          b.savedAt ||
-          0
-        ) -
-        Number(
-          a.updatedAt ||
-          a.savedAt ||
-          0
-        )
-    )
-    .slice(
-      0,
-      12
-    )
-    .forEach(
-      record => {
-
-        activity.push({
-
-          text:
-            `📝 ${
-              record.authorName ||
-              record.uid
-            } 在房間 ${
-              record.roomId
-            } 新增紀錄`,
-
-          time:
-            record.updatedAt ||
-            record.savedAt ||
-            0
-
-        });
-
-      }
-    );
-
-
-  allRooms
-    .slice()
-    .sort(
-      (a,b) =>
-        Number(
-          b.createdAt ||
-          0
-        ) -
-        Number(
-          a.createdAt ||
-          0
-        )
-    )
-    .slice(
-      0,
-      8
-    )
-    .forEach(
-      room => {
-
-        activity.push({
-
-          text:
-            `🏠 建立房間「${
-              room.name
-            }」`,
-
-          time:
-            room.createdAt ||
-            0
-
-        });
-
-      }
-    );
-
-
-  activity.sort(
-    (a,b) =>
-      Number(
-        b.time ||
-        0
-      ) -
-      Number(
-        a.time ||
-        0
-      )
-  );
-
-
-  const limited =
-    activity.slice(
-      0,
-      12
-    );
-
-
-  if(!limited.length){
-
-    container.innerHTML = `
-      <div class="empty">
-        目前沒有活動
-      </div>
-    `;
-
-    return;
-
-  }
-
-
-  container.innerHTML =
-    limited
-      .map(
-        item => `
-          <div class="activityItem">
-
-            <div class="activityDot"></div>
-
-            <div>
-
-              <div class="activityText">
-                ${esc(
-                  item.text
-                )}
-              </div>
-
-              <div class="activityTime">
-                ${formatTime(
-                  item.time
-                )}
-              </div>
-
-            </div>
-
-          </div>
-        `
-      )
-      .join("");
-
-}
-
-
-/* =========================
-   Broadcast
-========================= */
 
 $("sendBroadcastBtn")
-  ?.addEventListener(
+  .addEventListener(
     "click",
-    async () => {
+    async function(){
 
       const input =
         $("broadcastInput");
 
+      const button =
+        $("sendBroadcastBtn");
 
       const text =
-        input?.value
-          ?.trim() ||
-        "";
-
+        input.value.trim();
 
       if(!text){
 
@@ -2716,7 +2482,6 @@ $("sendBroadcastBtn")
         return;
 
       }
-
 
       if(
         text.length > 500
@@ -2730,10 +2495,8 @@ $("sendBroadcastBtn")
 
       }
 
-
       const user =
         auth.currentUser;
-
 
       if(!user){
 
@@ -2745,24 +2508,18 @@ $("sendBroadcastBtn")
 
       }
 
-
       if(
         user.uid !==
         ADMIN_UID
       ){
 
         alert(
-          "目前帳號不是指定管理員。"
+          "目前帳號不是管理員。"
         );
 
         return;
 
       }
-
-
-      const button =
-        $("sendBroadcastBtn");
-
 
       try{
 
@@ -2772,14 +2529,13 @@ $("sendBroadcastBtn")
         button.textContent =
           "發送中…";
 
-
         await set(
           ref(
             db,
             "system/broadcast"
           ),
           {
-            text,
+            text:text,
             timestamp:
               Date.now(),
             senderUid:
@@ -2787,15 +2543,11 @@ $("sendBroadcastBtn")
           }
         );
 
-
-        input.value =
-          "";
-
+        input.value = "";
 
         alert(
           "全站廣播已發送。"
         );
-
 
       }catch(error){
 
@@ -2804,12 +2556,13 @@ $("sendBroadcastBtn")
           error
         );
 
-
         alert(
           "發送失敗：\n" +
           (
-            error?.message ||
-            String(error)
+            error &&
+            error.message
+              ? error.message
+              : String(error)
           )
         );
 
@@ -2826,89 +2579,45 @@ $("sendBroadcastBtn")
     }
   );
 
-
-/* =========================
-   Search
-========================= */
-
-$("userSearch")
-  ?.addEventListener(
-    "input",
-    renderUsers
-  );
-
-
-$("roomSearch")
-  ?.addEventListener(
-    "input",
-    renderRooms
-  );
-
-
-$("recordSearch")
-  ?.addEventListener(
-    "input",
-    renderRecords
-  );
-
-
-/* =========================
-   Auth State
-========================= */
-
 onAuthStateChanged(
   auth,
-  async user => {
+  async function(user){
 
     if(!user){
 
       stopRealtimeListeners();
 
-
       $("loginScreen")
         .style.display =
         "flex";
-
 
       $("adminApp")
         .classList.add(
           "hide"
         );
 
-
       $("authStatus")
         .textContent =
         "未登入";
 
-
       $("adminClaimStatus")
         .textContent =
         "未驗證";
-
 
       setFirebaseStatus(
         "error",
         "尚未登入"
       );
 
-
       return;
 
     }
 
-
     console.log(
-      "Firebase Auth:",
+      "[MomentLog Admin] Auth:",
       user.uid,
       user.email
     );
-
-
-    /*
-      前端只負責控制 Admin UI。
-      真正的資料庫權限仍必須由
-      database.rules.json 控制。
-    */
 
     if(
       user.uid !==
@@ -2917,32 +2626,26 @@ onAuthStateChanged(
 
       stopRealtimeListeners();
 
-
       $("loginScreen")
         .style.display =
         "flex";
-
 
       $("adminApp")
         .classList.add(
           "hide"
         );
 
-
       $("authStatus")
         .textContent =
         "已登入";
-
 
       $("adminClaimStatus")
         .textContent =
         "無管理員權限";
 
-
       $("adminClaimStatus")
         .style.color =
         "#dc2626";
-
 
       showLoginError(
         "Google 登入成功，但此 Google 帳號沒有管理員權限。\n\n" +
@@ -2952,7 +2655,6 @@ onAuthStateChanged(
         "管理員 UID：\n" +
         ADMIN_UID
       );
-
 
       try{
 
@@ -2969,73 +2671,59 @@ onAuthStateChanged(
 
       }
 
-
       return;
 
     }
 
-
     clearLoginError();
-
 
     $("loginScreen")
       .style.display =
       "none";
-
 
     $("adminApp")
       .classList.remove(
         "hide"
       );
 
-
     $("adminName")
       .textContent =
       user.displayName ||
       "管理員";
-
 
     $("adminEmail")
       .textContent =
       user.email ||
       user.uid;
 
-
     $("firebaseAdminUid")
       .textContent =
       user.uid;
-
 
     $("adminClaimStatus")
       .textContent =
       "管理員 ✓";
 
-
     $("adminClaimStatus")
       .style.color =
       "#16a34a";
-
 
     $("authStatus")
       .textContent =
       "已驗證";
 
-
     $("authStatus")
       .style.color =
       "#16a34a";
-
 
     $("databaseStatus")
       .textContent =
       "讀取中…";
 
-
     setFirebaseStatus(
       "ok",
       "Firebase 已登入"
     );
-
 
     loadRealtimeData();
 
