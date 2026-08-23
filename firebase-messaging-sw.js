@@ -1,5 +1,10 @@
-importScripts("https://www.gstatic.com/firebasejs/12.17.0/firebase-app-compat.js");
-importScripts("https://www.gstatic.com/firebasejs/12.17.0/firebase-messaging-compat.js");
+importScripts(
+  "https://www.gstatic.com/firebasejs/12.17.0/firebase-app-compat.js"
+);
+
+importScripts(
+  "https://www.gstatic.com/firebasejs/12.17.0/firebase-messaging-compat.js"
+);
 
 firebase.initializeApp({
   apiKey: "AIzaSyBCMPxNB58yeF5zUxQmSlL_MjSGN8VR7YY",
@@ -14,27 +19,67 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage(payload => {
-  const title = payload?.data?.title || payload?.notification?.title || "MomentLog";
-  const body = payload?.data?.body || payload?.notification?.body || "該記錄了！";
-  self.registration.showNotification(title, {
-    body,
-    icon: "./icon-192.png",
-    badge: "./icon-192.png",
-    tag: payload?.data?.tag || "momentlog-reminder",
-    data: { url: "./" }
-  });
-});
+messaging.onBackgroundMessage((payload) => {
+  const title =
+    payload?.data?.title ||
+    payload?.notification?.title ||
+    "MomentLog";
 
-self.addEventListener("notificationclick", event => {
-  event.notification.close();
-  const url = new URL(event.notification.data?.url || "./", self.location.origin).href;
-  event.waitUntil(
-    clients.matchAll({type:"window", includeUncontrolled:true}).then(list => {
-      for (const client of list) {
-        if ("focus" in client) return client.focus();
+  const body =
+    payload?.data?.body ||
+    payload?.notification?.body ||
+    "該記錄了！";
+
+  self.registration.showNotification(
+    title,
+    {
+      body,
+      icon: "./icon-192.png",
+      badge: "./icon-192.png",
+      tag:
+        payload?.data?.tag ||
+        "momentlog-reminder",
+      data: {
+        url: "./"
       }
-      return clients.openWindow(url);
-    })
+    }
   );
 });
+
+self.addEventListener(
+  "notificationclick",
+  (event) => {
+
+    event.notification.close();
+
+    const targetUrl =
+      new URL(
+        event.notification?.data?.url || "./",
+        self.location.origin
+      ).href;
+
+    event.waitUntil(
+      clients
+        .matchAll({
+          type: "window",
+          includeUncontrolled: true
+        })
+        .then((clientList) => {
+
+          for (const client of clientList) {
+            if ("focus" in client) {
+              return client.focus();
+            }
+          }
+
+          if ("openWindow" in clients) {
+            return clients.openWindow(
+              targetUrl
+            );
+          }
+
+          return undefined;
+        })
+    );
+  }
+);
