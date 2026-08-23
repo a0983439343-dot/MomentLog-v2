@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#111827">
 <meta name="google" content="notranslate">
-
 <title>MomentLog Admin</title>
 
 <style>
@@ -117,6 +116,10 @@ button:disabled{
   font-weight:700;
 }
 
+.loginButton:hover{
+  background:#1f2937;
+}
+
 .loginError{
   display:none;
   margin-top:12px;
@@ -129,6 +132,7 @@ button:disabled{
   font-size:13px;
   line-height:1.5;
   white-space:pre-wrap;
+  word-break:break-word;
 }
 
 .app{
@@ -210,6 +214,10 @@ button:disabled{
   background:transparent;
   border-radius:10px;
   padding:10px;
+}
+
+.logoutBtn:hover{
+  background:rgba(255,255,255,.05);
 }
 
 .main{
@@ -573,13 +581,11 @@ td code{
       🛠️
     </div>
 
-    <h1>
-      MomentLog Admin
-    </h1>
+    <h1>MomentLog Admin</h1>
 
     <p>
       MomentLog 管理後台<br>
-      僅限具有管理員權限的帳號。
+      僅限指定管理員帳號。
     </p>
 
     <button
@@ -599,6 +605,7 @@ td code{
 
 </section>
 
+
 <div
   id="adminApp"
   class="app hide"
@@ -608,9 +615,7 @@ td code{
 
     <div class="logo">
       MomentLog
-      <small>
-        Admin Dashboard
-      </small>
+      <small>Admin Dashboard</small>
     </div>
 
     <div class="adminInfo">
@@ -685,6 +690,7 @@ td code{
 
   </aside>
 
+
   <main class="main">
 
     <div class="topbar">
@@ -711,6 +717,7 @@ td code{
 
     </div>
 
+
     <section
       id="page-dashboard"
       class="page active"
@@ -722,9 +729,11 @@ td code{
       >
 
         <div class="cardHeader">
+
           <h2>
             📢 發送全站廣播通知
           </h2>
+
         </div>
 
         <div
@@ -737,8 +746,8 @@ td code{
             <input
               id="broadcastInput"
               class="search"
-              maxlength="500"
               type="text"
+              maxlength="500"
               placeholder="輸入要發送給所有線上用戶的公告訊息..."
             >
 
@@ -756,9 +765,11 @@ td code{
 
       </div>
 
+
       <div class="statsGrid">
 
         <div class="statCard">
+
           <div class="statLabel">
             使用者
           </div>
@@ -769,9 +780,12 @@ td code{
           >
             0
           </div>
+
         </div>
 
+
         <div class="statCard">
+
           <div class="statLabel">
             房間
           </div>
@@ -782,9 +796,12 @@ td code{
           >
             0
           </div>
+
         </div>
 
+
         <div class="statCard">
+
           <div class="statLabel">
             總紀錄
           </div>
@@ -795,9 +812,12 @@ td code{
           >
             0
           </div>
+
         </div>
 
+
         <div class="statCard">
+
           <div class="statLabel">
             今日紀錄
           </div>
@@ -808,37 +828,38 @@ td code{
           >
             0
           </div>
+
         </div>
 
       </div>
+
 
       <div class="contentGrid">
 
         <div class="card">
 
           <div class="cardHeader">
-            <h2>
-              最近活動
-            </h2>
+            <h2>最近活動</h2>
           </div>
 
           <div
             id="dashboardActivity"
             class="cardBody"
           >
+
             <div class="empty">
               尚未有活動紀錄
             </div>
+
           </div>
 
         </div>
 
+
         <div class="card">
 
           <div class="cardHeader">
-            <h2>
-              系統資訊
-            </h2>
+            <h2>系統資訊</h2>
           </div>
 
           <div class="cardBody">
@@ -858,6 +879,7 @@ td code{
 
             </div>
 
+
             <div class="detailLine">
 
               <span class="detailLabel">
@@ -873,6 +895,7 @@ td code{
 
             </div>
 
+
             <div class="detailLine">
 
               <span class="detailLabel">
@@ -883,10 +906,11 @@ td code{
                 id="adminClaimStatus"
                 class="detailValue"
               >
-                檢查中…
+                —
               </span>
 
             </div>
+
 
             <div class="detailLine">
 
@@ -903,6 +927,7 @@ td code{
 
             </div>
 
+
             <div class="detailLine">
 
               <span class="detailLabel">
@@ -913,7 +938,7 @@ td code{
                 id="databaseStatus"
                 class="detailValue"
               >
-                讀取中…
+                尚未讀取
               </span>
 
             </div>
@@ -925,6 +950,7 @@ td code{
       </div>
 
     </section>
+
 
     <section
       id="page-users"
@@ -944,6 +970,7 @@ td code{
 
         </div>
 
+
         <div class="tableWrap">
 
           <table>
@@ -959,6 +986,7 @@ td code{
               </tr>
 
             </thead>
+
 
             <tbody id="usersBody">
 
@@ -984,6 +1012,7 @@ td code{
 
     </section>
 
+
     <section
       id="page-rooms"
       class="page"
@@ -1002,6 +1031,7 @@ td code{
 
         </div>
 
+
         <div class="tableWrap">
 
           <table>
@@ -1017,6 +1047,7 @@ td code{
               </tr>
 
             </thead>
+
 
             <tbody id="roomsBody">
 
@@ -1042,6 +1073,7 @@ td code{
 
     </section>
 
+
     <section
       id="page-records"
       class="page"
@@ -1060,6 +1092,7 @@ td code{
 
         </div>
 
+
         <div class="tableWrap">
 
           <table>
@@ -1075,6 +1108,7 @@ td code{
               </tr>
 
             </thead>
+
 
             <tbody id="recordsBody">
 
@@ -1100,6 +1134,7 @@ td code{
 
     </section>
 
+
     <section
       id="page-activity"
       class="page"
@@ -1108,9 +1143,11 @@ td code{
       <div class="card">
 
         <div class="cardHeader">
+
           <h2>
             即時活動
           </h2>
+
         </div>
 
         <div
@@ -1128,6 +1165,7 @@ td code{
 
     </section>
 
+
     <section
       id="page-errors"
       class="page"
@@ -1136,9 +1174,11 @@ td code{
       <div class="card">
 
         <div class="cardHeader">
+
           <h2>
             系統錯誤
           </h2>
+
         </div>
 
         <div
@@ -1160,11 +1200,14 @@ td code{
 
 </div>
 
+
 <script type="module">
 
 import {
   GoogleAuthProvider,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signOut,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
@@ -1183,8 +1226,21 @@ import {
 
 const db = database;
 
+
+/*
+  目前指定的管理員 UID
+*/
+const ADMIN_UID =
+  "nJdwA4Heqrbtqdt1atbiOsVi7r23";
+
+
 const googleProvider =
   new GoogleAuthProvider();
+
+
+googleProvider.setCustomParameters({
+  prompt:"select_account"
+});
 
 
 const $ = id =>
@@ -1198,6 +1254,10 @@ let allRecords = [];
 let listenersStarted = false;
 let unsubscribeFns = [];
 
+
+/* =========================
+   基礎工具
+========================= */
 
 function esc(value){
 
@@ -1223,8 +1283,10 @@ function formatTime(value){
 
   }
 
+
   const number =
     Number(value);
+
 
   if(
     !Number.isFinite(number)
@@ -1235,6 +1297,7 @@ function formatTime(value){
     );
 
   }
+
 
   return new Intl.DateTimeFormat(
     "zh-TW",
@@ -1255,6 +1318,43 @@ function formatTime(value){
 }
 
 
+function showLoginError(message){
+
+  const box =
+    $("loginError");
+
+  if(!box){
+    console.error(message);
+    return;
+  }
+
+  box.textContent =
+    message || "未知錯誤";
+
+  box.style.display =
+    "block";
+
+}
+
+
+function clearLoginError(){
+
+  const box =
+    $("loginError");
+
+  if(!box){
+    return;
+  }
+
+  box.textContent =
+    "";
+
+  box.style.display =
+    "none";
+
+}
+
+
 function setFirebaseStatus(
   type,
   text
@@ -1263,10 +1363,15 @@ function setFirebaseStatus(
   const status =
     $("firebaseStatus");
 
+  if(!status){
+    return;
+  }
+
   status.classList.remove(
     "ok",
     "error"
   );
+
 
   if(
     type === "ok"
@@ -1278,6 +1383,7 @@ function setFirebaseStatus(
 
   }
 
+
   if(
     type === "error"
   ){
@@ -1288,135 +1394,292 @@ function setFirebaseStatus(
 
   }
 
-  $("firebaseStatusText")
-    .textContent =
-    text;
 
-}
+  const textElement =
+    $("firebaseStatusText");
 
+  if(textElement){
 
-function showLoginError(
-  message
-){
-
-  $("loginError")
-    .textContent =
-    message || "發生未知錯誤";
-
-  $("loginError")
-    .style.display =
-    "block";
-
-}
-
-
-function clearLoginError(){
-
-  $("loginError")
-    .textContent =
-    "";
-
-  $("loginError")
-    .style.display =
-    "none";
-
-}
-
-
-async function getAdminStatus(
-  user
-){
-
-  try{
-
-    const tokenResult =
-      await user.getIdTokenResult(
-        true
-      );
-
-    return (
-      tokenResult &&
-      tokenResult.claims &&
-      tokenResult.claims.admin === true
-    );
-
-  }catch(error){
-
-    console.error(
-      "Admin claim:",
-      error
-    );
-
-    return false;
+    textElement.textContent =
+      text;
 
   }
 
 }
 
 
-$("googleLogin").onclick =
-  async () => {
+/* =========================
+   Firebase Auth 錯誤
+========================= */
 
-    clearLoginError();
+function authErrorMessage(error){
 
-    const button =
-      $("googleLogin");
+  const code =
+    error?.code ||
+    "unknown";
 
-    try{
+  const message =
+    error?.message ||
+    "未知錯誤";
 
-      button.disabled = true;
-      button.textContent =
-        "登入中…";
 
+  switch(code){
+
+    case "auth/popup-blocked":
+
+      return (
+        "Google 登入視窗被瀏覽器阻擋。\n\n" +
+        "請允許此網站的彈出視窗。"
+      );
+
+
+    case "auth/popup-closed-by-user":
+
+      return (
+        "Google 登入視窗被關閉。"
+      );
+
+
+    case "auth/unauthorized-domain":
+
+      return (
+        "目前網站網域尚未加入 Firebase Authentication 授權網域。\n\n" +
+        "目前網域：\n" +
+        window.location.hostname
+      );
+
+
+    case "auth/operation-not-allowed":
+
+      return (
+        "Firebase 尚未啟用 Google 登入。\n\n" +
+        "請到 Firebase Console → Authentication → Sign-in method → Google 啟用。"
+      );
+
+
+    case "auth/invalid-api-key":
+
+      return (
+        "Firebase API Key 無效。\n\n" +
+        "請檢查 firebase-config.js。"
+      );
+
+
+    case "auth/network-request-failed":
+
+      return (
+        "Firebase 網路連線失敗。\n\n" +
+        "請檢查網路後再試。"
+      );
+
+
+    default:
+
+      return (
+        "Google 登入失敗。\n\n" +
+        "錯誤代碼：\n" +
+        code +
+        "\n\n" +
+        "錯誤訊息：\n" +
+        message
+      );
+
+  }
+
+}
+
+
+/* =========================
+   Google Login
+========================= */
+
+async function loginWithGoogle(){
+
+  clearLoginError();
+
+
+  const button =
+    $("googleLogin");
+
+
+  if(!button){
+    return;
+  }
+
+
+  try{
+
+    button.disabled =
+      true;
+
+    button.textContent =
+      "Google 登入中…";
+
+
+    const result =
       await signInWithPopup(
         auth,
         googleProvider
       );
 
-    }catch(error){
 
-      console.error(
-        "Google login:",
-        error
-      );
+    console.log(
+      "Google login success:",
+      result.user.uid,
+      result.user.email
+    );
+
+
+  }catch(error){
+
+    console.error(
+      "Google login:",
+      error
+    );
+
+
+    /*
+      Popup 被阻擋時自動使用 redirect
+    */
+
+    if(
+      error?.code ===
+      "auth/popup-blocked"
+    ){
 
       showLoginError(
-        error?.message ||
-        "Google 登入失敗"
+        "登入視窗被瀏覽器阻擋，改用重新導向登入……"
       );
 
-    }finally{
 
-      button.disabled = false;
+      try{
 
-      button.textContent =
-        "使用 Google 登入";
+        await signInWithRedirect(
+          auth,
+          googleProvider
+        );
+
+        return;
+
+      }catch(redirectError){
+
+        console.error(
+          "Redirect login:",
+          redirectError
+        );
+
+        showLoginError(
+          authErrorMessage(
+            redirectError
+          )
+        );
+
+      }
+
+    }else{
+
+      showLoginError(
+        authErrorMessage(
+          error
+        )
+      );
 
     }
 
-  };
+  }finally{
+
+    button.disabled =
+      false;
+
+    button.textContent =
+      "使用 Google 登入";
+
+  }
+
+}
 
 
-$("logout").onclick =
-  async () => {
+$("googleLogin")
+  ?.addEventListener(
+    "click",
+    loginWithGoogle
+  );
 
-    try{
 
-      await signOut(
+/* =========================
+   Redirect Result
+========================= */
+
+(async function(){
+
+  try{
+
+    const result =
+      await getRedirectResult(
         auth
       );
 
-    }catch(error){
 
-      console.error(
-        "Logout:",
-        error
+    if(result?.user){
+
+      console.log(
+        "Redirect login success:",
+        result.user.uid
       );
 
     }
 
-  };
+  }catch(error){
 
+    console.error(
+      "Redirect result:",
+      error
+    );
+
+    showLoginError(
+      authErrorMessage(
+        error
+      )
+    );
+
+  }
+
+})();
+
+
+/* =========================
+   Logout
+========================= */
+
+$("logout")
+  ?.addEventListener(
+    "click",
+    async () => {
+
+      try{
+
+        stopRealtimeListeners();
+
+        await signOut(
+          auth
+        );
+
+      }catch(error){
+
+        console.error(
+          "Logout:",
+          error
+        );
+
+      }
+
+    }
+  );
+
+
+/* =========================
+   Navigation
+========================= */
 
 const pageNames = {
 
@@ -1434,7 +1697,8 @@ document
   .querySelectorAll(".nav button")
   .forEach(button => {
 
-    button.onclick =
+    button.addEventListener(
+      "click",
       () => {
 
         document
@@ -1447,6 +1711,7 @@ document
 
           });
 
+
         document
           .querySelectorAll(".page")
           .forEach(page => {
@@ -1457,15 +1722,19 @@ document
 
           });
 
+
         button.classList.add(
           "active"
         );
 
+
         const page =
           button.dataset.page;
 
+
         const target =
           $(`page-${page}`);
+
 
         if(target){
 
@@ -1475,15 +1744,21 @@ document
 
         }
 
+
         $("pageTitle")
           .textContent =
           pageNames[page] ||
           page;
 
-      };
+      }
+    );
 
   });
 
+
+/* =========================
+   Listener cleanup
+========================= */
 
 function stopRealtimeListeners(){
 
@@ -1506,12 +1781,17 @@ function stopRealtimeListeners(){
     }
   );
 
+
   unsubscribeFns = [];
 
   listenersStarted = false;
 
 }
 
+
+/* =========================
+   Load Users
+========================= */
 
 function loadUsers(){
 
@@ -1525,22 +1805,29 @@ function loadUsers(){
       snapshot => {
 
         const data =
-          snapshot.val() || {};
+          snapshot.val() ||
+          {};
+
 
         allUsers =
           Object.entries(data)
             .map(
               ([uid,value]) => ({
+
                 uid,
+
                 ...(value || {})
+
               })
             );
+
 
         $("statUsers")
           .textContent =
           String(
             allUsers.length
           );
+
 
         renderUsers();
 
@@ -1549,25 +1836,29 @@ function loadUsers(){
       error => {
 
         console.error(
-          "Users:",
+          "users:",
           error
         );
+
 
         $("databaseStatus")
           .textContent =
           "Users 讀取失敗";
 
+
         $("databaseStatus")
           .style.color =
           "#dc2626";
 
+
         setFirebaseStatus(
           "error",
-          "Firebase 讀取失敗"
+          "Users 讀取失敗"
         );
 
       }
     );
+
 
   unsubscribeFns.push(
     unsubscribe
@@ -1575,6 +1866,10 @@ function loadUsers(){
 
 }
 
+
+/* =========================
+   Load Rooms + Records
+========================= */
 
 function loadRooms(){
 
@@ -1588,10 +1883,13 @@ function loadRooms(){
       snapshot => {
 
         const data =
-          snapshot.val() || {};
+          snapshot.val() ||
+          {};
+
 
         allRooms = [];
         allRecords = [];
+
 
         for(
           const [
@@ -1607,17 +1905,20 @@ function loadRooms(){
               ? room
               : {};
 
+
           const meta =
             safeRoom.meta &&
             typeof safeRoom.meta === "object"
               ? safeRoom.meta
               : {};
 
+
           const members =
             safeRoom.members &&
             typeof safeRoom.members === "object"
               ? safeRoom.members
               : {};
+
 
           allRooms.push({
 
@@ -1646,6 +1947,18 @@ function loadRooms(){
 
           });
 
+
+          /*
+            實際結構：
+
+            rooms
+              roomId
+                records
+                  date
+                    hour
+                      uid
+                        record
+          */
 
           const records =
             safeRoom.records &&
@@ -1706,12 +2019,14 @@ function loadRooms(){
                         value:record
                       };
 
+
                 allRecords.push({
 
                   roomId,
                   date,
                   hour,
                   uid,
+
                   ...safeRecord
 
                 });
@@ -1743,7 +2058,8 @@ function loadRooms(){
           new Intl.DateTimeFormat(
             "en-CA",
             {
-              timeZone:"Asia/Taipei"
+              timeZone:
+                "Asia/Taipei"
             }
           ).format(
             new Date()
@@ -1769,6 +2085,7 @@ function loadRooms(){
           .textContent =
           "正常";
 
+
         $("databaseStatus")
           .style.color =
           "#16a34a";
@@ -1784,17 +2101,20 @@ function loadRooms(){
       error => {
 
         console.error(
-          "Rooms:",
+          "rooms:",
           error
         );
+
 
         $("databaseStatus")
           .textContent =
           "讀取失敗";
 
+
         $("databaseStatus")
           .style.color =
           "#dc2626";
+
 
         setFirebaseStatus(
           "error",
@@ -1804,6 +2124,7 @@ function loadRooms(){
       }
     );
 
+
   unsubscribeFns.push(
     unsubscribe
   );
@@ -1811,17 +2132,22 @@ function loadRooms(){
 }
 
 
+/* =========================
+   Start Realtime
+========================= */
+
 function loadRealtimeData(){
 
-  if(
-    listenersStarted
-  ){
+  if(listenersStarted){
 
     return;
 
   }
 
-  listenersStarted = true;
+
+  listenersStarted =
+    true;
+
 
   loadUsers();
   loadRooms();
@@ -1829,17 +2155,32 @@ function loadRealtimeData(){
 }
 
 
+/* =========================
+   Render Users
+========================= */
+
 function renderUsers(){
 
+  const body =
+    $("usersBody");
+
+
+  if(!body){
+    return;
+  }
+
+
   const keyword =
-    ($("userSearch").value || "")
+    (
+      $("userSearch")?.value ||
+      ""
+    )
       .trim()
       .toLowerCase();
 
 
   const rows =
     allUsers
-
       .filter(
         user =>
           [
@@ -1853,7 +2194,6 @@ function renderUsers(){
               keyword
             )
       )
-
       .sort(
         (a,b) =>
           String(
@@ -1867,12 +2207,9 @@ function renderUsers(){
       );
 
 
-  if(
-    !rows.length
-  ){
+  if(!rows.length){
 
-    $("usersBody").innerHTML =
-      `
+    body.innerHTML = `
       <tr>
         <td colspan="5">
           <div class="empty">
@@ -1880,18 +2217,17 @@ function renderUsers(){
           </div>
         </td>
       </tr>
-      `;
+    `;
 
     return;
 
   }
 
 
-  $("usersBody").innerHTML =
+  body.innerHTML =
     rows
       .map(
-        user =>
-          `
+        user => `
           <tr>
 
             <td>
@@ -1931,24 +2267,39 @@ function renderUsers(){
             </td>
 
           </tr>
-          `
+        `
       )
       .join("");
 
 }
 
 
+/* =========================
+   Render Rooms
+========================= */
+
 function renderRooms(){
 
+  const body =
+    $("roomsBody");
+
+
+  if(!body){
+    return;
+  }
+
+
   const keyword =
-    ($("roomSearch").value || "")
+    (
+      $("roomSearch")?.value ||
+      ""
+    )
       .trim()
       .toLowerCase();
 
 
   const rows =
     allRooms
-
       .filter(
         room =>
           [
@@ -1962,7 +2313,6 @@ function renderRooms(){
               keyword
             )
       )
-
       .sort(
         (a,b) =>
           Number(
@@ -1974,12 +2324,9 @@ function renderRooms(){
       );
 
 
-  if(
-    !rows.length
-  ){
+  if(!rows.length){
 
-    $("roomsBody").innerHTML =
-      `
+    body.innerHTML = `
       <tr>
         <td colspan="5">
           <div class="empty">
@@ -1987,18 +2334,17 @@ function renderRooms(){
           </div>
         </td>
       </tr>
-      `;
+    `;
 
     return;
 
   }
 
 
-  $("roomsBody").innerHTML =
+  body.innerHTML =
     rows
       .map(
-        room =>
-          `
+        room => `
           <tr>
 
             <td>
@@ -2039,24 +2385,39 @@ function renderRooms(){
             </td>
 
           </tr>
-          `
+        `
       )
       .join("");
 
 }
 
 
+/* =========================
+   Render Records
+========================= */
+
 function renderRecords(){
 
+  const body =
+    $("recordsBody");
+
+
+  if(!body){
+    return;
+  }
+
+
   const keyword =
-    ($("recordSearch").value || "")
+    (
+      $("recordSearch")?.value ||
+      ""
+    )
       .trim()
       .toLowerCase();
 
 
   const rows =
     allRecords
-
       .filter(
         record =>
           [
@@ -2074,7 +2435,6 @@ function renderRecords(){
               keyword
             )
       )
-
       .sort(
         (a,b) =>
           Number(
@@ -2088,19 +2448,15 @@ function renderRecords(){
             0
           )
       )
-
       .slice(
         0,
         500
       );
 
 
-  if(
-    !rows.length
-  ){
+  if(!rows.length){
 
-    $("recordsBody").innerHTML =
-      `
+    body.innerHTML = `
       <tr>
         <td colspan="5">
           <div class="empty">
@@ -2108,18 +2464,17 @@ function renderRecords(){
           </div>
         </td>
       </tr>
-      `;
+    `;
 
     return;
 
   }
 
 
-  $("recordsBody").innerHTML =
+  body.innerHTML =
     rows
       .map(
-        record =>
-          `
+        record => `
           <tr>
 
             <td>
@@ -2163,14 +2518,27 @@ function renderRecords(){
             </td>
 
           </tr>
-          `
+        `
       )
       .join("");
 
 }
 
 
+/* =========================
+   Dashboard Activity
+========================= */
+
 function renderDashboardActivity(){
+
+  const container =
+    $("dashboardActivity");
+
+
+  if(!container){
+    return;
+  }
+
 
   const activity = [];
 
@@ -2223,10 +2591,12 @@ function renderDashboardActivity(){
     .sort(
       (a,b) =>
         Number(
-          b.createdAt || 0
+          b.createdAt ||
+          0
         ) -
         Number(
-          a.createdAt || 0
+          a.createdAt ||
+          0
         )
     )
     .slice(
@@ -2256,10 +2626,12 @@ function renderDashboardActivity(){
   activity.sort(
     (a,b) =>
       Number(
-        b.time || 0
+        b.time ||
+        0
       ) -
       Number(
-        a.time || 0
+        a.time ||
+        0
       )
   );
 
@@ -2271,124 +2643,116 @@ function renderDashboardActivity(){
     );
 
 
-  if(
-    !limited.length
-  ){
+  if(!limited.length){
 
-    $("dashboardActivity")
-      .innerHTML =
-      `
+    container.innerHTML = `
       <div class="empty">
         目前沒有活動
       </div>
-      `;
+    `;
 
     return;
 
   }
 
 
-  $("dashboardActivity")
-    .innerHTML =
-      limited
-        .map(
-          item =>
-            `
-            <div class="activityItem">
+  container.innerHTML =
+    limited
+      .map(
+        item => `
+          <div class="activityItem">
 
-              <div class="activityDot"></div>
+            <div class="activityDot"></div>
 
-              <div>
+            <div>
 
-                <div class="activityText">
-                  ${esc(
-                    item.text
-                  )}
-                </div>
+              <div class="activityText">
+                ${esc(
+                  item.text
+                )}
+              </div>
 
-                <div class="activityTime">
-                  ${formatTime(
-                    item.time
-                  )}
-                </div>
-
+              <div class="activityTime">
+                ${formatTime(
+                  item.time
+                )}
               </div>
 
             </div>
-            `
-        )
-        .join("");
+
+          </div>
+        `
+      )
+      .join("");
 
 }
 
 
-$("sendBroadcastBtn").onclick =
-  async () => {
+/* =========================
+   Broadcast
+========================= */
 
-    const text =
-      $("broadcastInput")
-        .value
-        .trim();
+$("sendBroadcastBtn")
+  ?.addEventListener(
+    "click",
+    async () => {
 
-
-    if(
-      !text
-    ){
-
-      alert(
-        "請輸入廣播內容。"
-      );
-
-      return;
-
-    }
+      const input =
+        $("broadcastInput");
 
 
-    if(
-      text.length > 500
-    ){
-
-      alert(
-        "廣播內容不能超過 500 字。"
-      );
-
-      return;
-
-    }
+      const text =
+        input?.value
+          ?.trim() ||
+        "";
 
 
-    const user =
-      auth.currentUser;
+      if(!text){
 
-
-    if(
-      !user
-    ){
-
-      alert(
-        "尚未登入。"
-      );
-
-      return;
-
-    }
-
-
-    try{
-
-      const tokenResult =
-        await user.getIdTokenResult(
-          true
+        alert(
+          "請輸入廣播內容。"
         );
+
+        return;
+
+      }
 
 
       if(
-        !tokenResult.claims ||
-        tokenResult.claims.admin !== true
+        text.length > 500
       ){
 
         alert(
-          "目前帳號沒有 Admin 權限。"
+          "廣播內容不能超過 500 字。"
+        );
+
+        return;
+
+      }
+
+
+      const user =
+        auth.currentUser;
+
+
+      if(!user){
+
+        alert(
+          "尚未登入。"
+        );
+
+        return;
+
+      }
+
+
+      if(
+        user.uid !==
+        ADMIN_UID
+      ){
+
+        alert(
+          "目前帳號不是指定管理員。"
         );
 
         return;
@@ -2400,227 +2764,156 @@ $("sendBroadcastBtn").onclick =
         $("sendBroadcastBtn");
 
 
-      button.disabled = true;
+      try{
 
-      button.textContent =
-        "發送中…";
+        button.disabled =
+          true;
 
-
-      await set(
-        ref(
-          db,
-          "system/broadcast"
-        ),
-        {
-          text,
-          timestamp:Date.now(),
-          senderUid:user.uid
-        }
-      );
+        button.textContent =
+          "發送中…";
 
 
-      $("broadcastInput")
-        .value =
-        "";
+        await set(
+          ref(
+            db,
+            "system/broadcast"
+          ),
+          {
+            text,
+            timestamp:
+              Date.now(),
+            senderUid:
+              user.uid
+          }
+        );
 
 
-      alert(
-        "全站廣播已發送。"
-      );
+        input.value =
+          "";
 
 
-    }catch(error){
+        alert(
+          "全站廣播已發送。"
+        );
 
-      console.error(
-        "Broadcast:",
-        error
-      );
 
-      alert(
-        "發送失敗：\n" +
-        (
-          error?.message ||
-          String(error)
-        )
-      );
+      }catch(error){
 
-    }finally{
+        console.error(
+          "broadcast:",
+          error
+        );
 
-      const button =
-        $("sendBroadcastBtn");
 
-      button.disabled = false;
+        alert(
+          "發送失敗：\n" +
+          (
+            error?.message ||
+            String(error)
+          )
+        );
 
-      button.textContent =
-        "發送廣播";
+      }finally{
+
+        button.disabled =
+          false;
+
+        button.textContent =
+          "發送廣播";
+
+      }
 
     }
+  );
 
-  };
 
+/* =========================
+   Search
+========================= */
 
 $("userSearch")
-  .addEventListener(
+  ?.addEventListener(
     "input",
     renderUsers
   );
 
 
 $("roomSearch")
-  .addEventListener(
+  ?.addEventListener(
     "input",
     renderRooms
   );
 
 
 $("recordSearch")
-  .addEventListener(
+  ?.addEventListener(
     "input",
     renderRecords
   );
 
 
+/* =========================
+   Auth State
+========================= */
+
 onAuthStateChanged(
   auth,
   async user => {
 
-    if(
-      !user
-    ){
+    if(!user){
 
       stopRealtimeListeners();
+
 
       $("loginScreen")
         .style.display =
         "flex";
+
 
       $("adminApp")
         .classList.add(
           "hide"
         );
 
+
       $("authStatus")
         .textContent =
         "未登入";
+
 
       $("adminClaimStatus")
         .textContent =
         "未驗證";
 
-      $("adminClaimStatus")
-        .style.color =
-        "";
+
+      setFirebaseStatus(
+        "error",
+        "尚未登入"
+      );
+
 
       return;
 
     }
 
 
-    try{
-
-      clearLoginError();
-
-
-      const isAdmin =
-        await getAdminStatus(
-          user
-        );
+    console.log(
+      "Firebase Auth:",
+      user.uid,
+      user.email
+    );
 
 
-      if(
-        !isAdmin
-      ){
+    /*
+      前端只負責控制 Admin UI。
+      真正的資料庫權限仍必須由
+      database.rules.json 控制。
+    */
 
-        stopRealtimeListeners();
-
-        $("adminClaimStatus")
-          .textContent =
-          "無 Admin 權限";
-
-        $("adminClaimStatus")
-          .style.color =
-          "#dc2626";
-
-        showLoginError(
-          "這個 Google 帳號沒有 Admin 權限。\n\n" +
-          "UID：" +
-          user.uid
-        );
-
-
-        await signOut(
-          auth
-        );
-
-
-        return;
-
-      }
-
-
-      $("loginScreen")
-        .style.display =
-        "none";
-
-
-      $("adminApp")
-        .classList.remove(
-          "hide"
-        );
-
-
-      $("adminName")
-        .textContent =
-        user.displayName ||
-        "管理員";
-
-
-      $("adminEmail")
-        .textContent =
-        user.email ||
-        user.uid;
-
-
-      $("firebaseAdminUid")
-        .textContent =
-        user.uid;
-
-
-      $("adminClaimStatus")
-        .textContent =
-        "Admin ✓";
-
-
-      $("adminClaimStatus")
-        .style.color =
-        "#16a34a";
-
-
-      $("authStatus")
-        .textContent =
-        "已驗證";
-
-
-      $("authStatus")
-        .style.color =
-        "#16a34a";
-
-
-      $("databaseStatus")
-        .textContent =
-        "讀取中…";
-
-
-      loadRealtimeData();
-
-
-    }catch(error){
-
-      console.error(
-        "Admin authentication:",
-        error
-      );
-
+    if(
+      user.uid !==
+      ADMIN_UID
+    ){
 
       stopRealtimeListeners();
 
@@ -2636,9 +2929,28 @@ onAuthStateChanged(
         );
 
 
+      $("authStatus")
+        .textContent =
+        "已登入";
+
+
+      $("adminClaimStatus")
+        .textContent =
+        "無管理員權限";
+
+
+      $("adminClaimStatus")
+        .style.color =
+        "#dc2626";
+
+
       showLoginError(
-        error?.message ||
-        "管理員驗證失敗"
+        "Google 登入成功，但此 Google 帳號沒有管理員權限。\n\n" +
+        "目前 UID：\n" +
+        user.uid +
+        "\n\n" +
+        "管理員 UID：\n" +
+        ADMIN_UID
       );
 
 
@@ -2648,18 +2960,87 @@ onAuthStateChanged(
           auth
         );
 
-      }catch(signOutError){
+      }catch(error){
 
         console.error(
-          "Sign out:",
-          signOutError
+          "signOut:",
+          error
         );
 
       }
 
+
+      return;
+
     }
 
-  );
+
+    clearLoginError();
+
+
+    $("loginScreen")
+      .style.display =
+      "none";
+
+
+    $("adminApp")
+      .classList.remove(
+        "hide"
+      );
+
+
+    $("adminName")
+      .textContent =
+      user.displayName ||
+      "管理員";
+
+
+    $("adminEmail")
+      .textContent =
+      user.email ||
+      user.uid;
+
+
+    $("firebaseAdminUid")
+      .textContent =
+      user.uid;
+
+
+    $("adminClaimStatus")
+      .textContent =
+      "管理員 ✓";
+
+
+    $("adminClaimStatus")
+      .style.color =
+      "#16a34a";
+
+
+    $("authStatus")
+      .textContent =
+      "已驗證";
+
+
+    $("authStatus")
+      .style.color =
+      "#16a34a";
+
+
+    $("databaseStatus")
+      .textContent =
+      "讀取中…";
+
+
+    setFirebaseStatus(
+      "ok",
+      "Firebase 已登入"
+    );
+
+
+    loadRealtimeData();
+
+  }
+);
 
 </script>
 
