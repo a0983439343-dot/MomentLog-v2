@@ -19,67 +19,133 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-messaging.onBackgroundMessage((payload) => {
+messaging.onBackgroundMessage(function(payload) {
+
+  const data =
+    payload && payload.data
+      ? payload.data
+      : {};
+
+  const notification =
+    payload && payload.notification
+      ? payload.notification
+      : {};
+
   const title =
-    payload?.data?.title ||
-    payload?.notification?.title ||
+    data.title ||
+    notification.title ||
     "MomentLog";
 
   const body =
-    payload?.data?.body ||
-    payload?.notification?.body ||
+    data.body ||
+    notification.body ||
     "該記錄了！";
+
+  const tag =
+    data.tag ||
+    "momentlog";
+
+  const url =
+    data.url ||
+    "./";
 
   self.registration.showNotification(
     title,
     {
-      body,
+      body: body,
+
       icon: "./icon-192.png",
+
       badge: "./icon-192.png",
-      tag:
-        payload?.data?.tag ||
-        "momentlog-reminder",
+
+      tag: tag,
+
+      renotify: true,
+
       data: {
-        url: "./"
+        url: url
       }
     }
   );
+
 });
 
 self.addEventListener(
   "notificationclick",
-  (event) => {
+  function(event) {
 
     event.notification.close();
 
+    const url =
+      event.notification &&
+      event.notification.data &&
+      event.notification.data.url
+        ? event.notification.data.url
+        : "./";
+
     const targetUrl =
       new URL(
-        event.notification?.data?.url || "./",
+        url,
         self.location.origin
       ).href;
 
     event.waitUntil(
+
       clients
         .matchAll({
           type: "window",
           includeUncontrolled: true
         })
-        .then((clientList) => {
+        .then(
+          function(clientList) {
 
-          for (const client of clientList) {
-            if ("focus" in client) {
-              return client.focus();
+            for (
+              const client
+              of clientList
+            ) {
+
+              if (
+                client.url === targetUrl &&
+                "focus" in client
+              ) {
+
+                return client.focus();
+
+              }
+
             }
-          }
 
-          if ("openWindow" in clients) {
-            return clients.openWindow(
-              targetUrl
-            );
-          }
+            for (
+              const client
+              of clientList
+            ) {
 
-          return undefined;
-        })
+              if (
+                "focus" in client
+              ) {
+
+                return client.focus();
+
+              }
+
+            }
+
+            if (
+              "openWindow" in clients
+            ) {
+
+              return clients.openWindow(
+                targetUrl
+              );
+
+            }
+
+            return undefined;
+
+          }
+        )
+
     );
+
   }
 );
