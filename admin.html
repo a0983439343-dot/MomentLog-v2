@@ -560,6 +560,17 @@ td code{
 
     <section id="page-dashboard" class="page active">
 
+      <!-- 📢 這裡加了發送廣播按鈕 -->
+      <div class="card" style="margin-bottom:16px">
+        <div class="cardHeader">
+          <h2>📢 發送全站廣播通知</h2>
+        </div>
+        <div class="cardBody" style="padding:18px; display:flex; gap:10px;">
+          <input id="broadcastInput" class="search" placeholder="輸入要發送給所有在線用戶的公告訊息...">
+          <button id="sendBroadcastBtn" class="btn" style="flex:none; padding:10px 20px; background:#4f46e5; color:#fff; border:none; border-radius:10px;">發送廣播</button>
+        </div>
+      </div>
+
       <div class="statsGrid">
         <div class="statCard">
           <div class="statLabel">使用者</div>
@@ -746,7 +757,8 @@ import {
 import {
   getDatabase,
   ref,
-  onValue
+  onValue,
+  set
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-database.js";
 
 import firebaseConfig from "./firebase-config.js";
@@ -812,6 +824,27 @@ $("googleLogin").onclick = async () => {
 
 $("logout").onclick = async () => {
   await signOut(auth);
+};
+
+// 📢 這裡加入了發送廣播的點擊事件
+$("sendBroadcastBtn").onclick = async () => {
+  const text = $("broadcastInput").value.trim();
+  if(!text) return;
+
+  try {
+    $("sendBroadcastBtn").disabled = true;
+    await set(ref(db, "system/broadcast"), {
+      text,
+      timestamp: Date.now()
+    });
+    $("broadcastInput").value = "";
+    alert("全站廣播已發送！");
+  } catch(error) {
+    console.error(error);
+    alert("發送失敗：" + error.message);
+  } finally {
+    $("sendBroadcastBtn").disabled = false;
+  }
 };
 
 const pageNames = {
