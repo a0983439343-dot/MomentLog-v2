@@ -5,10 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#111827">
 <meta name="google" content="notranslate">
+
 <title>MomentLog Admin</title>
 
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
 
 :root{
   --bg:#f5f7fb;
@@ -24,7 +28,8 @@
   --yellow:#ca8a04;
 }
 
-html,body{
+html,
+body{
   margin:0;
   min-height:100%;
   background:var(--bg);
@@ -32,11 +37,19 @@ html,body{
 
 body{
   min-height:100vh;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","Microsoft JhengHei",sans-serif;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    "Noto Sans TC",
+    "Microsoft JhengHei",
+    sans-serif;
   color:var(--text);
 }
 
-button,input,select{
+button,
+input,
+select{
   font:inherit;
 }
 
@@ -378,6 +391,10 @@ button:disabled{
   font-weight:700;
 }
 
+.actionBtn:hover{
+  filter:brightness(.96);
+}
+
 .tableWrap{
   overflow:auto;
 }
@@ -388,7 +405,8 @@ table{
   border-collapse:collapse;
 }
 
-th,td{
+th,
+td{
   padding:13px 15px;
   border-bottom:1px solid #eef0f4;
   text-align:left;
@@ -406,7 +424,12 @@ th{
 }
 
 td code{
-  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Consolas,
+    monospace;
   font-size:11px;
   color:#475569;
   word-break:break-all;
@@ -447,12 +470,6 @@ td code{
   padding:40px 15px;
 }
 
-.detailGrid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:14px;
-}
-
 .detailLine{
   padding:11px 14px;
   border-bottom:1px solid #eef0f4;
@@ -485,6 +502,7 @@ td code{
 }
 
 @media(max-width:1050px){
+
   .statsGrid{
     grid-template-columns:repeat(2,minmax(0,1fr));
   }
@@ -492,9 +510,11 @@ td code{
   .contentGrid{
     grid-template-columns:1fr;
   }
+
 }
 
 @media(max-width:760px){
+
   .sidebar{
     position:static;
     width:100%;
@@ -526,20 +546,19 @@ td code{
   .broadcastBox{
     flex-direction:column;
   }
+
 }
 
 @media(max-width:480px){
-  .statsGrid{
-    grid-template-columns:1fr;
-  }
 
-  .detailGrid{
+  .statsGrid{
     grid-template-columns:1fr;
   }
 
   .main{
     padding:12px;
   }
+
 }
 </style>
 </head>
@@ -547,67 +566,120 @@ td code{
 <body>
 
 <section id="loginScreen" class="loginScreen">
-  <div class="loginCard">
-    <div class="loginIcon">🛠️</div>
 
-    <h1>MomentLog Admin</h1>
+  <div class="loginCard">
+
+    <div class="loginIcon">
+      🛠️
+    </div>
+
+    <h1>
+      MomentLog Admin
+    </h1>
 
     <p>
       MomentLog 管理後台<br>
       僅限具有管理員權限的帳號。
     </p>
 
-    <button id="googleLogin" class="loginButton">
+    <button
+      id="googleLogin"
+      class="loginButton"
+      type="button"
+    >
       使用 Google 登入
     </button>
 
-    <div id="loginError" class="loginError"></div>
+    <div
+      id="loginError"
+      class="loginError"
+    ></div>
+
   </div>
+
 </section>
 
-<div id="adminApp" class="app hide">
+<div
+  id="adminApp"
+  class="app hide"
+>
 
   <aside class="sidebar">
 
     <div class="logo">
       MomentLog
-      <small>Admin Dashboard</small>
+      <small>
+        Admin Dashboard
+      </small>
     </div>
 
     <div class="adminInfo">
-      <div id="adminName" class="adminName">管理員</div>
-      <div id="adminEmail">—</div>
+
+      <div
+        id="adminName"
+        class="adminName"
+      >
+        管理員
+      </div>
+
+      <div id="adminEmail">
+        —
+      </div>
+
     </div>
 
     <nav class="nav">
 
-      <button class="active" data-page="dashboard">
+      <button
+        class="active"
+        data-page="dashboard"
+        type="button"
+      >
         📊 總覽
       </button>
 
-      <button data-page="users">
+      <button
+        data-page="users"
+        type="button"
+      >
         👤 使用者
       </button>
 
-      <button data-page="rooms">
+      <button
+        data-page="rooms"
+        type="button"
+      >
         🏠 房間
       </button>
 
-      <button data-page="records">
+      <button
+        data-page="records"
+        type="button"
+      >
         📝 紀錄
       </button>
 
-      <button data-page="activity">
+      <button
+        data-page="activity"
+        type="button"
+      >
         📡 活動監控
       </button>
 
-      <button data-page="errors">
+      <button
+        data-page="errors"
+        type="button"
+      >
         🚨 錯誤監控
       </button>
 
     </nav>
 
-    <button id="logout" class="logoutBtn">
+    <button
+      id="logout"
+      class="logoutBtn"
+      type="button"
+    >
       登出管理後台
     </button>
 
@@ -617,28 +689,48 @@ td code{
 
     <div class="topbar">
 
-      <h1 id="pageTitle" class="pageTitle">
+      <h1
+        id="pageTitle"
+        class="pageTitle"
+      >
         總覽
       </h1>
 
-      <div id="firebaseStatus" class="status">
+      <div
+        id="firebaseStatus"
+        class="status"
+      >
+
         <span class="statusDot"></span>
+
         <span id="firebaseStatusText">
           Firebase 連線中…
         </span>
+
       </div>
 
     </div>
 
-    <section id="page-dashboard" class="page active">
+    <section
+      id="page-dashboard"
+      class="page active"
+    >
 
-      <div class="card" style="margin-bottom:16px">
+      <div
+        class="card"
+        style="margin-bottom:16px"
+      >
 
         <div class="cardHeader">
-          <h2>📢 發送全站廣播通知</h2>
+          <h2>
+            📢 發送全站廣播通知
+          </h2>
         </div>
 
-        <div class="cardBody" style="padding:18px">
+        <div
+          class="cardBody"
+          style="padding:18px"
+        >
 
           <div class="broadcastBox">
 
@@ -646,12 +738,14 @@ td code{
               id="broadcastInput"
               class="search"
               maxlength="500"
+              type="text"
               placeholder="輸入要發送給所有線上用戶的公告訊息..."
             >
 
             <button
               id="sendBroadcastBtn"
               class="actionBtn"
+              type="button"
             >
               發送廣播
             </button>
@@ -659,28 +753,61 @@ td code{
           </div>
 
         </div>
+
       </div>
 
       <div class="statsGrid">
 
         <div class="statCard">
-          <div class="statLabel">使用者</div>
-          <div id="statUsers" class="statNumber">0</div>
+          <div class="statLabel">
+            使用者
+          </div>
+
+          <div
+            id="statUsers"
+            class="statNumber"
+          >
+            0
+          </div>
         </div>
 
         <div class="statCard">
-          <div class="statLabel">房間</div>
-          <div id="statRooms" class="statNumber">0</div>
+          <div class="statLabel">
+            房間
+          </div>
+
+          <div
+            id="statRooms"
+            class="statNumber"
+          >
+            0
+          </div>
         </div>
 
         <div class="statCard">
-          <div class="statLabel">總紀錄</div>
-          <div id="statRecords" class="statNumber">0</div>
+          <div class="statLabel">
+            總紀錄
+          </div>
+
+          <div
+            id="statRecords"
+            class="statNumber"
+          >
+            0
+          </div>
         </div>
 
         <div class="statCard">
-          <div class="statLabel">今日紀錄</div>
-          <div id="statToday" class="statNumber">0</div>
+          <div class="statLabel">
+            今日紀錄
+          </div>
+
+          <div
+            id="statToday"
+            class="statNumber"
+          >
+            0
+          </div>
         </div>
 
       </div>
@@ -690,10 +817,15 @@ td code{
         <div class="card">
 
           <div class="cardHeader">
-            <h2>最近活動</h2>
+            <h2>
+              最近活動
+            </h2>
           </div>
 
-          <div id="dashboardActivity" class="cardBody">
+          <div
+            id="dashboardActivity"
+            class="cardBody"
+          >
             <div class="empty">
               尚未有活動紀錄
             </div>
@@ -704,54 +836,86 @@ td code{
         <div class="card">
 
           <div class="cardHeader">
-            <h2>系統資訊</h2>
+            <h2>
+              系統資訊
+            </h2>
           </div>
 
           <div class="cardBody">
 
             <div class="detailLine">
+
               <span class="detailLabel">
                 Firebase 專案
               </span>
-              <span id="firebaseProject" class="detailValue">
-                —
+
+              <span
+                id="firebaseProject"
+                class="detailValue"
+              >
+                momentlog-afcbf
               </span>
+
             </div>
 
             <div class="detailLine">
+
               <span class="detailLabel">
                 管理員 UID
               </span>
-              <span id="firebaseAdminUid" class="detailValue">
+
+              <span
+                id="firebaseAdminUid"
+                class="detailValue"
+              >
                 —
               </span>
+
             </div>
 
             <div class="detailLine">
+
               <span class="detailLabel">
                 管理員權限
               </span>
-              <span id="adminClaimStatus" class="detailValue">
+
+              <span
+                id="adminClaimStatus"
+                class="detailValue"
+              >
                 檢查中…
               </span>
+
             </div>
 
             <div class="detailLine">
+
               <span class="detailLabel">
                 認證狀態
               </span>
-              <span id="authStatus" class="detailValue">
+
+              <span
+                id="authStatus"
+                class="detailValue"
+              >
                 —
               </span>
+
             </div>
 
             <div class="detailLine">
+
               <span class="detailLabel">
                 資料庫
               </span>
-              <span id="databaseStatus" class="detailValue">
+
+              <span
+                id="databaseStatus"
+                class="detailValue"
+              >
                 讀取中…
               </span>
+
             </div>
 
           </div>
@@ -762,7 +926,10 @@ td code{
 
     </section>
 
-    <section id="page-users" class="page">
+    <section
+      id="page-users"
+      class="page"
+    >
 
       <div class="tableCard">
 
@@ -771,6 +938,7 @@ td code{
           <input
             id="userSearch"
             class="search"
+            type="search"
             placeholder="搜尋 Google 名稱、Email、UID"
           >
 
@@ -795,11 +963,15 @@ td code{
             <tbody id="usersBody">
 
               <tr>
+
                 <td colspan="5">
+
                   <div class="empty">
                     尚未有資料
                   </div>
+
                 </td>
+
               </tr>
 
             </tbody>
@@ -812,7 +984,10 @@ td code{
 
     </section>
 
-    <section id="page-rooms" class="page">
+    <section
+      id="page-rooms"
+      class="page"
+    >
 
       <div class="tableCard">
 
@@ -821,6 +996,7 @@ td code{
           <input
             id="roomSearch"
             class="search"
+            type="search"
             placeholder="搜尋房間名稱、房間 ID、房主 UID"
           >
 
@@ -845,11 +1021,15 @@ td code{
             <tbody id="roomsBody">
 
               <tr>
+
                 <td colspan="5">
+
                   <div class="empty">
                     尚未有資料
                   </div>
+
                 </td>
+
               </tr>
 
             </tbody>
@@ -862,7 +1042,10 @@ td code{
 
     </section>
 
-    <section id="page-records" class="page">
+    <section
+      id="page-records"
+      class="page"
+    >
 
       <div class="tableCard">
 
@@ -871,6 +1054,7 @@ td code{
           <input
             id="recordSearch"
             class="search"
+            type="search"
             placeholder="搜尋紀錄文字、房間 ID、使用者 UID"
           >
 
@@ -895,11 +1079,15 @@ td code{
             <tbody id="recordsBody">
 
               <tr>
+
                 <td colspan="5">
+
                   <div class="empty">
                     尚未有資料
                   </div>
+
                 </td>
+
               </tr>
 
             </tbody>
@@ -912,15 +1100,23 @@ td code{
 
     </section>
 
-    <section id="page-activity" class="page">
+    <section
+      id="page-activity"
+      class="page"
+    >
 
       <div class="card">
 
         <div class="cardHeader">
-          <h2>即時活動</h2>
+          <h2>
+            即時活動
+          </h2>
         </div>
 
-        <div id="activityBody" class="cardBody">
+        <div
+          id="activityBody"
+          class="cardBody"
+        >
 
           <div class="empty">
             目前尚未寫入活動日誌。
@@ -932,15 +1128,23 @@ td code{
 
     </section>
 
-    <section id="page-errors" class="page">
+    <section
+      id="page-errors"
+      class="page"
+    >
 
       <div class="card">
 
         <div class="cardHeader">
-          <h2>系統錯誤</h2>
+          <h2>
+            系統錯誤
+          </h2>
         </div>
 
-        <div id="errorsBody" class="cardBody">
+        <div
+          id="errorsBody"
+          class="cardBody"
+        >
 
           <div class="empty">
             目前尚未寫入錯誤日誌。
@@ -959,7 +1163,6 @@ td code{
 <script type="module">
 
 import {
-  getAuth,
   GoogleAuthProvider,
   signInWithPopup,
   signOut,
@@ -967,27 +1170,26 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
 
 import {
-  getDatabase,
   ref,
   onValue,
   set
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-database.js";
 
-import { database, firebaseConfig } from "./firebase-config.js";
+import {
+  auth,
+  database
+} from "./firebase-config.js";
 
-/* =========================
-   Firebase
-========================= */
 
-const auth = getAuth();
-const db = database || getDatabase();
-const googleProvider = new GoogleAuthProvider();
+const db = database;
 
-/* =========================
-   Helpers
-========================= */
+const googleProvider =
+  new GoogleAuthProvider();
 
-const $ = id => document.getElementById(id);
+
+const $ = id =>
+  document.getElementById(id);
+
 
 let allUsers = [];
 let allRooms = [];
@@ -996,14 +1198,18 @@ let allRecords = [];
 let listenersStarted = false;
 let unsubscribeFns = [];
 
+
 function esc(value){
+
   return String(value ?? "")
     .replaceAll("&","&amp;")
     .replaceAll("<","&lt;")
     .replaceAll(">","&gt;")
     .replaceAll('"',"&quot;")
     .replaceAll("'","&#039;");
+
 }
+
 
 function formatTime(value){
 
@@ -1012,13 +1218,22 @@ function formatTime(value){
     value === undefined ||
     value === ""
   ){
+
     return "—";
+
   }
 
-  const number = Number(value);
+  const number =
+    Number(value);
 
-  if(!Number.isFinite(number)){
-    return esc(String(value));
+  if(
+    !Number.isFinite(number)
+  ){
+
+    return esc(
+      String(value)
+    );
+
   }
 
   return new Intl.DateTimeFormat(
@@ -1033,112 +1248,84 @@ function formatTime(value){
       second:"2-digit",
       hourCycle:"h23"
     }
-  ).format(new Date(number));
+  ).format(
+    new Date(number)
+  );
+
 }
 
-function setFirebaseStatus(type,text){
 
-  const status = $("firebaseStatus");
+function setFirebaseStatus(
+  type,
+  text
+){
+
+  const status =
+    $("firebaseStatus");
 
   status.classList.remove(
     "ok",
     "error"
   );
 
-  if(type === "ok"){
-    status.classList.add("ok");
+  if(
+    type === "ok"
+  ){
+
+    status.classList.add(
+      "ok"
+    );
+
   }
 
-  if(type === "error"){
-    status.classList.add("error");
+  if(
+    type === "error"
+  ){
+
+    status.classList.add(
+      "error"
+    );
+
   }
 
-  $("firebaseStatusText").textContent = text;
+  $("firebaseStatusText")
+    .textContent =
+    text;
+
 }
 
-/* =========================
-   Login error
-========================= */
 
-function showLoginError(message){
+function showLoginError(
+  message
+){
 
-  $("loginError").textContent = message;
-  $("loginError").style.display = "block";
+  $("loginError")
+    .textContent =
+    message || "發生未知錯誤";
+
+  $("loginError")
+    .style.display =
+    "block";
+
 }
+
 
 function clearLoginError(){
 
-  $("loginError").textContent = "";
-  $("loginError").style.display = "none";
+  $("loginError")
+    .textContent =
+    "";
+
+  $("loginError")
+    .style.display =
+    "none";
+
 }
 
-/* =========================
-   Google login
-========================= */
 
-$("googleLogin").onclick = async () => {
-
-  clearLoginError();
-
-  const button = $("googleLogin");
-
-  try{
-
-    button.disabled = true;
-    button.textContent = "登入中…";
-
-    await signInWithPopup(
-      auth,
-      googleProvider
-    );
-
-  }catch(error){
-
-    console.error(
-      "Google login:",
-      error
-    );
-
-    showLoginError(
-      error?.message ||
-      "Google 登入失敗"
-    );
-
-  }finally{
-
-    button.disabled = false;
-    button.textContent = "使用 Google 登入";
-
-  }
-
-};
-
-/* =========================
-   Logout
-========================= */
-
-$("logout").onclick = async () => {
-
-  try{
-
-    await signOut(auth);
-
-  }catch(error){
-
-    console.error(
-      "logout:",
-      error
-    );
-
-  }
-
-};
-
-/* =========================
-   Admin claim
-========================= */
-
-async function checkAdminClaim(user){
+async function getAdminStatus(
+  user
+){
 
   try{
 
@@ -1148,13 +1335,15 @@ async function checkAdminClaim(user){
       );
 
     return (
-      tokenResult?.claims?.admin === true
+      tokenResult &&
+      tokenResult.claims &&
+      tokenResult.claims.admin === true
     );
 
   }catch(error){
 
     console.error(
-      "admin claim:",
+      "Admin claim:",
       error
     );
 
@@ -1164,98 +1353,70 @@ async function checkAdminClaim(user){
 
 }
 
-/* =========================
-   Broadcast
-========================= */
 
-$("sendBroadcastBtn").onclick = async () => {
+$("googleLogin").onclick =
+  async () => {
 
-  const text =
-    $("broadcastInput")
-      .value
-      .trim();
-
-  if(!text){
-    alert("請輸入廣播內容。");
-    return;
-  }
-
-  if(text.length > 500){
-    alert("廣播內容不能超過 500 字。");
-    return;
-  }
-
-  try{
-
-    const currentUser =
-      auth.currentUser;
-
-    if(!currentUser){
-      throw new Error(
-        "尚未登入。"
-      );
-    }
-
-    const tokenResult =
-      await currentUser.getIdTokenResult();
-
-    if(tokenResult?.claims?.admin !== true){
-      throw new Error(
-        "目前帳號沒有 Admin 權限。"
-      );
-    }
+    clearLoginError();
 
     const button =
-      $("sendBroadcastBtn");
+      $("googleLogin");
 
-    button.disabled = true;
-    button.textContent = "發送中…";
+    try{
 
-    await set(
-      ref(
-        db,
-        "system/broadcast"
-      ),
-      {
-        text,
-        timestamp:Date.now(),
-        senderUid:currentUser.uid
-      }
-    );
+      button.disabled = true;
+      button.textContent =
+        "登入中…";
 
-    $("broadcastInput").value = "";
+      await signInWithPopup(
+        auth,
+        googleProvider
+      );
 
-    alert(
-      "全站廣播已發送。"
-    );
+    }catch(error){
 
-  }catch(error){
+      console.error(
+        "Google login:",
+        error
+      );
 
-    console.error(
-      "broadcast:",
-      error
-    );
+      showLoginError(
+        error?.message ||
+        "Google 登入失敗"
+      );
 
-    alert(
-      "發送失敗：\n" +
-      (error?.message || error)
-    );
+    }finally{
 
-  }finally{
+      button.disabled = false;
 
-    const button =
-      $("sendBroadcastBtn");
+      button.textContent =
+        "使用 Google 登入";
 
-    button.disabled = false;
-    button.textContent = "發送廣播";
+    }
 
-  }
+  };
 
-};
 
-/* =========================
-   Navigation
-========================= */
+$("logout").onclick =
+  async () => {
+
+    try{
+
+      await signOut(
+        auth
+      );
+
+    }catch(error){
+
+      console.error(
+        "Logout:",
+        error
+      );
+
+    }
+
+  };
+
 
 const pageNames = {
 
@@ -1268,64 +1429,79 @@ const pageNames = {
 
 };
 
+
 document
   .querySelectorAll(".nav button")
   .forEach(button => {
 
-    button.onclick = () => {
+    button.onclick =
+      () => {
 
-      document
-        .querySelectorAll(".nav button")
-        .forEach(item => {
+        document
+          .querySelectorAll(".nav button")
+          .forEach(item => {
 
-          item.classList.remove(
-            "active"
-          );
+            item.classList.remove(
+              "active"
+            );
 
-        });
+          });
 
-      document
-        .querySelectorAll(".page")
-        .forEach(page => {
+        document
+          .querySelectorAll(".page")
+          .forEach(page => {
 
-          page.classList.remove(
-            "active"
-          );
+            page.classList.remove(
+              "active"
+            );
 
-        });
+          });
 
-      button.classList.add(
-        "active"
-      );
-
-      const page =
-        button.dataset.page;
-
-      $(`page-${page}`)
-        .classList.add(
+        button.classList.add(
           "active"
         );
 
-      $("pageTitle")
-        .textContent =
-        pageNames[page] || page;
+        const page =
+          button.dataset.page;
 
-    };
+        const target =
+          $(`page-${page}`);
+
+        if(target){
+
+          target.classList.add(
+            "active"
+          );
+
+        }
+
+        $("pageTitle")
+          .textContent =
+          pageNames[page] ||
+          page;
+
+      };
 
   });
 
-/* =========================
-   Stop old listeners
-========================= */
 
 function stopRealtimeListeners(){
 
   unsubscribeFns.forEach(
-    fn => {
+    unsubscribe => {
 
       try{
-        fn();
-      }catch{}
+
+        unsubscribe();
+
+      }catch(error){
+
+        console.error(
+          "unsubscribe:",
+          error
+        );
+
+      }
 
     }
   );
@@ -1333,17 +1509,18 @@ function stopRealtimeListeners(){
   unsubscribeFns = [];
 
   listenersStarted = false;
+
 }
 
-/* =========================
-   Load users
-========================= */
 
 function loadUsers(){
 
   const unsubscribe =
     onValue(
-      ref(db,"users"),
+      ref(
+        db,
+        "users"
+      ),
 
       snapshot => {
 
@@ -1361,7 +1538,9 @@ function loadUsers(){
 
         $("statUsers")
           .textContent =
-          allUsers.length;
+          String(
+            allUsers.length
+          );
 
         renderUsers();
 
@@ -1370,7 +1549,7 @@ function loadUsers(){
       error => {
 
         console.error(
-          "users:",
+          "Users:",
           error
         );
 
@@ -1382,6 +1561,11 @@ function loadUsers(){
           .style.color =
           "#dc2626";
 
+        setFirebaseStatus(
+          "error",
+          "Firebase 讀取失敗"
+        );
+
       }
     );
 
@@ -1391,15 +1575,15 @@ function loadUsers(){
 
 }
 
-/* =========================
-   Load rooms
-========================= */
 
 function loadRooms(){
 
   const unsubscribe =
     onValue(
-      ref(db,"rooms"),
+      ref(
+        db,
+        "rooms"
+      ),
 
       snapshot => {
 
@@ -1410,15 +1594,30 @@ function loadRooms(){
         allRecords = [];
 
         for(
-          const [roomId,room]
+          const [
+            roomId,
+            room
+          ]
           of Object.entries(data)
         ){
 
+          const safeRoom =
+            room &&
+            typeof room === "object"
+              ? room
+              : {};
+
           const meta =
-            room?.meta || {};
+            safeRoom.meta &&
+            typeof safeRoom.meta === "object"
+              ? safeRoom.meta
+              : {};
 
           const members =
-            room?.members || {};
+            safeRoom.members &&
+            typeof safeRoom.members === "object"
+              ? safeRoom.members
+              : {};
 
           allRooms.push({
 
@@ -1447,21 +1646,19 @@ function loadRooms(){
 
           });
 
-          /*
-            實際資料結構：
-
-            records
-              /date
-                /hour
-                  /uid
-                    /record
-          */
 
           const records =
-            room?.records || {};
+            safeRoom.records &&
+            typeof safeRoom.records === "object"
+              ? safeRoom.records
+              : {};
+
 
           for(
-            const [date,hours]
+            const [
+              date,
+              hours
+            ]
             of Object.entries(records)
           ){
 
@@ -1469,11 +1666,17 @@ function loadRooms(){
               !hours ||
               typeof hours !== "object"
             ){
+
               continue;
+
             }
 
+
             for(
-              const [hour,users]
+              const [
+                hour,
+                users
+              ]
               of Object.entries(hours)
             ){
 
@@ -1481,13 +1684,27 @@ function loadRooms(){
                 !users ||
                 typeof users !== "object"
               ){
+
                 continue;
+
               }
 
+
               for(
-                const [uid,record]
+                const [
+                  uid,
+                  record
+                ]
                 of Object.entries(users)
               ){
+
+                const safeRecord =
+                  record &&
+                  typeof record === "object"
+                    ? record
+                    : {
+                        value:record
+                      };
 
                 allRecords.push({
 
@@ -1495,7 +1712,7 @@ function loadRooms(){
                   date,
                   hour,
                   uid,
-                  ...(record || {})
+                  ...safeRecord
 
                 });
 
@@ -1507,13 +1724,20 @@ function loadRooms(){
 
         }
 
+
         $("statRooms")
           .textContent =
-          allRooms.length;
+          String(
+            allRooms.length
+          );
+
 
         $("statRecords")
           .textContent =
-          allRecords.length;
+          String(
+            allRecords.length
+          );
+
 
         const today =
           new Intl.DateTimeFormat(
@@ -1525,16 +1749,21 @@ function loadRooms(){
             new Date()
           );
 
+
         $("statToday")
           .textContent =
-          allRecords.filter(
-            record =>
-              record.date === today
-          ).length;
+          String(
+            allRecords.filter(
+              record =>
+                record.date === today
+            ).length
+          );
+
 
         renderRooms();
         renderRecords();
         renderDashboardActivity();
+
 
         $("databaseStatus")
           .textContent =
@@ -1543,6 +1772,7 @@ function loadRooms(){
         $("databaseStatus")
           .style.color =
           "#16a34a";
+
 
         setFirebaseStatus(
           "ok",
@@ -1554,7 +1784,7 @@ function loadRooms(){
       error => {
 
         console.error(
-          "rooms:",
+          "Rooms:",
           error
         );
 
@@ -1580,14 +1810,15 @@ function loadRooms(){
 
 }
 
-/* =========================
-   Start realtime
-========================= */
 
 function loadRealtimeData(){
 
-  if(listenersStarted){
+  if(
+    listenersStarted
+  ){
+
     return;
+
   }
 
   listenersStarted = true;
@@ -1597,9 +1828,6 @@ function loadRealtimeData(){
 
 }
 
-/* =========================
-   Render users
-========================= */
 
 function renderUsers(){
 
@@ -1608,38 +1836,40 @@ function renderUsers(){
       .trim()
       .toLowerCase();
 
+
   const rows =
     allUsers
 
-      .filter(user => {
+      .filter(
+        user =>
+          [
+            user.displayName,
+            user.email,
+            user.uid
+          ]
+            .join(" ")
+            .toLowerCase()
+            .includes(
+              keyword
+            )
+      )
 
-        return [
-
-          user.displayName,
-          user.email,
-          user.uid
-
-        ]
-          .join(" ")
-          .toLowerCase()
-          .includes(keyword);
-
-      })
-
-      .sort((a,b) => {
-
-        return String(
-          a.displayName || ""
-        ).localeCompare(
+      .sort(
+        (a,b) =>
           String(
-            b.displayName || ""
-          ),
-          "zh-Hant"
-        );
+            a.displayName || ""
+          ).localeCompare(
+            String(
+              b.displayName || ""
+            ),
+            "zh-Hant"
+          )
+      );
 
-      });
 
-  if(!rows.length){
+  if(
+    !rows.length
+  ){
 
     $("usersBody").innerHTML =
       `
@@ -1653,54 +1883,60 @@ function renderUsers(){
       `;
 
     return;
+
   }
 
+
   $("usersBody").innerHTML =
-    rows.map(
-      user => `
-      <tr>
-        <td>
-          <strong>
-            ${esc(
-              user.displayName ||
-              "未設定"
-            )}
-          </strong>
-        </td>
+    rows
+      .map(
+        user =>
+          `
+          <tr>
 
-        <td>
-          ${esc(
-            user.email ||
-            "—"
-          )}
-        </td>
+            <td>
+              <strong>
+                ${esc(
+                  user.displayName ||
+                  "未設定"
+                )}
+              </strong>
+            </td>
 
-        <td>
-          <code>
-            ${esc(user.uid)}
-          </code>
-        </td>
+            <td>
+              ${esc(
+                user.email ||
+                "—"
+              )}
+            </td>
 
-        <td>
-          ${formatTime(
-            user.updatedAt
-          )}
-        </td>
+            <td>
+              <code>
+                ${esc(
+                  user.uid
+                )}
+              </code>
+            </td>
 
-        <td>
-          <span class="badge green">
-            已建立
-          </span>
-        </td>
-      </tr>
-      `
-    ).join("");
+            <td>
+              ${formatTime(
+                user.updatedAt
+              )}
+            </td>
+
+            <td>
+              <span class="badge green">
+                已建立
+              </span>
+            </td>
+
+          </tr>
+          `
+      )
+      .join("");
 
 }
 
-/* =========================
-   Render rooms
-========================= */
 
 function renderRooms(){
 
@@ -1709,23 +1945,23 @@ function renderRooms(){
       .trim()
       .toLowerCase();
 
+
   const rows =
     allRooms
 
-      .filter(room => {
-
-        return [
-
-          room.name,
-          room.roomId,
-          room.ownerUid
-
-        ]
-          .join(" ")
-          .toLowerCase()
-          .includes(keyword);
-
-      })
+      .filter(
+        room =>
+          [
+            room.name,
+            room.roomId,
+            room.ownerUid
+          ]
+            .join(" ")
+            .toLowerCase()
+            .includes(
+              keyword
+            )
+      )
 
       .sort(
         (a,b) =>
@@ -1737,7 +1973,10 @@ function renderRooms(){
           )
       );
 
-  if(!rows.length){
+
+  if(
+    !rows.length
+  ){
 
     $("roomsBody").innerHTML =
       `
@@ -1751,55 +1990,61 @@ function renderRooms(){
       `;
 
     return;
+
   }
 
+
   $("roomsBody").innerHTML =
-    rows.map(
-      room => `
-      <tr>
+    rows
+      .map(
+        room =>
+          `
+          <tr>
 
-        <td>
-          <strong>
-            ${esc(room.name)}
-          </strong>
-        </td>
+            <td>
+              <strong>
+                ${esc(
+                  room.name
+                )}
+              </strong>
+            </td>
 
-        <td>
-          <code>
-            ${esc(room.roomId)}
-          </code>
-        </td>
+            <td>
+              <code>
+                ${esc(
+                  room.roomId
+                )}
+              </code>
+            </td>
 
-        <td>
-          <code>
-            ${esc(
-              room.ownerUid ||
-              "—"
-            )}
-          </code>
-        </td>
+            <td>
+              <code>
+                ${esc(
+                  room.ownerUid ||
+                  "—"
+                )}
+              </code>
+            </td>
 
-        <td>
-          ${esc(
-            room.memberCount
-          )}
-        </td>
+            <td>
+              ${esc(
+                room.memberCount
+              )}
+            </td>
 
-        <td>
-          ${formatTime(
-            room.createdAt
-          )}
-        </td>
+            <td>
+              ${formatTime(
+                room.createdAt
+              )}
+            </td>
 
-      </tr>
-      `
-    ).join("");
+          </tr>
+          `
+      )
+      .join("");
 
 }
 
-/* =========================
-   Render records
-========================= */
 
 function renderRecords(){
 
@@ -1808,26 +2053,27 @@ function renderRecords(){
       .trim()
       .toLowerCase();
 
+
   const rows =
     allRecords
 
-      .filter(record => {
-
-        return [
-
-          record.text,
-          record.roomId,
-          record.uid,
-          record.authorName,
-          record.date,
-          record.hour
-
-        ]
-          .join(" ")
-          .toLowerCase()
-          .includes(keyword);
-
-      })
+      .filter(
+        record =>
+          [
+            record.text,
+            record.value,
+            record.roomId,
+            record.uid,
+            record.authorName,
+            record.date,
+            record.hour
+          ]
+            .join(" ")
+            .toLowerCase()
+            .includes(
+              keyword
+            )
+      )
 
       .sort(
         (a,b) =>
@@ -1848,7 +2094,10 @@ function renderRecords(){
         500
       );
 
-  if(!rows.length){
+
+  if(
+    !rows.length
+  ){
 
     $("recordsBody").innerHTML =
       `
@@ -1862,65 +2111,69 @@ function renderRecords(){
       `;
 
     return;
+
   }
 
+
   $("recordsBody").innerHTML =
-    rows.map(
-      record => `
-      <tr>
+    rows
+      .map(
+        record =>
+          `
+          <tr>
 
-        <td>
-          ${esc(
-            record.date ||
-            "—"
-          )}
-        </td>
+            <td>
+              ${esc(
+                record.date ||
+                "—"
+              )}
+            </td>
 
-        <td>
-          ${esc(
-            String(
-              record.hour ??
-              ""
-            )
-          )}:00
-        </td>
+            <td>
+              ${esc(
+                String(
+                  record.hour ??
+                  ""
+                )
+              )}:00
+            </td>
 
-        <td>
-          <code>
-            ${esc(
-              record.roomId
-            )}
-          </code>
-        </td>
+            <td>
+              <code>
+                ${esc(
+                  record.roomId
+                )}
+              </code>
+            </td>
 
-        <td>
-          ${esc(
-            record.authorName ||
-            record.uid ||
-            "—"
-          )}
-        </td>
+            <td>
+              ${esc(
+                record.authorName ||
+                record.uid ||
+                "—"
+              )}
+            </td>
 
-        <td>
-          ${esc(
-            record.text ||
-            "（沒有文字）"
-          )}
-        </td>
+            <td>
+              ${esc(
+                record.text ??
+                record.value ??
+                "（沒有文字）"
+              )}
+            </td>
 
-      </tr>
-      `
-    ).join("");
+          </tr>
+          `
+      )
+      .join("");
 
 }
 
-/* =========================
-   Dashboard activity
-========================= */
 
 function renderDashboardActivity(){
 
   const activity = [];
+
 
   allRecords
     .slice()
@@ -1941,26 +2194,29 @@ function renderDashboardActivity(){
       0,
       12
     )
-    .forEach(record => {
+    .forEach(
+      record => {
 
-      activity.push({
+        activity.push({
 
-        text:
-          `📝 ${
-            record.authorName ||
-            record.uid
-          } 在房間 ${
-            record.roomId
-          } 新增紀錄`,
+          text:
+            `📝 ${
+              record.authorName ||
+              record.uid
+            } 在房間 ${
+              record.roomId
+            } 新增紀錄`,
 
-        time:
-          record.updatedAt ||
-          record.savedAt ||
-          0
+          time:
+            record.updatedAt ||
+            record.savedAt ||
+            0
 
-      });
+        });
 
-    });
+      }
+    );
+
 
   allRooms
     .slice()
@@ -1977,21 +2233,25 @@ function renderDashboardActivity(){
       0,
       8
     )
-    .forEach(room => {
+    .forEach(
+      room => {
 
-      activity.push({
+        activity.push({
 
-        text:
-          `🏠 建立房間「${
-            room.name
-          }」`,
+          text:
+            `🏠 建立房間「${
+              room.name
+            }」`,
 
-        time:
-          room.createdAt || 0
+          time:
+            room.createdAt ||
+            0
 
-      });
+        });
 
-    });
+      }
+    );
+
 
   activity.sort(
     (a,b) =>
@@ -2003,13 +2263,17 @@ function renderDashboardActivity(){
       )
   );
 
+
   const limited =
     activity.slice(
       0,
       12
     );
 
-  if(!limited.length){
+
+  if(
+    !limited.length
+  ){
 
     $("dashboardActivity")
       .innerHTML =
@@ -2020,39 +2284,180 @@ function renderDashboardActivity(){
       `;
 
     return;
+
   }
+
 
   $("dashboardActivity")
     .innerHTML =
-      limited.map(
-        item => `
-        <div class="activityItem">
+      limited
+        .map(
+          item =>
+            `
+            <div class="activityItem">
 
-          <div class="activityDot"></div>
+              <div class="activityDot"></div>
 
-          <div>
+              <div>
 
-            <div class="activityText">
-              ${esc(item.text)}
+                <div class="activityText">
+                  ${esc(
+                    item.text
+                  )}
+                </div>
+
+                <div class="activityTime">
+                  ${formatTime(
+                    item.time
+                  )}
+                </div>
+
+              </div>
+
             </div>
-
-            <div class="activityTime">
-              ${formatTime(
-                item.time
-              )}
-            </div>
-
-          </div>
-
-        </div>
-        `
-      ).join("");
+            `
+        )
+        .join("");
 
 }
 
-/* =========================
-   Search listeners
-========================= */
+
+$("sendBroadcastBtn").onclick =
+  async () => {
+
+    const text =
+      $("broadcastInput")
+        .value
+        .trim();
+
+
+    if(
+      !text
+    ){
+
+      alert(
+        "請輸入廣播內容。"
+      );
+
+      return;
+
+    }
+
+
+    if(
+      text.length > 500
+    ){
+
+      alert(
+        "廣播內容不能超過 500 字。"
+      );
+
+      return;
+
+    }
+
+
+    const user =
+      auth.currentUser;
+
+
+    if(
+      !user
+    ){
+
+      alert(
+        "尚未登入。"
+      );
+
+      return;
+
+    }
+
+
+    try{
+
+      const tokenResult =
+        await user.getIdTokenResult(
+          true
+        );
+
+
+      if(
+        !tokenResult.claims ||
+        tokenResult.claims.admin !== true
+      ){
+
+        alert(
+          "目前帳號沒有 Admin 權限。"
+        );
+
+        return;
+
+      }
+
+
+      const button =
+        $("sendBroadcastBtn");
+
+
+      button.disabled = true;
+
+      button.textContent =
+        "發送中…";
+
+
+      await set(
+        ref(
+          db,
+          "system/broadcast"
+        ),
+        {
+          text,
+          timestamp:Date.now(),
+          senderUid:user.uid
+        }
+      );
+
+
+      $("broadcastInput")
+        .value =
+        "";
+
+
+      alert(
+        "全站廣播已發送。"
+      );
+
+
+    }catch(error){
+
+      console.error(
+        "Broadcast:",
+        error
+      );
+
+      alert(
+        "發送失敗：\n" +
+        (
+          error?.message ||
+          String(error)
+        )
+      );
+
+    }finally{
+
+      const button =
+        $("sendBroadcastBtn");
+
+      button.disabled = false;
+
+      button.textContent =
+        "發送廣播";
+
+    }
+
+  };
+
 
 $("userSearch")
   .addEventListener(
@@ -2060,11 +2465,13 @@ $("userSearch")
     renderUsers
   );
 
+
 $("roomSearch")
   .addEventListener(
     "input",
     renderRooms
   );
+
 
 $("recordSearch")
   .addEventListener(
@@ -2072,15 +2479,14 @@ $("recordSearch")
     renderRecords
   );
 
-/* =========================
-   Auth state
-========================= */
 
 onAuthStateChanged(
   auth,
   async user => {
 
-    if(!user){
+    if(
+      !user
+    ){
 
       stopRealtimeListeners();
 
@@ -2101,40 +2507,31 @@ onAuthStateChanged(
         .textContent =
         "未驗證";
 
+      $("adminClaimStatus")
+        .style.color =
+        "";
+
       return;
+
     }
+
 
     try{
 
       clearLoginError();
 
-      /*
-        強制刷新 ID token，
-        確保剛設定的 admin claim
-        能被拿到。
-      */
 
       const isAdmin =
-        await checkAdminClaim(
+        await getAdminStatus(
           user
         );
 
-      if(!isAdmin){
+
+      if(
+        !isAdmin
+      ){
 
         stopRealtimeListeners();
-
-        $("loginScreen")
-          .style.display =
-          "flex";
-
-        $("adminApp")
-          .classList.add(
-            "hide"
-          );
-
-        $("authStatus")
-          .textContent =
-          "已登入";
 
         $("adminClaimStatus")
           .textContent =
@@ -2150,87 +2547,115 @@ onAuthStateChanged(
           user.uid
         );
 
-        await signOut(auth);
+
+        await signOut(
+          auth
+        );
+
 
         return;
+
       }
+
 
       $("loginScreen")
         .style.display =
         "none";
+
 
       $("adminApp")
         .classList.remove(
           "hide"
         );
 
+
       $("adminName")
         .textContent =
         user.displayName ||
         "管理員";
+
 
       $("adminEmail")
         .textContent =
         user.email ||
         user.uid;
 
+
       $("firebaseAdminUid")
         .textContent =
         user.uid;
 
-      $("authStatus")
-        .textContent =
-        "已驗證";
-
-      $("authStatus")
-        .style.color =
-        "#16a34a";
 
       $("adminClaimStatus")
         .textContent =
         "Admin ✓";
 
+
       $("adminClaimStatus")
         .style.color =
         "#16a34a";
 
-      $("firebaseProject")
+
+      $("authStatus")
         .textContent =
-        firebaseConfig?.projectId ||
-        "—";
+        "已驗證";
+
+
+      $("authStatus")
+        .style.color =
+        "#16a34a";
+
 
       $("databaseStatus")
         .textContent =
         "讀取中…";
 
+
       loadRealtimeData();
+
 
     }catch(error){
 
       console.error(
-        "admin auth:",
+        "Admin authentication:",
         error
       );
 
+
       stopRealtimeListeners();
+
 
       $("loginScreen")
         .style.display =
         "flex";
+
 
       $("adminApp")
         .classList.add(
           "hide"
         );
 
+
       showLoginError(
         error?.message ||
         "管理員驗證失敗"
       );
 
+
       try{
-        await signOut(auth);
-      }catch{}
+
+        await signOut(
+          auth
+        );
+
+      }catch(signOutError){
+
+        console.error(
+          "Sign out:",
+          signOutError
+        );
+
+      }
 
     }
 
