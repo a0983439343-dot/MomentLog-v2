@@ -1542,11 +1542,6 @@ token => {
 };
 
 
-/*
- * 曾加入房間只存在這台裝置的 localStorage。
- * 不修改 Firebase Rules。
- */
-
 const RECENT_ROOMS_KEY =
 "momentlog_recent_rooms";
 
@@ -3314,10 +3309,6 @@ function connectRoom(){
           {};
 
 
-        /*
-         * 確保曾加入房間名稱同步。
-         */
-
         rememberRoom(
           roomId,
           room.meta.name ||
@@ -3367,20 +3358,10 @@ function connectRoom(){
             "";
 
 
-          /*
-           * 注意：
-           * 這裡只把目前加入狀態清掉。
-           * 最近房間紀錄仍然保留。
-           */
-
           localStorage.removeItem(
             "momentlog_room"
           );
 
-
-          /*
-           * 保留歷史房間。
-           */
 
           markRecentRoomLeft(
             room?.meta?.roomId ||
@@ -5001,12 +4982,6 @@ async function invite(){
 }
 
 
-/*
- * =====================================================
- * 離開房間
- * =====================================================
- */
-
 async function leaveRoom(){
 
   if(
@@ -5042,11 +5017,6 @@ async function leaveRoom(){
     room?.meta?.name ||
     "MomentLog";
 
-
-  /*
-   * 在刪除 localStorage 目前房間前，
-   * 先保留最近房間紀錄。
-   */
 
   rememberRoom(
     id,
@@ -5142,10 +5112,6 @@ async function leaveRoom(){
       );
 
 
-    /*
-     * 自己已經不在成員清單。
-     */
-
     if(
       !members[user.uid]
     ){
@@ -5164,13 +5130,6 @@ async function leaveRoom(){
 
     }
 
-
-    /*
-     * =================================================
-     * 只有自己：
-     * 如果我是房主，刪房間。
-     * =================================================
-     */
 
     if(
       memberIds.length ===
@@ -5222,11 +5181,6 @@ async function leaveRoom(){
 
       }
 
-
-      /*
-       * 最後一位房主：
-       * 刪除整個房間。
-       */
 
       try{
 
@@ -5296,13 +5250,6 @@ async function leaveRoom(){
 
     }
 
-
-    /*
-     * =================================================
-     * 房主離開：
-     * 自動選下一位房主。
-     * =================================================
-     */
 
     if(
       amOwner
@@ -5394,12 +5341,6 @@ async function leaveRoom(){
 
     }
 
-
-    /*
-     * =================================================
-     * 一般成員離開。
-     * =================================================
-     */
 
     await remove(
       ref(
@@ -5570,12 +5511,6 @@ function changeDate(
 
 }
 
-
-/*
- * =====================================================
- * 事件
- * =====================================================
- */
 
 $("googleLogin")
   .onclick =
@@ -5875,12 +5810,6 @@ applyTheme();
 renderRecentRooms();
 
 
-/*
- * =====================================================
- * 時鐘與今天的時間軸
- * =====================================================
- */
-
 setInterval(
   () => {
 
@@ -5905,11 +5834,6 @@ setInterval(
         currentDate
       )
     ){
-
-      /*
-       * 例如現在 18:xx：
-       * 顯示到 18:00。
-       */
 
       const maxHour =
         Number(
@@ -5972,12 +5896,6 @@ setInterval(
 );
 
 
-/*
- * =====================================================
- * Firebase Auth
- * =====================================================
- */
-
 onAuthStateChanged(
   auth,
   async currentUser => {
@@ -6039,11 +5957,51 @@ onAuthStateChanged(
 
     await initForegroundMessaging();
 
+    onValue(
+      ref(
+        db,
+        "system/broadcast"
+      ),
+      snapshot => {
 
-    /*
-     * 如果瀏覽器還記著目前房間，
-     * 嘗試自動恢復。
-     */
+        const data =
+          snapshot.val();
+
+        if(
+          !data
+        ){
+          return;
+        }
+
+        const lastSeen =
+          Number(
+            localStorage.getItem(
+              "momentlog_last_broadcast"
+            ) || 0
+          );
+
+        if(
+          data.timestamp >
+          lastSeen
+        ){
+
+          toast(
+            "📢 " +
+            data.text
+          );
+
+          localStorage.setItem(
+            "momentlog_last_broadcast",
+            String(
+              data.timestamp
+            )
+          );
+
+        }
+
+      }
+    );
+
 
     const savedRoom =
       localStorage.getItem(
