@@ -4991,8 +4991,7 @@ async function toggleNotification(){
   try{
 
     if(
-      room?.myNotification?.enabled ===
-      true
+      room?.myNotification?.enabled === true
     ){
 
       await update(
@@ -5020,9 +5019,101 @@ async function toggleNotification(){
       );
 
       return;
+    }
+
+
+    if(
+      !("Notification" in window)
+    ){
+
+      toast(
+        "這個瀏覽器不支援通知"
+      );
+
+      return;
+    }
+
+
+    if(
+      Notification.permission === "denied"
+    ){
+
+      toast(
+        "通知已被瀏覽器禁止，請到網站設定允許通知"
+      );
+
+      return;
+    }
+
+
+    let permission =
+      Notification.permission;
+
+
+    if(
+      permission === "default"
+    ){
+
+      permission =
+        await Notification.requestPermission();
 
     }
 
+
+    if(
+      permission !== "granted"
+    ){
+
+      toast(
+        "你沒有允許通知"
+      );
+
+      return;
+    }
+
+
+    await update(
+      ref(
+        db,
+        `rooms/${roomId}/notificationSettings/${user.uid}`
+      ),
+      {
+        enabled:true,
+        minute:0,
+        timezone:"Asia/Taipei",
+        updatedAt:Date.now()
+      }
+    );
+
+
+    localStorage.setItem(
+      "momentlog_local_notifications",
+      "true"
+    );
+
+
+    renderNotify();
+
+    startLocalNotificationCheck();
+
+    toast(
+      "🔔 提醒已開啟"
+    );
+
+  }catch(error){
+
+    console.error(
+      "toggleNotification:",
+      error
+    );
+
+    toast(
+      "通知設定失敗："+friendlyError(error)
+    );
+
+  }
+
+}
 
     if(
       !("Notification" in window)
