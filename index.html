@@ -1709,7 +1709,82 @@ function applyTheme(){
 }
 
 
-function friendlyError(
+function friendlyError(error){
+
+  const code =
+    typeof error?.code === "string"
+      ? error.code
+      : "";
+
+  const message =
+    typeof error?.message === "string"
+      ? error.message
+      : String(
+          error?.message ||
+          error ||
+          "未知錯誤"
+        );
+
+  if(
+    code.includes("permission-denied") ||
+    code === "PERMISSION_DENIED"
+  ){
+
+    return "Firebase 權限被拒絕，請檢查 Realtime Database Rules";
+
+  }
+
+  if(
+    code.includes("storage/unauthorized")
+  ){
+
+    return "Storage 權限被拒絕，請檢查 Storage Rules";
+
+  }
+
+  if(
+    code.includes("storage/bucket-not-found")
+  ){
+
+    return "Storage 尚未建立";
+
+  }
+
+  if(
+    code === "auth/unauthorized-domain"
+  ){
+
+    return "目前網站網域尚未加入 Firebase Authentication 授權網域";
+
+  }
+
+  if(
+    code === "auth/operation-not-allowed"
+  ){
+
+    return "Firebase 尚未啟用 Google 登入";
+
+  }
+
+  if(
+    code === "auth/popup-blocked"
+  ){
+
+    return "瀏覽器阻擋 Google 登入視窗";
+
+  }
+
+  if(
+    code === "auth/popup-closed-by-user"
+  ){
+
+    return "你關閉了 Google 登入視窗";
+
+  }
+
+  return message;
+
+}
   error
 ){
 
