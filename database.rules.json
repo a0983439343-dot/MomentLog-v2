@@ -2,16 +2,25 @@
   "rules": {
     "users": {
       ".read": "auth != null && auth.uid === 'nJdwA4Heqrbtqdt1atbiOsVi7r23'",
+
       "$uid": {
         ".read": "auth != null && (auth.uid === $uid || auth.uid === 'nJdwA4Heqrbtqdt1atbiOsVi7r23')",
-        ".write": "auth != null && auth.uid === $uid"
+
+        ".write": "auth != null && auth.uid === $uid",
+
+        ".validate": "!newData.exists() || (newData.hasChildren(['displayName']) && newData.child('displayName').isString() && newData.child('displayName').val().length > 0 && newData.child('displayName').val().length <= 30 && (!newData.hasChild('updatedAt') || newData.child('updatedAt').isNumber()))"
       }
     },
 
     "fcmTokens": {
       "$uid": {
         ".read": "auth != null && auth.uid === $uid",
-        ".write": "auth != null && auth.uid === $uid"
+
+        ".write": "auth != null && auth.uid === $uid",
+
+        "$tokenKey": {
+          ".validate": "!newData.exists() || (newData.hasChildren(['token']) && newData.child('token').isString() && newData.child('token').val().length > 0 && newData.child('token').val().length <= 4096 && (!newData.hasChild('createdAt') || newData.child('createdAt').isNumber()) && (!newData.hasChild('updatedAt') || newData.child('updatedAt').isNumber()))"
+        }
       }
     },
 
@@ -24,26 +33,32 @@
         "meta": {
           ".read": "auth != null",
 
-          ".write": "auth != null && ((!data.exists() && newData.child('ownerUid').val() === auth.uid) || (data.exists() && data.child('ownerUid').val() === auth.uid))",
+          ".write": "auth != null && ((!data.exists() && newData.child('ownerUid').val() === auth.uid) || (data.exists() && data.child('ownerUid').val() === auth.uid && (newData.child('ownerUid').val() === data.child('ownerUid').val() || (newData.child('ownerUid').isString() && root.child('rooms').child($roomId).child('members').child(newData.child('ownerUid').val()).exists()))))",
 
-          ".validate": "newData.hasChildren(['ownerUid']) && newData.child('ownerUid').isString() && newData.child('ownerUid').val().length > 0"
+          ".validate": "!newData.exists() || (newData.hasChildren(['ownerUid']) && newData.child('ownerUid').isString() && newData.child('ownerUid').val().length > 0 && (!newData.hasChild('roomId') || (newData.child('roomId').isString() && newData.child('roomId').val() === $roomId)) && (!newData.hasChild('name') || (newData.child('name').isString() && newData.child('name').val().length > 0 && newData.child('name').val().length <= 60)) && (!newData.hasChild('createdAt') || newData.child('createdAt').isNumber()) && (!newData.hasChild('updatedAt') || newData.child('updatedAt').isNumber()))"
         },
 
         "members": {
           "$uid": {
             ".read": "auth != null && (auth.uid === 'nJdwA4Heqrbtqdt1atbiOsVi7r23' || root.child('rooms').child($roomId).child('members').child(auth.uid).exists())",
 
-            ".write": "auth != null && ((auth.uid === $uid && newData.exists()) || (auth.uid === $uid && !newData.exists()) || (root.child('rooms').child($roomId).child('meta').child('ownerUid').val() === auth.uid && auth.uid !== $uid))"
+            ".write": "auth != null && ((auth.uid === $uid) || (root.child('rooms').child($roomId).child('meta').child('ownerUid').val() === auth.uid && auth.uid !== $uid))",
+
+            ".validate": "!newData.exists() || (newData.hasChildren(['displayName']) && newData.child('displayName').isString() && newData.child('displayName').val().length > 0 && newData.child('displayName').val().length <= 30 && (!newData.hasChild('joinedAt') || newData.child('joinedAt').isNumber()) && (!newData.hasChild('updatedAt') || newData.child('updatedAt').isNumber()))"
           }
         },
 
         "records": {
-          ".read": "auth != null && (auth.uid === 'nJdwA4Heqrbtqdt1atbiOsVi7r23' || data.parent().parent().parent().child('members').child(auth.uid).exists())",
+          ".read": "auth != null && (auth.uid === 'nJdwA4Heqrbtqdt1atbiOsVi7r23' || root.child('rooms').child($roomId).child('members').child(auth.uid).exists())",
 
           "$date": {
             "$hour": {
               "$uid": {
-                ".write": "auth != null && auth.uid === $uid && root.child('rooms').child($roomId).child('members').child(auth.uid).exists()"
+                ".read": "auth != null && (auth.uid === 'nJdwA4Heqrbtqdt1atbiOsVi7r23' || root.child('rooms').child($roomId).child('members').child(auth.uid).exists())",
+
+                ".write": "auth != null && auth.uid === $uid && root.child('rooms').child($roomId).child('members').child(auth.uid).exists()",
+
+                ".validate": "!newData.exists() || (newData.hasChildren(['date','hour','authorUid','savedAt','updatedAt']) && newData.child('date').isString() && newData.child('hour').isNumber() && newData.child('hour').val() >= 0 && newData.child('hour').val() <= 23 && newData.child('authorUid').isString() && newData.child('authorUid').val() === $uid && newData.child('savedAt').isNumber() && newData.child('updatedAt').isNumber() && (!newData.hasChild('text') || (newData.child('text').isString() && newData.child('text').val().length <= 3000)) && (!newData.hasChild('authorName') || (newData.child('authorName').isString() && newData.child('authorName').val().length <= 30)) && (!newData.hasChild('media') || newData.child('media').val() === null || newData.child('media').isObject()))"
               }
             }
           }
@@ -51,9 +66,11 @@
 
         "notificationSettings": {
           "$uid": {
-            ".read": "auth != null && (auth.uid === 'nJdwA4Heqrbtqdt1atbiOsVi7r23' || (auth.uid === $uid && root.child('rooms').child($roomId).child('members').child(auth.uid).exists()))",
+            ".read": "auth != null && (auth.uid === 'nJdwA4Heqrbtqdt1atbiOsVi7r23' || auth.uid === $uid)",
 
-            ".write": "auth != null && auth.uid === $uid && root.child('rooms').child($roomId).child('members').child(auth.uid).exists()"
+            ".write": "auth != null && auth.uid === $uid && (root.child('rooms').child($roomId).child('members').child(auth.uid).exists() || (data.exists() && !newData.exists()))",
+
+            ".validate": "!newData.exists() || (newData.hasChildren(['enabled']) && newData.child('enabled').isBoolean() && (!newData.hasChild('minute') || (newData.child('minute').isNumber() && newData.child('minute').val() >= 0 && newData.child('minute').val() <= 59)) && (!newData.hasChild('timezone') || (newData.child('timezone').isString() && newData.child('timezone').val().length <= 100)) && (!newData.hasChild('updatedAt') || newData.child('updatedAt').isNumber()))"
           }
         }
       }
@@ -62,8 +79,10 @@
     "system": {
       "broadcast": {
         ".read": "auth != null",
+
         ".write": "auth != null && auth.uid === 'nJdwA4Heqrbtqdt1atbiOsVi7r23'",
-        ".validate": "newData.hasChildren(['text','timestamp','senderUid']) && newData.child('text').isString() && newData.child('timestamp').isNumber() && newData.child('senderUid').val() === auth.uid"
+
+        ".validate": "!newData.exists() || (newData.hasChildren(['text','timestamp','senderUid']) && newData.child('text').isString() && newData.child('text').val().length > 0 && newData.child('text').val().length <= 3000 && newData.child('timestamp').isNumber() && newData.child('senderUid').isString() && newData.child('senderUid').val() === auth.uid)"
       }
     }
   }
