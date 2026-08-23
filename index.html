@@ -722,10 +722,7 @@ Google 帳號只用於 Firebase 身分驗證。
 
 </div>
 
-<div
-  id="profileArea"
-  class="hide"
->
+<div id="profileArea" class="hide">
 
 <div class="account">
 
@@ -880,10 +877,7 @@ style="border:0;border-top:1px solid var(--border);margin:18px 0"
 
 </section>
 
-<section
-  id="room"
-  class="hide"
->
+<section id="room" class="hide">
 
 <header class="top">
 
@@ -1123,8 +1117,8 @@ MomentLog
 </div>
 
 <div
-  id="recordModal"
-  class="modal"
+id="recordModal"
+class="modal"
 >
 
 <div class="modalCard">
@@ -1274,8 +1268,8 @@ MomentLog
 </div>
 
 <div
-  id="themeModal"
-  class="modal"
+id="themeModal"
+class="modal"
 >
 
 <div class="modalCard">
@@ -1389,8 +1383,8 @@ MomentLog
 </div>
 
 <div
-  id="toast"
-  class="toast"
+id="toast"
+class="toast"
 ></div>
 
 <script type="module">
@@ -1421,15 +1415,11 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-storage.js";
 
 import {
-  isSupported,
-  onMessage
-} from "https://www.gstatic.com/firebasejs/12.17.0/firebase-messaging.js";
-
-import {
   app,
   auth,
   database
 } from "./firebase-config.js";
+
 
 const db =
   database;
@@ -1443,6 +1433,7 @@ const googleProvider =
 const $ =
   id =>
     document.getElementById(id);
+
 
 const themes = {
 
@@ -1469,9 +1460,11 @@ const themes = {
 
 };
 
+
 const pad =
   n =>
     String(n).padStart(2,"0");
+
 
 const taipeiParts =
   date =>
@@ -1501,6 +1494,7 @@ const taipeiParts =
       {}
     );
 
+
 const dateKey =
   date => {
 
@@ -1510,6 +1504,7 @@ const dateKey =
     return `${p.year}-${p.month}-${p.day}`;
 
   };
+
 
 const addDays =
   (date,amount) => {
@@ -1526,10 +1521,12 @@ const addDays =
 
   };
 
+
 const isToday =
   date =>
     dateKey(date) ===
     dateKey(new Date());
+
 
 const escapeHtml =
   value =>
@@ -1546,6 +1543,7 @@ const escapeHtml =
           })[match]
       );
 
+
 const safeFileName =
   value =>
     String(
@@ -1561,11 +1559,13 @@ const safeFileName =
       120
     );
 
+
 const RECENT_ROOMS_KEY =
   "momentlog_recent_rooms";
 
 const MAX_RECENT_ROOMS =
   20;
+
 
 let user =
   null;
@@ -1602,9 +1602,6 @@ let unsubRecords =
 let unsubBroadcast =
   null;
 
-let messagingReady =
-  false;
-
 let lastRenderedHour =
   null;
 
@@ -1625,9 +1622,7 @@ function toast(
     $("toast");
 
   if(!t){
-
     return;
-
   }
 
   t.textContent =
@@ -1709,7 +1704,9 @@ function applyTheme(){
 }
 
 
-function friendlyError(error){
+function friendlyError(
+  error
+){
 
   const code =
     typeof error?.code === "string"
@@ -1725,72 +1722,6 @@ function friendlyError(error){
           "未知錯誤"
         );
 
-  if(
-    code.includes("permission-denied") ||
-    code === "PERMISSION_DENIED"
-  ){
-
-    return "Firebase 權限被拒絕，請檢查 Realtime Database Rules";
-
-  }
-
-  if(
-    code.includes("storage/unauthorized")
-  ){
-
-    return "Storage 權限被拒絕，請檢查 Storage Rules";
-
-  }
-
-  if(
-    code.includes("storage/bucket-not-found")
-  ){
-
-    return "Storage 尚未建立";
-
-  }
-
-  if(
-    code === "auth/unauthorized-domain"
-  ){
-
-    return "目前網站網域尚未加入 Firebase Authentication 授權網域";
-
-  }
-
-  if(
-    code === "auth/operation-not-allowed"
-  ){
-
-    return "Firebase 尚未啟用 Google 登入";
-
-  }
-
-  if(
-    code === "auth/popup-blocked"
-  ){
-
-    return "瀏覽器阻擋 Google 登入視窗";
-
-  }
-
-  if(
-    code === "auth/popup-closed-by-user"
-  ){
-
-    return "你關閉了 Google 登入視窗";
-
-  }
-
-  return message;
-
-}
-  error
-){
-
-  const code =
-    error?.code ||
-    "";
 
   if(
     code.includes(
@@ -1806,6 +1737,7 @@ function friendlyError(error){
 
   }
 
+
   if(
     code.includes(
       "storage/unauthorized"
@@ -1817,6 +1749,7 @@ function friendlyError(error){
     );
 
   }
+
 
   if(
     code.includes(
@@ -1830,6 +1763,7 @@ function friendlyError(error){
 
   }
 
+
   if(
     code ===
       "auth/unauthorized-domain"
@@ -1840,6 +1774,7 @@ function friendlyError(error){
     );
 
   }
+
 
   if(
     code ===
@@ -1852,6 +1787,7 @@ function friendlyError(error){
 
   }
 
+
   if(
     code ===
       "auth/popup-blocked"
@@ -1862,6 +1798,7 @@ function friendlyError(error){
     );
 
   }
+
 
   if(
     code ===
@@ -1874,10 +1811,8 @@ function friendlyError(error){
 
   }
 
-  return(
-    error?.message ||
-    "未知錯誤"
-  );
+
+  return message;
 
 }
 
@@ -1956,13 +1891,14 @@ function rememberRoom(
   const old =
     getRecentRooms()
       .filter(
-        room =>
-          room?.roomId !== id
+        item =>
+          item?.roomId !== id
       );
 
   old.unshift({
 
-    roomId:id,
+    roomId:
+      id,
 
     name:
       String(
@@ -1993,9 +1929,7 @@ function markRecentRoomLeft(
 ){
 
   if(!id){
-
     return;
-
   }
 
   const list =
@@ -2016,7 +1950,8 @@ function markRecentRoomLeft(
 
     list.push({
 
-      roomId:id,
+      roomId:
+        id,
 
       name:
         "MomentLog",
@@ -2060,9 +1995,7 @@ function formatRecentTime(
 ){
 
   if(!value){
-
     return "尚未加入";
-
   }
 
   try{
@@ -2334,9 +2267,14 @@ async function rejoinRoom(
         `rooms/${id}/members/${user.uid}`
       ),
       {
-        displayName:name,
-        joinedAt:now,
-        updatedAt:now
+        displayName:
+          name,
+
+        joinedAt:
+          now,
+
+        updatedAt:
+          now
       }
     );
 
@@ -2432,9 +2370,7 @@ function clearListeners(){
       try{
 
         if(fn){
-
           fn();
-
         }
 
       }catch(error){
@@ -2477,9 +2413,7 @@ function renderNotify(){
     $("notify");
 
   if(!button){
-
     return;
-
   }
 
   button.textContent =
@@ -2574,9 +2508,7 @@ function renderAccount(){
 async function loadProfile(){
 
   if(!user){
-
     return;
-
   }
 
   try{
@@ -2681,8 +2613,11 @@ async function saveProfile(){
         `users/${user.uid}`
       ),
       {
-        displayName:name,
-        updatedAt:now
+        displayName:
+          name,
+
+        updatedAt:
+          now
       }
     );
 
@@ -2700,8 +2635,11 @@ async function saveProfile(){
           )
         ),
         {
-          displayName:name,
-          updatedAt:now
+          displayName:
+            name,
+
+          updatedAt:
+            now
         }
       );
 
@@ -2715,9 +2653,11 @@ async function saveProfile(){
 
       ...(room.profile || {}),
 
-      displayName:name,
+      displayName:
+        name,
 
-      updatedAt:now
+      updatedAt:
+        now
 
     };
 
@@ -3003,9 +2943,14 @@ async function createRoom(){
         )
       ),
       {
-        displayName:name,
-        joinedAt:Date.now(),
-        updatedAt:Date.now()
+        displayName:
+          name,
+
+        joinedAt:
+          Date.now(),
+
+        updatedAt:
+          Date.now()
       }
     );
 
@@ -3088,7 +3033,9 @@ async function joinRoom(){
   }
 
   if(
-    !/^[A-Z0-9]{8,12}$/.test(id)
+    !/^[A-Z0-9]{8,12}$/.test(
+      id
+    )
   ){
 
     toast(
@@ -3137,9 +3084,14 @@ async function joinRoom(){
         )
       ),
       {
-        displayName:name,
-        joinedAt:now,
-        updatedAt:now
+        displayName:
+          name,
+
+        joinedAt:
+          now,
+
+        updatedAt:
+          now
       }
     );
 
@@ -3151,8 +3103,11 @@ async function joinRoom(){
           `users/${user.uid}`
         ),
         {
-          displayName:name,
-          updatedAt:now
+          displayName:
+            name,
+
+          updatedAt:
+            now
         }
       );
 
@@ -3239,6 +3194,8 @@ function connectRoom(){
 
           clearListeners();
 
+          stopLocalNotificationCheck();
+
           room =
             null;
 
@@ -3248,8 +3205,6 @@ function connectRoom(){
           localStorage.removeItem(
             "momentlog_room"
           );
-
-          stopLocalNotificationCheck();
 
           $("room")
             .classList
@@ -3297,6 +3252,7 @@ function connectRoom(){
 
       }
     );
+
 
   unsubMembers =
     onValue(
@@ -3374,6 +3330,7 @@ function connectRoom(){
       }
     );
 
+
   unsubSettings =
     onValue(
       ref(
@@ -3389,8 +3346,7 @@ function connectRoom(){
         renderNotify();
 
         if(
-          room.myNotification?.enabled ===
-          true &&
+          room.myNotification?.enabled === true &&
           localNotificationsEnabled()
         ){
 
@@ -4021,17 +3977,22 @@ function renderPreview(
     fileUrl ||
     (
       media &&
-      typeof media === "object"
-        ? media.downloadURL || ""
-        : media || ""
+      typeof media ===
+        "object"
+        ? media.downloadURL ||
+          ""
+        : media ||
+          ""
     );
 
   const contentType =
     type ||
     (
       media &&
-      typeof media === "object"
-        ? media.contentType || ""
+      typeof media ===
+        "object"
+        ? media.contentType ||
+          ""
         : ""
     );
 
@@ -4135,9 +4096,7 @@ function chooseFile(
 ){
 
   if(!f){
-
     return;
-
   }
 
   if(
@@ -4181,7 +4140,8 @@ function chooseFile(
 
   selectedFile = {
 
-    file:f,
+    file:
+      f,
 
     previewUrl:
       URL.createObjectURL(
@@ -4557,8 +4517,10 @@ async function removeMedia(){
       ),
       {
         ...old,
-        media:null,
-        updatedAt:Date.now()
+        media:
+          null,
+        updatedAt:
+          Date.now()
       }
     );
 
@@ -4613,7 +4575,6 @@ async function removeMedia(){
 
 /* =========================================================
    本地通知
-   不依賴 Cloud Functions
 ========================================================= */
 
 function localNotificationsEnabled(){
@@ -4621,7 +4582,8 @@ function localNotificationsEnabled(){
   return (
     localStorage.getItem(
       "momentlog_local_notifications"
-    ) === "true"
+    ) ===
+    "true"
   );
 
 }
@@ -4632,14 +4594,29 @@ function getTaipeiNow(){
   return new Intl.DateTimeFormat(
     "en-CA",
     {
-      timeZone:"Asia/Taipei",
-      year:"numeric",
-      month:"2-digit",
-      day:"2-digit",
-      hour:"2-digit",
-      minute:"2-digit",
-      second:"2-digit",
-      hourCycle:"h23"
+      timeZone:
+        "Asia/Taipei",
+
+      year:
+        "numeric",
+
+      month:
+        "2-digit",
+
+      day:
+        "2-digit",
+
+      hour:
+        "2-digit",
+
+      minute:
+        "2-digit",
+
+      second:
+        "2-digit",
+
+      hourCycle:
+        "h23"
     }
   )
   .formatToParts(
@@ -4675,21 +4652,38 @@ function getNextTaipeiHour(){
   const next =
     new Date(
       now.getTime() +
-      60 * 60 * 1000
+      60 *
+      60 *
+      1000
     );
 
   const parts =
     new Intl.DateTimeFormat(
       "en-CA",
       {
-        timeZone:"Asia/Taipei",
-        year:"numeric",
-        month:"2-digit",
-        day:"2-digit",
-        hour:"2-digit",
-        minute:"2-digit",
-        second:"2-digit",
-        hourCycle:"h23"
+        timeZone:
+          "Asia/Taipei",
+
+        year:
+          "numeric",
+
+        month:
+          "2-digit",
+
+        day:
+          "2-digit",
+
+        hour:
+          "2-digit",
+
+        minute:
+          "2-digit",
+
+        second:
+          "2-digit",
+
+        hourCycle:
+          "h23"
       }
     )
     .formatToParts(
@@ -4755,83 +4749,67 @@ async function showLocalNotification(
   try{
 
     const registration =
-      await navigator.serviceWorker.getRegistration(
-        "./"
-      );
+      await navigator.serviceWorker.ready;
 
-    if(
-      registration &&
-      typeof registration.showNotification ===
-      "function"
-    ){
+    await registration.showNotification(
+      title,
+      {
+        body,
 
-      await registration.showNotification(
-        title,
-        {
-          body,
-          icon:"./icon-192.png",
-          badge:"./icon-192.png",
-          tag,
-          renotify:true,
-          data:{
-            url:"./"
-          }
+        icon:
+          "./icon-192.png",
+
+        badge:
+          "./icon-192.png",
+
+        tag,
+
+        renotify:
+          true,
+
+        data:{
+          url:
+            "./"
         }
-      );
-
-      return;
-
-    }
+      }
+    );
 
   }catch(error){
 
-    console.warn(
-      "Service Worker notification:",
+    console.error(
+      "showLocalNotification:",
       error
     );
 
   }
 
-  try{
+}
 
-    const notification =
-      new Notification(
-        title,
-        {
-          body,
-          icon:"./icon-192.png",
-          tag
-        }
-      );
 
-    notification.onclick =
-      () => {
+async function ensureNotificationServiceWorker(){
 
-        try{
+  if(
+    !("serviceWorker" in navigator)
+  ){
 
-          window.focus();
-
-        }catch(error){
-
-          console.warn(
-            "notification focus:",
-            error
-          );
-
-        }
-
-        notification.close();
-
-      };
-
-  }catch(error){
-
-    console.warn(
-      "Browser notification:",
-      error
+    throw new Error(
+      "此瀏覽器不支援 Service Worker"
     );
 
   }
+
+  const registration =
+    await navigator.serviceWorker.register(
+      "./firebase-messaging-sw.js",
+      {
+        scope:
+          "./"
+      }
+    );
+
+  await navigator.serviceWorker.ready;
+
+  return registration;
 
 }
 
@@ -4944,7 +4922,9 @@ async function checkLocalNotification(){
 
         await showLocalNotification(
           "🔔 MomentLog 提醒",
+
           `${room?.meta?.name || "MomentLog"}：現在 ${pad(hour)}:00，記錄一下吧！`,
+
           `momentlog_${key}`
         );
 
@@ -5003,7 +4983,9 @@ async function checkLocalNotification(){
 
         await showLocalNotification(
           "⏰ MomentLog 提醒",
+
           `${room?.meta?.name || "MomentLog"}：10 分鐘後 ${pad(nextHour)}:00 要記錄了`,
+
           `momentlog_${key}`
         );
 
@@ -5057,16 +5039,13 @@ function stopLocalNotificationCheck(){
 }
 
 
-/* =========================================================
-   通知開關
-========================================================= */
-
 async function toggleNotification(){
 
   try{
 
     if(
-      room?.myNotification?.enabled === true
+      room?.myNotification?.enabled ===
+      true
     ){
 
       await update(
@@ -5075,8 +5054,11 @@ async function toggleNotification(){
           `rooms/${roomId}/notificationSettings/${user.uid}`
         ),
         {
-          enabled:false,
-          updatedAt:Date.now()
+          enabled:
+            false,
+
+          updatedAt:
+            Date.now()
         }
       );
 
@@ -5094,6 +5076,7 @@ async function toggleNotification(){
       );
 
       return;
+
     }
 
 
@@ -5106,101 +5089,9 @@ async function toggleNotification(){
       );
 
       return;
-    }
-
-
-    if(
-      Notification.permission === "denied"
-    ){
-
-      toast(
-        "通知已被瀏覽器禁止，請到網站設定允許通知"
-      );
-
-      return;
-    }
-
-
-    let permission =
-      Notification.permission;
-
-
-    if(
-      permission === "default"
-    ){
-
-      permission =
-        await Notification.requestPermission();
 
     }
 
-
-    if(
-      permission !== "granted"
-    ){
-
-      toast(
-        "你沒有允許通知"
-      );
-
-      return;
-    }
-
-
-    await update(
-      ref(
-        db,
-        `rooms/${roomId}/notificationSettings/${user.uid}`
-      ),
-      {
-        enabled:true,
-        minute:0,
-        timezone:"Asia/Taipei",
-        updatedAt:Date.now()
-      }
-    );
-
-
-    localStorage.setItem(
-      "momentlog_local_notifications",
-      "true"
-    );
-
-
-    renderNotify();
-
-    startLocalNotificationCheck();
-
-    toast(
-      "🔔 提醒已開啟"
-    );
-
-  }catch(error){
-
-    console.error(
-      "toggleNotification:",
-      error
-    );
-
-    toast(
-      "通知設定失敗："+friendlyError(error)
-    );
-
-  }
-
-}
-
-    if(
-      !("Notification" in window)
-    ){
-
-      toast(
-        "這個瀏覽器不支援通知"
-      );
-
-      return;
-
-    }
 
     if(
       Notification.permission ===
@@ -5215,8 +5106,10 @@ async function toggleNotification(){
 
     }
 
+
     let permission =
       Notification.permission;
+
 
     if(
       permission ===
@@ -5227,6 +5120,7 @@ async function toggleNotification(){
         await Notification.requestPermission();
 
     }
+
 
     if(
       permission !==
@@ -5241,23 +5135,36 @@ async function toggleNotification(){
 
     }
 
+
+    await ensureNotificationServiceWorker();
+
+
     await update(
       ref(
         db,
         `rooms/${roomId}/notificationSettings/${user.uid}`
       ),
       {
-        enabled:true,
-        minute:0,
-        timezone:"Asia/Taipei",
-        updatedAt:Date.now()
+        enabled:
+          true,
+
+        minute:
+          0,
+
+        timezone:
+          "Asia/Taipei",
+
+        updatedAt:
+          Date.now()
       }
     );
+
 
     localStorage.setItem(
       "momentlog_local_notifications",
       "true"
     );
+
 
     renderNotify();
 
@@ -5276,68 +5183,6 @@ async function toggleNotification(){
 
     toast(
       "通知設定失敗："+friendlyError(error)
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   前景 Firebase 訊息
-========================================================= */
-
-async function initForegroundMessaging(){
-
-  try{
-
-    if(
-      messagingReady ||
-      !(await isSupported())
-    ){
-
-      return;
-
-    }
-
-    /*
-      免費本地通知模式下，
-      不再依賴 FCM Token 來做定時提醒。
-      這裡只保留前景訊息監聽，
-      方便未來恢復 FCM。
-    */
-
-    const messaging =
-      (
-        await import(
-          "https://www.gstatic.com/firebasejs/12.17.0/firebase-messaging.js"
-        )
-      ).getMessaging(app);
-
-    onMessage(
-      messaging,
-      payload => {
-
-        const body =
-          payload?.notification?.body ||
-          payload?.data?.body ||
-          "該記錄了！";
-
-        toast(
-          body
-        );
-
-      }
-    );
-
-    messagingReady =
-      true;
-
-  }catch(error){
-
-    console.warn(
-      "foreground messaging:",
-      error
     );
 
   }
@@ -5498,6 +5343,7 @@ async function leaveRoom(){
         members
       );
 
+
     if(
       !members[user.uid]
     ){
@@ -5515,6 +5361,7 @@ async function leaveRoom(){
       return;
 
     }
+
 
     if(
       memberIds.length ===
@@ -5564,6 +5411,7 @@ async function leaveRoom(){
 
       }
 
+
       try{
 
         await remove(
@@ -5582,6 +5430,7 @@ async function leaveRoom(){
 
       }
 
+
       try{
 
         await remove(
@@ -5599,6 +5448,7 @@ async function leaveRoom(){
         );
 
       }
+
 
       await remove(
         ref(
@@ -5627,6 +5477,7 @@ async function leaveRoom(){
       return;
 
     }
+
 
     if(
       amOwner
@@ -5661,11 +5512,13 @@ async function leaveRoom(){
           `rooms/${id}/meta`
         ),
         {
+
           ownerUid:
             newOwnerUid,
 
           updatedAt:
             Date.now()
+
         }
       );
 
@@ -5707,6 +5560,7 @@ async function leaveRoom(){
       return;
 
     }
+
 
     await remove(
       ref(
@@ -6001,6 +5855,7 @@ $("album")
     $("albumInput")
       .click();
 
+
 $("photoInput")
   .onchange =
   event => {
@@ -6013,6 +5868,7 @@ $("photoInput")
       "";
 
   };
+
 
 $("videoInput")
   .onchange =
@@ -6027,6 +5883,7 @@ $("videoInput")
 
   };
 
+
 $("albumInput")
   .onchange =
   event => {
@@ -6040,6 +5897,7 @@ $("albumInput")
 
   };
 
+
 $("theme")
   .onclick =
   () =>
@@ -6049,6 +5907,7 @@ $("theme")
         "show"
       );
 
+
 $("themeClose")
   .onclick =
   () =>
@@ -6057,6 +5916,7 @@ $("themeClose")
       .remove(
         "show"
       );
+
 
 document
   .querySelectorAll(
@@ -6086,6 +5946,7 @@ document
     }
   );
 
+
 $("recordModal")
   .onclick =
   event => {
@@ -6100,6 +5961,7 @@ $("recordModal")
     }
 
   };
+
 
 $("themeModal")
   .onclick =
@@ -6119,6 +5981,7 @@ $("themeModal")
     }
 
   };
+
 
 window
   .addEventListener(
@@ -6263,22 +6126,17 @@ onAuthStateChanged(
 
     }
 
+
     showSetupStatus(
       "Google 登入成功"
     );
 
+
     await loadProfile();
+
 
     renderAccount();
 
-    await initForegroundMessaging();
-
-
-    /*
-      網站內廣播。
-      這不是手機推播。
-      它只負責已開啟 MomentLog 的使用者。
-    */
 
     unsubBroadcast =
       onValue(
@@ -6349,6 +6207,7 @@ onAuthStateChanged(
         "momentlog_room"
       );
 
+
     if(
       savedRoom
     ){
@@ -6359,6 +6218,7 @@ onAuthStateChanged(
       connectRoom();
 
     }
+
 
     renderRecentRooms();
 
