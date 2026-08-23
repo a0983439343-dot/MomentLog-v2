@@ -321,10 +321,6 @@ button:disabled{
   flex:none
 }
 
-.recentRoom.dead{
-  opacity:.72
-}
-
 .hero{
   padding:18px;
   margin-bottom:14px
@@ -679,13 +675,11 @@ button:disabled{
   .themeGrid{grid-template-columns:1fr}
   .slot{grid-template-columns:52px 1fr}
   .modalActions{display:grid;grid-template-columns:1fr 1fr}
-
   .recentRoom{
-    align-items:flex-start;
+    align-items:flex-start
   }
-
   .recentRoomActions{
-    flex-direction:column;
+    flex-direction:column
   }
 }
 </style>
@@ -708,9 +702,9 @@ Google 登入、多人房間、即時同步，一起記錄每個時刻。
 <div id="loginArea">
 
 <button
-  id="googleLogin"
-  class="btn primary"
-  type="button"
+id="googleLogin"
+class="btn primary"
+type="button"
 >
 🔐 使用 Google 帳號登入
 </button>
@@ -727,29 +721,29 @@ Google 帳號只用於 Firebase 身分驗證。
 <div class="account">
 
 <img
-  id="accountAvatar"
-  class="accountAvatar"
-  alt=""
+id="accountAvatar"
+class="accountAvatar"
+alt=""
 >
 
 <div class="accountInfo">
 
 <div
-  id="accountName"
-  class="accountName"
+id="accountName"
+class="accountName"
 ></div>
 
 <div
-  id="accountEmail"
-  class="accountEmail"
+id="accountEmail"
+class="accountEmail"
 ></div>
 
 </div>
 
 <button
-  id="logout"
-  class="btn"
-  type="button"
+id="logout"
+class="btn"
+type="button"
 >
 登出
 </button>
@@ -763,11 +757,11 @@ Google 帳號只用於 Firebase 身分驗證。
 </label>
 
 <input
-  id="name"
-  maxlength="30"
-  placeholder="例如：小明"
-  autocomplete="nickname"
-  translate="no"
+id="name"
+maxlength="30"
+placeholder="例如：小明"
+autocomplete="nickname"
+translate="no"
 >
 
 </div>
@@ -779,11 +773,11 @@ Log 名稱
 </label>
 
 <input
-  id="log"
-  maxlength="60"
-  placeholder="例如：我們的暑假"
-  autocomplete="off"
-  translate="no"
+id="log"
+maxlength="60"
+placeholder="例如：我們的暑假"
+autocomplete="off"
+translate="no"
 >
 
 </div>
@@ -791,17 +785,17 @@ Log 名稱
 <div class="setupActions">
 
 <button
-  id="saveProfile"
-  class="btn"
-  type="button"
+id="saveProfile"
+class="btn"
+type="button"
 >
 保存個人資料
 </button>
 
 <button
-  id="create"
-  class="btn primary"
-  type="button"
+id="create"
+class="btn primary"
+type="button"
 >
 建立新房間
 </button>
@@ -819,26 +813,26 @@ style="border:0;border-top:1px solid var(--border);margin:18px 0"
 </label>
 
 <input
-  id="joinCode"
-  maxlength="12"
-  placeholder="例如 ABCD1234"
-  autocomplete="off"
-  translate="no"
+id="joinCode"
+maxlength="12"
+placeholder="例如 ABCD1234"
+autocomplete="off"
+translate="no"
 >
 
 </div>
 
 <button
-  id="join"
-  class="btn"
-  type="button"
+id="join"
+class="btn"
+type="button"
 >
 加入房間
 </button>
 
 <div
-  id="recentRooms"
-  class="recentRooms hide"
+id="recentRooms"
+class="recentRooms hide"
 >
 
 <div class="recentHead">
@@ -848,10 +842,10 @@ style="border:0;border-top:1px solid var(--border);margin:18px 0"
 </h3>
 
 <button
-  id="clearRecentRooms"
-  class="btn"
-  type="button"
-  style="padding:7px 10px;min-height:34px;font-size:12px"
+id="clearRecentRooms"
+class="btn"
+type="button"
+style="padding:7px 10px;min-height:34px;font-size:12px"
 >
 清除紀錄
 </button>
@@ -859,8 +853,8 @@ style="border:0;border-top:1px solid var(--border);margin:18px 0"
 </div>
 
 <div
-  id="recentRoomList"
-  class="recentList"
+id="recentRoomList"
+class="recentList"
 ></div>
 
 </div>
@@ -868,9 +862,9 @@ style="border:0;border-top:1px solid var(--border);margin:18px 0"
 </div>
 
 <div
-  id="setupStatus"
-  class="muted"
-  style="font-size:13px;margin-top:10px"
+id="setupStatus"
+class="muted"
+style="font-size:13px;margin-top:10px"
 >
 請先登入 Google 帳號
 </div>
@@ -902,33 +896,33 @@ style="border:0;border-top:1px solid var(--border);margin:18px 0"
 <div class="actions">
 
 <button
-  id="notify"
-  class="btn"
-  type="button"
+id="notify"
+class="btn"
+type="button"
 >
 🔕 通知：關閉
 </button>
 
 <button
-  id="theme"
-  class="btn"
-  type="button"
+id="theme"
+class="btn"
+type="button"
 >
 🎨 主題
 </button>
 
 <button
-  id="invite"
-  class="btn"
-  type="button"
+id="invite"
+class="btn"
+type="button"
 >
 邀請
 </button>
 
 <button
-  id="leave"
-  class="btn danger"
-  type="button"
+id="leave"
+class="btn danger"
+type="button"
 >
 離開房間
 </button>
@@ -948,8 +942,8 @@ MomentLog
 </h2>
 
 <div
-  id="sub"
-  class="muted"
+id="sub"
+class="muted"
 ></div>
 
 </div>
@@ -957,15 +951,15 @@ MomentLog
 <div>
 
 <div
-  id="clock"
-  class="clock"
+id="clock"
+class="clock"
 >
 00:00:00
 </div>
 
 <div
-  id="next"
-  class="next"
+id="next"
+class="next"
 ></div>
 
 </div>
@@ -981,8 +975,8 @@ MomentLog
 </div>
 
 <div
-  id="available"
-  class="statValue"
+id="available"
+class="statValue"
 >
 0
 </div>
@@ -992,15 +986,15 @@ MomentLog
 <div class="stat">
 
 <div
-  id="doneLabel"
-  class="statTitle"
+id="doneLabel"
+class="statTitle"
 >
 今日已完成
 </div>
 
 <div
-  id="doneCount"
-  class="statValue"
+id="doneCount"
+class="statValue"
 >
 0
 </div>
@@ -1014,8 +1008,8 @@ MomentLog
 </div>
 
 <div
-  id="roomCode"
-  class="statValue"
+id="roomCode"
+class="statValue"
 ></div>
 
 </div>
@@ -1033,48 +1027,48 @@ MomentLog
 </div>
 
 <div
-  id="members"
-  class="members"
+id="members"
+class="members"
 ></div>
 
 <div class="sideButtons">
 
 <button
-  id="now"
-  class="btn primary"
-  type="button"
+id="now"
+class="btn primary"
+type="button"
 >
 📍 記錄現在
 </button>
 
 <button
-  id="yesterday"
-  class="btn"
-  type="button"
+id="yesterday"
+class="btn"
+type="button"
 >
 查看昨天
 </button>
 
 <button
-  id="today"
-  class="btn hide"
-  type="button"
+id="today"
+class="btn hide"
+type="button"
 >
 ↩ 返回今天
 </button>
 
 <button
-  id="prevDate"
-  class="btn"
-  type="button"
+id="prevDate"
+class="btn"
+type="button"
 >
 ◀ 前一天
 </button>
 
 <button
-  id="nextDate"
-  class="btn"
-  type="button"
+id="nextDate"
+class="btn"
+type="button"
 >
 下一天 ▶
 </button>
@@ -1094,9 +1088,9 @@ MomentLog
 </h3>
 
 <div
-  id="dateLabel"
-  class="muted"
-  style="font-size:13px;margin-top:4px"
+id="dateLabel"
+class="muted"
+style="font-size:13px;margin-top:4px"
 ></div>
 
 </div>
@@ -1104,8 +1098,8 @@ MomentLog
 </div>
 
 <div
-  id="slots"
-  class="slots"
+id="slots"
+class="slots"
 ></div>
 
 </section>
@@ -1132,16 +1126,16 @@ class="modal"
 </h3>
 
 <div
-  id="recordWhen"
-  class="muted"
+id="recordWhen"
+class="muted"
 ></div>
 
 </div>
 
 <button
-  id="recordClose"
-  class="close"
-  type="button"
+id="recordClose"
+class="close"
+type="button"
 >
 ×
 </button>
@@ -1155,11 +1149,11 @@ class="modal"
 </label>
 
 <textarea
-  id="caption"
-  maxlength="3000"
-  rows="6"
-  placeholder="寫下這一刻發生了什麼…"
-  translate="no"
+id="caption"
+maxlength="3000"
+rows="6"
+placeholder="寫下這一刻發生了什麼…"
+translate="no"
 ></textarea>
 
 </div>
@@ -1167,33 +1161,33 @@ class="modal"
 <div class="mediaBtns">
 
 <button
-  id="photo"
-  class="btn"
-  type="button"
+id="photo"
+class="btn"
+type="button"
 >
 📷 拍照
 </button>
 
 <button
-  id="video"
-  class="btn"
-  type="button"
+id="video"
+class="btn"
+type="button"
 >
 🎥 錄影
 </button>
 
 <button
-  id="album"
-  class="btn"
-  type="button"
+id="album"
+class="btn"
+type="button"
 >
 🖼️ 相簿
 </button>
 
 <button
-  id="remove"
-  class="btn danger"
-  type="button"
+id="remove"
+class="btn danger"
+type="button"
 >
 🗑️ 移除媒體
 </button>
@@ -1201,33 +1195,33 @@ class="modal"
 </div>
 
 <input
-  id="photoInput"
-  class="hidden"
-  type="file"
-  accept="image/*"
-  capture="environment"
+id="photoInput"
+class="hidden"
+type="file"
+accept="image/*"
+capture="environment"
 >
 
 <input
-  id="videoInput"
-  class="hidden"
-  type="file"
-  accept="video/*"
-  capture="environment"
+id="videoInput"
+class="hidden"
+type="file"
+accept="video/*"
+capture="environment"
 >
 
 <input
-  id="albumInput"
-  class="hidden"
-  type="file"
-  accept="image/*,video/*"
+id="albumInput"
+class="hidden"
+type="file"
+accept="image/*,video/*"
 >
 
 <div id="preview"></div>
 
 <div
-  id="uploadStatus"
-  class="status hide"
+id="uploadStatus"
+class="status hide"
 >
 
 <div id="uploadText"></div>
@@ -1235,8 +1229,8 @@ class="modal"
 <div class="progress">
 
 <div
-  id="progressBar"
-  class="progressBar"
+id="progressBar"
+class="progressBar"
 ></div>
 
 </div>
@@ -1246,17 +1240,17 @@ class="modal"
 <div class="modalActions">
 
 <button
-  id="cancelRecord"
-  class="btn"
-  type="button"
+id="cancelRecord"
+class="btn"
+type="button"
 >
 取消
 </button>
 
 <button
-  id="saveRecord"
-  class="btn primary"
-  type="button"
+id="saveRecord"
+class="btn primary"
+type="button"
 >
 儲存
 </button>
@@ -1281,9 +1275,9 @@ class="modal"
 </h3>
 
 <button
-  id="themeClose"
-  class="close"
-  type="button"
+id="themeClose"
+class="close"
+type="button"
 >
 ×
 </button>
@@ -1293,85 +1287,85 @@ class="modal"
 <div class="themeGrid">
 
 <button
-  class="themeOpt"
-  data-theme="default"
-  type="button"
+class="themeOpt"
+data-theme="default"
+type="button"
 >
 <div
-  class="swatch"
-  style="background:linear-gradient(135deg,#eef2ff,#f8fafc)"
+class="swatch"
+style="background:linear-gradient(135deg,#eef2ff,#f8fafc)"
 ></div>
 🌤️ 預設
 </button>
 
 <button
-  class="themeOpt"
-  data-theme="blue"
-  type="button"
+class="themeOpt"
+data-theme="blue"
+type="button"
 >
 <div
-  class="swatch"
-  style="background:linear-gradient(135deg,#dbeafe,#eff6ff)"
+class="swatch"
+style="background:linear-gradient(135deg,#dbeafe,#eff6ff)"
 ></div>
 🌊 藍色
 </button>
 
 <button
-  class="themeOpt"
-  data-theme="green"
-  type="button"
+class="themeOpt"
+data-theme="green"
+type="button"
 >
 <div
-  class="swatch"
-  style="background:linear-gradient(135deg,#dcfce7,#f0fdf4)"
+class="swatch"
+style="background:linear-gradient(135deg,#dcfce7,#f0fdf4)"
 ></div>
 🌿 綠色
 </button>
 
 <button
-  class="themeOpt"
-  data-theme="pink"
-  type="button"
+class="themeOpt"
+data-theme="pink"
+type="button"
 >
 <div
-  class="swatch"
-  style="background:linear-gradient(135deg,#fce7f3,#fff1f2)"
+class="swatch"
+style="background:linear-gradient(135deg,#fce7f3,#fff1f2)"
 ></div>
 🌸 粉色
 </button>
 
 <button
-  class="themeOpt"
-  data-theme="purple"
-  type="button"
+class="themeOpt"
+data-theme="purple"
+type="button"
 >
 <div
-  class="swatch"
-  style="background:linear-gradient(135deg,#ede9fe,#f5f3ff)"
+class="swatch"
+style="background:linear-gradient(135deg,#ede9fe,#f5f3ff)"
 ></div>
 💜 紫色
 </button>
 
 <button
-  class="themeOpt"
-  data-theme="sunset"
-  type="button"
+class="themeOpt"
+data-theme="sunset"
+type="button"
 >
 <div
-  class="swatch"
-  style="background:linear-gradient(135deg,#ffedd5,#fef3c7)"
+class="swatch"
+style="background:linear-gradient(135deg,#ffedd5,#fef3c7)"
 ></div>
 🌅 日落
 </button>
 
 <button
-  class="themeOpt"
-  data-theme="dark"
-  type="button"
+class="themeOpt"
+data-theme="dark"
+type="button"
 >
 <div
-  class="swatch"
-  style="background:linear-gradient(135deg,#1e293b,#0f172a)"
+class="swatch"
+style="background:linear-gradient(135deg,#1e293b,#0f172a)"
 ></div>
 🌌 黑暗
 </button>
@@ -1386,6 +1380,7 @@ class="modal"
 id="toast"
 class="toast"
 ></div>
+
 
 <script type="module">
 
@@ -1614,15 +1609,15 @@ let localNotificationLastKey =
   ) || "";
 
 
-function toast(
-  message
-){
+function toast(message){
 
   const t =
     $("toast");
 
   if(!t){
+
     return;
+
   }
 
   t.textContent =
@@ -1651,9 +1646,7 @@ function toast(
 }
 
 
-function showSetupStatus(
-  message
-){
+function showSetupStatus(message){
 
   $("setupStatus")
     .textContent =
@@ -1704,9 +1697,7 @@ function applyTheme(){
 }
 
 
-function friendlyError(
-  error
-){
+function friendlyError(error){
 
   const code =
     typeof error?.code === "string"
@@ -1844,9 +1835,7 @@ function getRecentRooms(){
 }
 
 
-function saveRecentRooms(
-  list
-){
+function saveRecentRooms(list){
 
   try{
 
@@ -1872,16 +1861,11 @@ function saveRecentRooms(
 }
 
 
-function rememberRoom(
-  id,
-  name
-){
+function rememberRoom(id,name){
 
   if(
     !id ||
-    !/^[A-Z0-9]{8,12}$/.test(
-      id
-    )
+    !/^[A-Z0-9]{8,12}$/.test(id)
   ){
 
     return;
@@ -1924,12 +1908,12 @@ function rememberRoom(
 }
 
 
-function markRecentRoomLeft(
-  id
-){
+function markRecentRoomLeft(id){
 
   if(!id){
+
     return;
+
   }
 
   const list =
@@ -1973,9 +1957,7 @@ function markRecentRoomLeft(
 }
 
 
-function removeRecentRoom(
-  id
-){
+function removeRecentRoom(id){
 
   saveRecentRooms(
     getRecentRooms()
@@ -1990,12 +1972,12 @@ function removeRecentRoom(
 }
 
 
-function formatRecentTime(
-  value
-){
+function formatRecentTime(value){
 
   if(!value){
+
     return "尚未加入";
+
   }
 
   try{
@@ -2083,7 +2065,6 @@ function renderRecentRooms(){
           return `
             <div
               class="recentRoom"
-              data-recent-room="${id}"
             >
 
               <div class="recentRoomInfo">
@@ -2184,9 +2165,7 @@ function renderRecentRooms(){
 }
 
 
-async function rejoinRoom(
-  id
-){
+async function rejoinRoom(id){
 
   if(!user){
 
@@ -2405,7 +2384,7 @@ function clearListeners(){
 
 function renderNotify(){
 
-  const on =
+  const enabled =
     room?.myNotification?.enabled ===
     true;
 
@@ -2413,17 +2392,19 @@ function renderNotify(){
     $("notify");
 
   if(!button){
+
     return;
+
   }
 
   button.textContent =
-    on
+    enabled
       ? "🔔 通知：開啟"
       : "🔕 通知：關閉";
 
   button.classList.toggle(
     "active",
-    on
+    enabled
   );
 
 }
@@ -2450,9 +2431,7 @@ function renderAccount(){
       !loggedIn
     );
 
-  if(
-    !loggedIn
-  ){
+  if(!loggedIn){
 
     $("accountName")
       .textContent =
@@ -2508,7 +2487,9 @@ function renderAccount(){
 async function loadProfile(){
 
   if(!user){
+
     return;
+
   }
 
   try{
@@ -2546,16 +2527,13 @@ async function loadProfile(){
 
   }
 
-  const savedName =
+  $("name")
+    .value =
     room.profile?.displayName ||
     localStorage.getItem(
       "momentlog_name"
     ) ||
     "";
-
-  $("name")
-    .value =
-    savedName;
 
 }
 
@@ -3095,30 +3073,25 @@ async function joinRoom(){
       }
     );
 
-    try{
+    await update(
+      ref(
+        db,
+        `users/${user.uid}`
+      ),
+      {
+        displayName:
+          name,
 
-      await update(
-        ref(
-          db,
-          `users/${user.uid}`
-        ),
-        {
-          displayName:
-            name,
-
-          updatedAt:
-            now
-        }
-      );
-
-    }catch(error){
-
-      console.warn(
-        "profile update:",
-        error
-      );
-
-    }
+        updatedAt:
+          now
+      }
+    ).catch(
+      error =>
+        console.warn(
+          "profile update:",
+          error
+        )
+    );
 
     localStorage.setItem(
       "momentlog_room",
@@ -3163,6 +3136,10 @@ async function joinRoom(){
 }
 
 
+/* =========================================================
+   房間連線
+========================================================= */
+
 function connectRoom(){
 
   clearListeners();
@@ -3179,6 +3156,7 @@ function connectRoom(){
   room =
     room ||
     {};
+
 
   unsubMeta =
     onValue(
@@ -3198,9 +3176,6 @@ function connectRoom(){
 
           room =
             null;
-
-          roomId =
-            "";
 
           localStorage.removeItem(
             "momentlog_room"
@@ -3307,14 +3282,6 @@ function connectRoom(){
 
         render();
 
-        if(
-          localNotificationsEnabled()
-        ){
-
-          startLocalNotificationCheck();
-
-        }
-
       },
       error => {
 
@@ -3331,6 +3298,10 @@ function connectRoom(){
     );
 
 
+  /* =======================================================
+     這裡是這次真正修正的 notificationSettings
+  ======================================================= */
+
   unsubSettings =
     onValue(
       ref(
@@ -3339,20 +3310,43 @@ function connectRoom(){
       ),
       snapshot => {
 
+        const data =
+          snapshot.exists()
+            ? snapshot.val()
+            : null;
+
         room.myNotification =
-          snapshot.val() ||
-          {};
+          data && typeof data === "object"
+            ? data
+            : {
+                enabled:false
+              };
+
+        console.log(
+          "MomentLog notificationSettings:",
+          room.myNotification
+        );
 
         renderNotify();
 
         if(
-          room.myNotification?.enabled === true &&
-          localNotificationsEnabled()
+          room.myNotification.enabled ===
+          true
         ){
+
+          localStorage.setItem(
+            "momentlog_local_notifications",
+            "true"
+          );
 
           startLocalNotificationCheck();
 
         }else{
+
+          localStorage.setItem(
+            "momentlog_local_notifications",
+            "false"
+          );
 
           stopLocalNotificationCheck();
 
@@ -3361,10 +3355,18 @@ function connectRoom(){
       },
       error => {
 
-        console.warn(
+        console.error(
           "notification listener:",
           error
         );
+
+        room.myNotification = {
+          enabled:false
+        };
+
+        renderNotify();
+
+        stopLocalNotificationCheck();
 
       }
     );
@@ -3593,7 +3595,8 @@ function render(){
     );
 
     next.setHours(
-      next.getHours() + 1
+      next.getHours() +
+      1
     );
 
     const np =
@@ -3692,13 +3695,11 @@ function renderMembers(){
                   ? "done"
                   : "wait"
               }">
-
                 ${
                   done
                     ? "已完成"
                     : "等待中"
                 }
-
               </span>
 
             </span>
@@ -3715,9 +3716,7 @@ function renderMembers(){
 }
 
 
-function renderTimeline(
-  entries
-){
+function renderTimeline(entries){
 
   if(
     !entries.length
@@ -3844,9 +3843,7 @@ function renderTimeline(
 
                 ${media}
 
-                <div
-                  style="margin-top:9px"
-                >
+                <div style="margin-top:9px">
 
                   <button
                     class="btn ${
@@ -3899,9 +3896,7 @@ function renderTimeline(
 }
 
 
-function openRecord(
-  h
-){
+function openRecord(h){
 
   if(
     !user ||
@@ -3996,9 +3991,7 @@ function renderPreview(
         : ""
     );
 
-  if(
-    !src
-  ){
+  if(!src){
 
     $("preview")
       .innerHTML =
@@ -4091,12 +4084,12 @@ function closeRecord(){
 }
 
 
-function chooseFile(
-  f
-){
+function chooseFile(f){
 
   if(!f){
+
     return;
+
   }
 
   if(
@@ -4159,9 +4152,7 @@ function chooseFile(
 }
 
 
-function setUploadStatus(
-  text
-){
+function setUploadStatus(text){
 
   $("uploadText")
     .textContent =
@@ -4260,7 +4251,8 @@ async function saveRecord(){
 
             customMetadata:{
               roomId,
-              uid:user.uid
+              uid:
+                user.uid
             }
           }
         );
@@ -4272,7 +4264,6 @@ async function saveRecord(){
         ) => {
 
           task.on(
-
             "state_changed",
 
             snapshot => {
@@ -4335,7 +4326,6 @@ async function saveRecord(){
               }
 
             }
-
           );
 
         }
@@ -4519,6 +4509,7 @@ async function removeMedia(){
         ...old,
         media:
           null,
+
         updatedAt:
           Date.now()
       }
@@ -4723,6 +4714,31 @@ function getNextTaipeiHour(){
 }
 
 
+async function ensureNotificationServiceWorker(){
+
+  if(
+    !("serviceWorker" in navigator)
+  ){
+
+    throw new Error(
+      "此瀏覽器不支援 Service Worker"
+    );
+
+  }
+
+  await navigator.serviceWorker.register(
+    "./firebase-messaging-sw.js",
+    {
+      scope:
+        "./"
+    }
+  );
+
+  await navigator.serviceWorker.ready;
+
+}
+
+
 async function showLocalNotification(
   title,
   body,
@@ -4730,14 +4746,7 @@ async function showLocalNotification(
 ){
 
   if(
-    !("Notification" in window)
-  ){
-
-    return;
-
-  }
-
-  if(
+    !("Notification" in window) ||
     Notification.permission !==
     "granted"
   ){
@@ -4747,6 +4756,8 @@ async function showLocalNotification(
   }
 
   try{
+
+    await ensureNotificationServiceWorker();
 
     const registration =
       await navigator.serviceWorker.ready;
@@ -4786,34 +4797,6 @@ async function showLocalNotification(
 }
 
 
-async function ensureNotificationServiceWorker(){
-
-  if(
-    !("serviceWorker" in navigator)
-  ){
-
-    throw new Error(
-      "此瀏覽器不支援 Service Worker"
-    );
-
-  }
-
-  const registration =
-    await navigator.serviceWorker.register(
-      "./firebase-messaging-sw.js",
-      {
-        scope:
-          "./"
-      }
-    );
-
-  await navigator.serviceWorker.ready;
-
-  return registration;
-
-}
-
-
 async function checkLocalNotification(){
 
   if(
@@ -4844,14 +4827,7 @@ async function checkLocalNotification(){
   }
 
   if(
-    !("Notification" in window)
-  ){
-
-    return;
-
-  }
-
-  if(
+    !("Notification" in window) ||
     Notification.permission !==
     "granted"
   ){
@@ -4867,14 +4843,10 @@ async function checkLocalNotification(){
     `${parts.year}-${parts.month}-${parts.day}`;
 
   const hour =
-    Number(
-      parts.hour
-    );
+    Number(parts.hour);
 
   const minute =
-    Number(
-      parts.minute
-    );
+    Number(parts.minute);
 
   const userId =
     user.uid;
@@ -4942,18 +4914,12 @@ async function checkLocalNotification(){
     const next =
       getNextTaipeiHour();
 
-    const nextDate =
-      next.date;
-
-    const nextHour =
-      next.hour;
-
     const key =
       [
         currentRoomId,
         userId,
-        nextDate,
-        String(nextHour),
+        next.date,
+        String(next.hour),
         "heads-up"
       ].join("_");
 
@@ -4964,7 +4930,7 @@ async function checkLocalNotification(){
 
       const nextRecord =
         room?.records?.[
-          pad(nextHour)
+          pad(next.hour)
         ]?.[
           userId
         ];
@@ -4984,7 +4950,7 @@ async function checkLocalNotification(){
         await showLocalNotification(
           "⏰ MomentLog 提醒",
 
-          `${room?.meta?.name || "MomentLog"}：10 分鐘後 ${pad(nextHour)}:00 要記錄了`,
+          `${room?.meta?.name || "MomentLog"}：10 分鐘後 ${pad(next.hour)}:00 要記錄了`,
 
           `momentlog_${key}`
         );
@@ -5211,7 +5177,7 @@ async function invite(){
       "邀請資訊已複製"
     );
 
-  }catch(error){
+  }catch{
 
     prompt(
       "複製邀請資訊",
@@ -5259,16 +5225,6 @@ async function leaveRoom(){
     room?.meta?.name ||
     "MomentLog";
 
-  rememberRoom(
-    id,
-    roomName
-  );
-
-  localStorage.setItem(
-    "momentlog_last_room",
-    id
-  );
-
   try{
 
     const metaSnapshot =
@@ -5305,44 +5261,23 @@ async function leaveRoom(){
       meta.ownerUid ===
       user.uid;
 
-    let members =
-      room?.members ||
-      {};
-
-    try{
-
-      const membersSnapshot =
-        await get(
-          ref(
-            db,
-            `rooms/${id}/members`
-          )
-        );
-
-      if(
-        membersSnapshot.exists()
-      ){
-
-        members =
-          membersSnapshot.val() ||
-          {};
-
-      }
-
-    }catch(error){
-
-      console.warn(
-        "members snapshot:",
-        error
+    const membersSnapshot =
+      await get(
+        ref(
+          db,
+          `rooms/${id}/members`
+        )
       );
 
-    }
+    const members =
+      membersSnapshot.exists()
+        ? membersSnapshot.val() || {}
+        : {};
 
     const memberIds =
       Object.keys(
         members
       );
-
 
     if(
       !members[user.uid]
@@ -5369,33 +5304,15 @@ async function leaveRoom(){
     ){
 
       if(
-        !amOwner
+        amOwner
       ){
 
         await remove(
           ref(
             db,
-            `rooms/${id}/members/${user.uid}`
+            `rooms/${id}`
           )
         );
-
-        try{
-
-          await remove(
-            ref(
-              db,
-              `rooms/${id}/notificationSettings/${user.uid}`
-            )
-          );
-
-        }catch(error){
-
-          console.warn(
-            "notification cleanup:",
-            error
-          );
-
-        }
 
         markRecentRoomLeft(
           id
@@ -5404,64 +5321,28 @@ async function leaveRoom(){
         leaveLocal();
 
         toast(
-          "已離開房間"
+          "你是最後一位成員，房間已刪除"
         );
 
         return;
 
       }
 
-
-      try{
-
-        await remove(
-          ref(
-            db,
-            `rooms/${id}/records`
-          )
-        );
-
-      }catch(error){
-
-        console.warn(
-          "records cleanup:",
-          error
-        );
-
-      }
-
-
-      try{
-
-        await remove(
-          ref(
-            db,
-            `rooms/${id}/notificationSettings`
-          )
-        );
-
-      }catch(error){
-
-        console.warn(
-          "notification cleanup:",
-          error
-        );
-
-      }
-
-
       await remove(
         ref(
           db,
-          `rooms/${id}/members`
+          `rooms/${id}/members/${user.uid}`
         )
       );
 
       await remove(
         ref(
           db,
-          `rooms/${id}/meta`
+          `rooms/${id}/notificationSettings/${user.uid}`
         )
+      )
+      .catch(
+        () => {}
       );
 
       markRecentRoomLeft(
@@ -5471,7 +5352,7 @@ async function leaveRoom(){
       leaveLocal();
 
       toast(
-        "你是最後一位成員，房間已刪除"
+        "已離開房間"
       );
 
       return;
@@ -5512,13 +5393,11 @@ async function leaveRoom(){
           `rooms/${id}/meta`
         ),
         {
-
           ownerUid:
             newOwnerUid,
 
           updatedAt:
             Date.now()
-
         }
       );
 
@@ -5529,23 +5408,15 @@ async function leaveRoom(){
         )
       );
 
-      try{
-
-        await remove(
-          ref(
-            db,
-            `rooms/${id}/notificationSettings/${user.uid}`
-          )
-        );
-
-      }catch(error){
-
-        console.warn(
-          "notification cleanup:",
-          error
-        );
-
-      }
+      await remove(
+        ref(
+          db,
+          `rooms/${id}/notificationSettings/${user.uid}`
+        )
+      )
+      .catch(
+        () => {}
+      );
 
       markRecentRoomLeft(
         id
@@ -5569,23 +5440,15 @@ async function leaveRoom(){
       )
     );
 
-    try{
-
-      await remove(
-        ref(
-          db,
-          `rooms/${id}/notificationSettings/${user.uid}`
-        )
-      );
-
-    }catch(error){
-
-      console.warn(
-        "notification cleanup:",
-        error
-      );
-
-    }
+    await remove(
+      ref(
+        db,
+        `rooms/${id}/notificationSettings/${user.uid}`
+      )
+    )
+    .catch(
+      () => {}
+    );
 
     markRecentRoomLeft(
       id
@@ -5600,7 +5463,7 @@ async function leaveRoom(){
   }catch(error){
 
     console.error(
-      "leaveRoom failed:",
+      "leaveRoom:",
       error
     );
 
@@ -5655,13 +5518,16 @@ function leaveLocal(){
 function showYesterday(){
 
   currentDate =
-    addDays(
-      new Date(),
-      -1
+    new Date(
+      new Date().getTime()
     );
 
-  lastRenderedHour =
-    null;
+  currentDate =
+    new Date(
+      currentDate.setDate(
+        currentDate.getDate() - 1
+      )
+    );
 
   loadRecordsListener();
 
@@ -5675,9 +5541,6 @@ function showToday(){
   currentDate =
     new Date();
 
-  lastRenderedHour =
-    null;
-
   loadRecordsListener();
 
   render();
@@ -5685,15 +5548,17 @@ function showToday(){
 }
 
 
-function changeDate(
-  offset
-){
+function changeDate(offset){
 
   const next =
-    addDays(
-      currentDate,
-      offset
+    new Date(
+      currentDate
     );
+
+  next.setDate(
+    next.getDate() +
+    offset
+  );
 
   if(
     dateKey(next) >
@@ -5707,9 +5572,6 @@ function changeDate(
   currentDate =
     next;
 
-  lastRenderedHour =
-    null;
-
   loadRecordsListener();
 
   render();
@@ -5718,7 +5580,7 @@ function changeDate(
 
 
 /* =========================================================
-   按鈕
+   Button Events
 ========================================================= */
 
 $("googleLogin")
@@ -5753,15 +5615,13 @@ $("leave")
   .onclick =
   leaveRoom;
 
+
 $("now")
   .onclick =
   () => {
 
     currentDate =
       new Date();
-
-    lastRenderedHour =
-      null;
 
     loadRecordsListener();
 
@@ -5775,6 +5635,7 @@ $("now")
 
   };
 
+
 $("yesterday")
   .onclick =
   showYesterday;
@@ -5786,16 +5647,13 @@ $("today")
 $("prevDate")
   .onclick =
   () =>
-    changeDate(
-      -1
-    );
+    changeDate(-1);
 
 $("nextDate")
   .onclick =
   () =>
-    changeDate(
-      1
-    );
+    changeDate(1);
+
 
 $("clearRecentRooms")
   .onclick =
@@ -5821,6 +5679,7 @@ $("clearRecentRooms")
 
   };
 
+
 $("recordClose")
   .onclick =
   closeRecord;
@@ -5836,6 +5695,7 @@ $("saveRecord")
 $("remove")
   .onclick =
   removeMedia;
+
 
 $("photo")
   .onclick =
@@ -5906,7 +5766,6 @@ $("theme")
       .add(
         "show"
       );
-
 
 $("themeClose")
   .onclick =
@@ -6001,10 +5860,6 @@ applyTheme();
 renderRecentRooms();
 
 
-/* =========================================================
-   時鐘
-========================================================= */
-
 setInterval(
   () => {
 
@@ -6019,6 +5874,7 @@ setInterval(
     $("clock")
       .textContent =
       `${p.hour}:${p.minute}:${p.second}`;
+
 
     if(
       room &&
@@ -6081,7 +5937,7 @@ setInterval(
 
 
 /* =========================================================
-   Firebase Auth
+   Auth
 ========================================================= */
 
 onAuthStateChanged(
@@ -6092,6 +5948,7 @@ onAuthStateChanged(
       currentUser;
 
     renderAccount();
+
 
     if(
       !currentUser
