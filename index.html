@@ -1,4 +1,3 @@
-```html
 <!doctype html>
 <html lang="zh-Hant" translate="no">
 <head>
@@ -1344,14 +1343,6 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-database.js";
 
 import {
-  getStorage,
-  ref as storageRef,
-  uploadBytesResumable,
-  getDownloadURL,
-  deleteObject
-} from "https://www.gstatic.com/firebasejs/12.17.0/firebase-storage.js";
-
-import {
   getMessaging,
   getToken,
   isSupported,
@@ -1368,9 +1359,6 @@ import {
 const db =
   database;
 
-const storage =
-  getStorage(app);
-
 const googleProvider =
   new GoogleAuthProvider();
 
@@ -1379,9 +1367,6 @@ const $ =
     document.getElementById(id);
 
 
-/*
-  你的 Firebase Web Push VAPID public key
-*/
 const VAPID_PUBLIC_KEY =
   "BN4k0ivU8J1bzyVlUncMDqgJnQKpzO33wwOJW4PbKvjGBHhBlc74bo_LmRw6lfsjREcjqH5YUfmCBMegeMMr83c";
 
@@ -1436,8 +1421,15 @@ const taipeiParts =
     .reduce(
       (obj,part) => {
 
-        obj[part.type] =
-          part.value;
+        if(
+          part.type !==
+          "literal"
+        ){
+
+          obj[part.type] =
+            part.value;
+
+        }
 
         return obj;
 
@@ -1493,22 +1485,6 @@ const escapeHtml =
             "'":"&#039;"
           })[match]
       );
-
-
-const safeFileName =
-  value =>
-    String(
-      value ||
-      "file"
-    )
-    .replace(
-      /[^a-zA-Z0-9._-]/g,
-      "_"
-    )
-    .slice(
-      0,
-      120
-    );
 
 
 const tokenKey =
@@ -1738,32 +1714,6 @@ function friendlyError(
 
     return(
       "Firebase 權限被拒絕，請檢查 Realtime Database Rules"
-    );
-
-  }
-
-
-  if(
-    code.includes(
-      "storage/unauthorized"
-    )
-  ){
-
-    return(
-      "Storage 權限被拒絕，請檢查 Storage Rules"
-    );
-
-  }
-
-
-  if(
-    code.includes(
-      "storage/bucket-not-found"
-    )
-  ){
-
-    return(
-      "Storage 尚未建立"
     );
 
   }
@@ -3294,10 +3244,6 @@ async function joinRoom(){
 }
 
 
-/* =========================================================
-   房間連線
-========================================================= */
-
 function connectRoom(){
 
   clearListeners();
@@ -4409,13 +4355,13 @@ function chooseFile(
 
   if(
     f.size >
-    250 *
+    3 *
     1024 *
     1024
   ){
 
     toast(
-      "單檔不能超過 250MB"
+      "免綁卡模式限制：檔案不能超過 3MB"
     );
 
     return;
@@ -4500,11 +4446,6 @@ async function saveRecord(){
   }
 
 
-  /*
-    建立 immutable save snapshot。
-    後續不再依賴會被 closeRecord() 改掉的 activeHour/currentDate。
-  */
-
   const operationId =
     ++recordOperationId;
 
@@ -4554,9 +4495,6 @@ async function saveRecord(){
     old?.media ||
     null;
 
-  let newStoragePath =
-    null;
-
 
   try{
 
@@ -4567,7 +4505,7 @@ async function saveRecord(){
 
     setUploadStatus(
       saveFile
-        ? "準備上傳媒體…"
+        ? "正在轉換媒體格式..."
         : "正在儲存紀錄…"
     );
 
@@ -4576,128 +4514,50 @@ async function saveRecord(){
       saveFile
     ){
 
-      newStoragePath =
-        `
-          room-media/
-          ${saveRoomId}/
-          ${saveUserId}/
-          ${saveDateKey}_${pad(saveHour)}/
-          ${crypto.randomUUID()}-
-          ${safeFileName(saveFile.name)}
-        `.replace(
-          /\s+/g,
-          ""
-        );
+      const base64Data =
+        await new Promise(
+          (resolve, reject) => {
 
+            const reader =
+              new FileReader();
 
-      const task =
-        uploadBytesResumable(
-          storageRef(
-            storage,
-            newStoragePath
-          ),
-          saveFile,
-          {
-            contentType:
-              saveFile.type,
+            reader.onload =
+              () =>
+                resolve(
+                  reader.result
+                );
 
-            customMetadata:{
-              roomId:
-                saveRoomId,
-
-              uid:
-                saveUserId
-            }
-
-          }
-        );
-
-
-      await new Promise(
-        (
-          resolve,
-          reject
-        ) => {
-
-          task.on(
-
-            "state_changed",
-
-            snapshot => {
-
-              const percent =
-                snapshot.totalBytes
-                  ? Math.round(
-                      snapshot.bytesTransferred /
-                      snapshot.totalBytes *
-                      100
-                    )
-                  : 0;
-
-
-              setUploadStatus(
-                `正在上傳媒體… ${percent}%`
-              );
-
-
-              $("progressBar")
-                .style
-                .width =
-                `${percent}%`;
-
-            },
-
-            reject,
-
-            async () => {
-
-              try{
-
-                media = {
-
-                  storagePath:
-                    newStoragePath,
-
-                  downloadURL:
-                    await getDownloadURL(
-                      task.snapshot.ref
-                    ),
-
-                  contentType:
-                    saveFile.type,
-
-                  name:
-                    saveFile.name,
-
-                  size:
-                    saveFile.size
-
-                };
-
-
-                resolve();
-
-              }catch(error){
-
+            reader.onerror =
+              error =>
                 reject(
                   error
                 );
 
-              }
+            reader.readAsDataURL(
+              saveFile
+            );
 
-            }
+          }
+        );
 
-          );
+      media = {
 
-        }
-      );
+        downloadURL:
+          base64Data,
+
+        contentType:
+          saveFile.type,
+
+        name:
+          saveFile.name,
+
+        size:
+          saveFile.size
+
+      };
 
     }
 
-
-    /*
-      確認這次操作仍然是有效的。
-    */
 
     if(
       operationId !==
@@ -4768,30 +4628,6 @@ async function saveRecord(){
     );
 
 
-    if(
-      old?.media?.storagePath &&
-      newStoragePath &&
-      old.media.storagePath !==
-      newStoragePath
-    ){
-
-      deleteObject(
-        storageRef(
-          storage,
-          old.media.storagePath
-        )
-      )
-      .catch(
-        error =>
-          console.warn(
-            "old media delete:",
-            error
-          )
-      );
-
-    }
-
-
     closeRecord(
       true
     );
@@ -4803,31 +4639,6 @@ async function saveRecord(){
 
 
   }catch(error){
-
-    if(
-      newStoragePath
-    ){
-
-      try{
-
-        await deleteObject(
-          storageRef(
-            storage,
-            newStoragePath
-          )
-        );
-
-      }catch(cleanupError){
-
-        console.warn(
-          "new media cleanup:",
-          cleanupError
-        );
-
-      }
-
-    }
-
 
     console.error(
       "saveRecord:",
@@ -4917,7 +4728,7 @@ async function removeMedia(){
 
 
   if(
-    !old?.media?.storagePath
+    !old?.media
   ){
 
     toast(
@@ -4953,25 +4764,6 @@ async function removeMedia(){
 
       }
     );
-
-
-    try{
-
-      await deleteObject(
-        storageRef(
-          storage,
-          old.media.storagePath
-        )
-      );
-
-    }catch(error){
-
-      console.warn(
-        "media delete:",
-        error
-      );
-
-    }
 
 
     selectedFile =
@@ -5814,11 +5606,6 @@ async function toggleNotification(){
     }
 
 
-    /*
-      Service Worker + FCM token。
-      FCM 失敗不阻止免費本地通知。
-    */
-
     await ensureNotificationServiceWorker();
 
     await registerFCMToken();
@@ -6030,12 +5817,6 @@ async function leaveRoom(){
 
     }
 
-
-    /*
-      先刪通知設定。
-      再刪 members。
-      房間本身、records、Storage 媒體全部保留。
-    */
 
     await remove(
       ref(
@@ -6583,11 +6364,6 @@ setInterval(
       `${p.hour}:${p.minute}:${p.second}`;
 
 
-    /*
-      如果使用者本來正在看「今天」，
-      跨過午夜後自動切到新的一天。
-    */
-
     if(
       room &&
       followToday
@@ -6751,10 +6527,6 @@ onAuthStateChanged(
     await initForegroundMessaging();
 
 
-    /*
-      頁面廣播。
-    */
-
     unsubBroadcast =
       onValue(
         ref(
@@ -6857,4 +6629,3 @@ onAuthStateChanged(
 
 </body>
 </html>
-```
