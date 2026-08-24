@@ -5,7 +5,7 @@ const {
 );
 
 const {
-  onValueCreated
+  onValueWritten
 } = require(
   "firebase-functions/v2/database"
 );
@@ -43,47 +43,76 @@ const ADMIN_UID =
   "nJdwA4Heqrbtqdt1atbiOsVi7r23";
 
 
-function getTimeParts(date) {
+function getTimeParts(
+  date
+){
 
   return Object.fromEntries(
     new Intl.DateTimeFormat(
       "en-CA",
       {
-        timeZone: TIME_ZONE,
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hourCycle: "h23"
+        timeZone:
+          TIME_ZONE,
+
+        year:
+          "numeric",
+
+        month:
+          "2-digit",
+
+        day:
+          "2-digit",
+
+        hour:
+          "2-digit",
+
+        minute:
+          "2-digit",
+
+        second:
+          "2-digit",
+
+        hourCycle:
+          "h23"
       }
     )
-      .formatToParts(date)
+      .formatToParts(
+        date
+      )
       .filter(
         part =>
-          part.type !== "literal"
+          part.type !==
+          "literal"
       )
       .map(
         part =>
-          [part.type, part.value]
+          [
+            part.type,
+            part.value
+          ]
       )
   );
 
 }
 
 
-function getTarget(date) {
+function getTarget(
+  date
+){
 
   const parts =
-    getTimeParts(date);
+    getTimeParts(
+      date
+    );
 
   return {
+
     date:
       `${parts.year}-${parts.month}-${parts.day}`,
 
     hour:
       parts.hour
+
   };
 
 }
@@ -112,7 +141,9 @@ exports.momentLogReminder =
         new Date();
 
       const current =
-        getTimeParts(now);
+        getTimeParts(
+          now
+        );
 
       const minute =
         Number(
@@ -125,16 +156,16 @@ exports.momentLogReminder =
       let kind =
         "";
 
-      if (
+      if(
         minute === 0
-      ) {
+      ){
 
         kind =
           "hour";
 
-      } else if (
+      }else if(
         minute === 50
-      ) {
+      ){
 
         kind =
           "heads-up";
@@ -142,12 +173,15 @@ exports.momentLogReminder =
         targetDate =
           new Date(
             now.getTime() +
-            10 * 60 * 1000
+            10 *
+            60 *
+            1000
           );
 
-      } else {
+      }else{
 
         return null;
+
       }
 
 
@@ -159,44 +193,53 @@ exports.momentLogReminder =
 
       const roomsSnapshot =
         await db
-          .ref("rooms")
+          .ref(
+            "rooms"
+          )
           .get();
 
 
-      if (
+      if(
         !roomsSnapshot.exists()
-      ) {
+      ){
 
         return null;
+
       }
 
 
       const rooms =
-        roomsSnapshot.val() || {};
+        roomsSnapshot.val() ||
+        {};
 
-      const tasks = [];
+      const tasks =
+        [];
 
 
-      for (
+      for(
         const [
           roomId,
           room
         ]
-        of Object.entries(rooms)
-      ) {
+        of Object.entries(
+          rooms
+        )
+      ){
 
-        if (
+        if(
           !room ||
           !room.meta ||
           !room.members
-        ) {
+        ){
 
           continue;
+
         }
 
 
         const members =
-          room.members || {};
+          room.members ||
+          {};
 
 
         const records =
@@ -204,7 +247,8 @@ exports.momentLogReminder =
             target.date
           ]?.[
             target.hour
-          ] || {};
+          ] ||
+          {};
 
 
         const settings =
@@ -212,28 +256,107 @@ exports.momentLogReminder =
           {};
 
 
-        for (
+        for(
           const uid
-          of Object.keys(members)
-        ) {
+          of Object.keys(
+            members
+          )
+        ){
 
-          if (
+          if(
             settings?.[
               uid
-            ]?.enabled !== true
-          ) {
+            ]?.enabled !==
+            true
+          ){
 
             continue;
+
           }
 
 
-          if (
+          if(
             records?.[uid]
-          ) {
+          ){
 
             continue;
+
           }
 
+
+          /*
+            先確認 token 存在，
+            避免沒有 token 時就先 claim，
+            導致之後永遠不再嘗試。
+          */
+
+          const tokenSnapshot =
+            await db
+              .ref(
+                `fcmTokens/${uid}`
+              )
+              .get();
+
+
+          if(
+            !tokenSnapshot.exists()
+          ){
+
+            continue;
+
+          }
+
+
+          const tokenMap =
+            tokenSnapshot.val() ||
+            {};
+
+
+          const tokens =
+            Object.entries(
+              tokenMap
+            )
+            .map(
+              (
+                [
+                  tokenKey,
+                  data
+                ]
+              ) => ({
+
+                tokenKey,
+
+                token:
+                  data?.token ||
+                  ""
+
+              })
+            )
+            .filter(
+              item =>
+                Boolean(
+                  item.token
+                )
+            );
+
+
+          if(
+            !tokens.length
+          ){
+
+            continue;
+
+          }
+
+
+          /*
+            用 transaction 防止排程重疊
+            時同一個使用者收到重複提醒。
+
+            Cloud Scheduler / Functions
+            官方也提醒排程可能重疊執行，
+            所以這裡保留 transaction。
+          */
 
           const deliveryRef =
             db.ref(
@@ -251,76 +374,41 @@ exports.momentLogReminder =
             await deliveryRef.transaction(
               currentValue => {
 
-                if (
-                  currentValue !== null
-                ) {
+                if(
+                  currentValue !==
+                  null
+                ){
 
                   return;
 
                 }
 
+
                 return {
+
                   claimedAt:
-                    Date.now()
+                    Date.now(),
+
+                  date:
+                    target.date,
+
+                  hour:
+                    target.hour,
+
+                  kind
+
                 };
 
               }
             );
 
 
-          if (
+          if(
             !claim.committed
-          ) {
+          ){
 
             continue;
-          }
 
-
-          const tokenSnapshot =
-            await db
-              .ref(
-                `fcmTokens/${uid}`
-              )
-              .get();
-
-
-          if (
-            !tokenSnapshot.exists()
-          ) {
-
-            continue;
-          }
-
-
-          const tokenMap =
-            tokenSnapshot.val() ||
-            {};
-
-
-          const tokens =
-            Object.entries(
-              tokenMap
-            )
-              .map(
-                ([tokenKey, data]) => ({
-                  tokenKey,
-                  token:
-                    data?.token || ""
-                })
-              )
-              .filter(
-                item =>
-                  Boolean(
-                    item.token
-                  )
-              );
-
-
-          if (
-            !tokens.length
-          ) {
-
-            continue;
           }
 
 
@@ -332,7 +420,8 @@ exports.momentLogReminder =
               room?.meta?.name ||
                 "MomentLog",
               target,
-              kind
+              kind,
+              deliveryRef
             )
           );
 
@@ -352,76 +441,157 @@ exports.momentLogReminder =
   );
 
 
+/* =========================================================
+   發送 Reminder
+========================================================= */
+
 async function sendReminder(
   roomId,
   uid,
   tokens,
   roomName,
   target,
-  kind
-) {
+  kind,
+  deliveryRef
+){
 
   const title =
-    kind === "heads-up"
+    kind ===
+    "heads-up"
+
       ? "⏰ MomentLog 提醒"
+
       : "🔔 MomentLog 提醒";
 
 
   const body =
-    kind === "heads-up"
+    kind ===
+    "heads-up"
+
       ? `${roomName}：10 分鐘後 ${target.hour}:00 要記錄了`
+
       : `${roomName}：現在 ${target.hour}:00，記錄一下吧！`;
 
 
-  const response =
-    await messaging
-      .sendEachForMulticast({
-        tokens:
-          tokens.map(
-            item =>
-              item.token
-          ),
+  try{
 
-        notification: {
-          title,
-          body
-        },
+    const response =
+      await messaging
+        .sendEachForMulticast({
 
-        data: {
-          title,
-          body,
+          tokens:
+            tokens.map(
+              item =>
+                item.token
+            ),
 
-          roomId,
-          date:
-            target.date,
+          notification: {
 
-          hour:
-            target.hour,
+            title,
 
-          kind,
+            body
 
-          tag:
-            `${roomId}_${target.date}_${target.hour}_${kind}`
-        }
+          },
 
-      });
+          data: {
+
+            title,
+
+            body,
+
+            roomId,
+
+            date:
+              target.date,
+
+            hour:
+              target.hour,
+
+            kind,
+
+            tag:
+              `${roomId}_${target.date}_${target.hour}_${kind}`
+
+          }
+
+        });
 
 
-  await cleanupInvalidTokens(
-    uid,
-    tokens,
-    response
-  );
+    await cleanupInvalidTokens(
+      uid,
+      tokens,
+      response
+    );
+
+
+    /*
+      記錄實際發送結果。
+      不刪 reminderDelivery，避免同一次排程重複送。
+    */
+
+    await deliveryRef.update({
+
+      sentAt:
+        Date.now(),
+
+      successCount:
+        response.successCount,
+
+      failureCount:
+        response.failureCount
+
+    });
+
+
+    return response;
+
+  }catch(error){
+
+    console.error(
+      "sendReminder failed:",
+      {
+        roomId,
+        uid,
+        kind,
+        error
+      }
+    );
+
+
+    /*
+      如果整批發送完全失敗，
+      解除 claim，讓下一次排程還有機會重試。
+    */
+
+    try{
+
+      await deliveryRef.remove();
+
+    }catch(
+      cleanupError
+    ){
+
+      console.warn(
+        "delivery claim cleanup failed:",
+        cleanupError
+      );
+
+    }
+
+
+    throw error;
+
+  }
 
 }
 
 
 /* =========================================================
-   新增：Admin 全站廣播
+   Admin 全站廣播
 ========================================================= */
 
 exports.momentLogBroadcast =
-  onValueCreated(
+  onValueWritten(
     {
       ref:
         "/system/broadcast",
@@ -432,31 +602,69 @@ exports.momentLogBroadcast =
 
     async event => {
 
-      const snapshot =
-        event.data;
+      /*
+        onValueWritten 的 event.data
+        是 Change：
 
-      if (
+        event.data.before
+        event.data.after
+      */
+
+      const before =
+        event.data.before;
+
+      const snapshot =
+        event.data.after;
+
+
+      /*
+        /system/broadcast 被刪除
+        就不發送。
+      */
+
+      if(
         !snapshot.exists()
-      ) {
+      ){
 
         return null;
+
+      }
+
+
+      /*
+        如果這次寫入沒有讓內容變化，
+        直接忽略。
+      */
+
+      if(
+        before.exists() &&
+        JSON.stringify(
+          before.val()
+        ) ===
+        JSON.stringify(
+          snapshot.val()
+        )
+      ){
+
+        return null;
+
       }
 
 
       const broadcast =
-        snapshot.val() || {};
+        snapshot.val() ||
+        {};
 
 
       /*
-        只接受指定 Admin 建立的廣播。
-        Admin HTML 本身也會限制 UID，
-        這裡再由後端驗證一次。
+        Cloud Function 再驗證一次 Admin。
+        不能只相信 admin.html。
       */
 
-      if (
+      if(
         broadcast.senderUid !==
         ADMIN_UID
-      ) {
+      ){
 
         console.error(
           "Rejected broadcast:",
@@ -464,24 +672,52 @@ exports.momentLogBroadcast =
         );
 
         return null;
+
       }
 
 
       const text =
-        typeof broadcast.text === "string"
+        typeof broadcast.text ===
+        "string"
+
           ? broadcast.text.trim()
+
           : "";
 
 
-      if (
+      if(
         !text
-      ) {
+      ){
 
         console.error(
           "Broadcast text is empty."
         );
 
         return null;
+
+      }
+
+
+      const timestamp =
+        Number(
+          broadcast.timestamp ||
+          0
+        );
+
+
+      if(
+        !Number.isFinite(
+          timestamp
+        ) ||
+        timestamp <= 0
+      ){
+
+        console.error(
+          "Broadcast timestamp is invalid."
+        );
+
+        return null;
+
       }
 
 
@@ -490,36 +726,41 @@ exports.momentLogBroadcast =
 
 
       /*
-        取得所有使用者的 FCM token。
+        取得所有 FCM token。
       */
 
       const tokenSnapshot =
         await db
-          .ref("fcmTokens")
+          .ref(
+            "fcmTokens"
+          )
           .get();
 
 
-      if (
+      if(
         !tokenSnapshot.exists()
-      ) {
+      ){
 
         console.log(
           "No FCM tokens found."
         );
 
         return null;
+
       }
 
 
       const tokenRoot =
-        tokenSnapshot.val() || {};
+        tokenSnapshot.val() ||
+        {};
 
 
-      const tokenRecords = [];
+      const tokenRecords =
+        [];
 
 
       /*
-        目前你的資料格式：
+        目前資料格式：
 
         fcmTokens
           uid
@@ -527,7 +768,7 @@ exports.momentLogBroadcast =
               token
       */
 
-      for (
+      for(
         const [
           uid,
           tokenMapValue
@@ -535,18 +776,20 @@ exports.momentLogBroadcast =
         of Object.entries(
           tokenRoot
         )
-      ) {
+      ){
 
-        if (
+        if(
           !tokenMapValue ||
-          typeof tokenMapValue !== "object"
-        ) {
+          typeof tokenMapValue !==
+            "object"
+        ){
 
           continue;
+
         }
 
 
-        for (
+        for(
           const [
             tokenKey,
             tokenData
@@ -554,24 +797,30 @@ exports.momentLogBroadcast =
           of Object.entries(
             tokenMapValue
           )
-        ) {
+        ){
 
           const token =
-            tokenData?.token || "";
+            tokenData?.token ||
+            "";
 
 
-          if (
+          if(
             !token
-          ) {
+          ){
 
             continue;
+
           }
 
 
           tokenRecords.push({
+
             uid,
+
             tokenKey,
+
             token
+
           });
 
         }
@@ -579,31 +828,41 @@ exports.momentLogBroadcast =
       }
 
 
-      if (
+      if(
         !tokenRecords.length
-      ) {
+      ){
 
         console.log(
           "No valid FCM tokens found."
         );
 
         return null;
+
       }
 
 
       /*
-        FCM multicast 每批最多 500 個目標。
+        FCM multicast 每批最多 500 個 token。
       */
 
       const chunkSize =
         500;
 
 
-      for (
+      /*
+        使用單一 broadcast timestamp
+        作為這次廣播的 tag。
+      */
+
+      const broadcastTag =
+        `broadcast_${timestamp}`;
+
+
+      for(
         let start = 0;
         start < tokenRecords.length;
         start += chunkSize
-      ) {
+      ){
 
         const chunk =
           tokenRecords.slice(
@@ -615,6 +874,7 @@ exports.momentLogBroadcast =
         const response =
           await messaging
             .sendEachForMulticast({
+
               tokens:
                 chunk.map(
                   item =>
@@ -622,33 +882,54 @@ exports.momentLogBroadcast =
                 ),
 
               notification: {
+
                 title,
-                body: text
+
+                body:
+                  text
+
               },
 
               data: {
+
                 title,
-                body: text,
-                kind: "broadcast",
+
+                body:
+                  text,
+
+                kind:
+                  "broadcast",
+
+                timestamp:
+                  String(
+                    timestamp
+                  ),
+
                 tag:
-                  `broadcast_${Date.now()}`
+                  broadcastTag
+
               }
 
             });
 
 
-        const invalidUpdates = {};
+        const invalidUpdates =
+          {};
 
 
         response.responses
           .forEach(
-            (result, index) => {
+            (
+              result,
+              index
+            ) => {
 
-              if (
+              if(
                 result.success
-              ) {
+              ){
 
                 return;
+
               }
 
 
@@ -656,12 +937,13 @@ exports.momentLogBroadcast =
                 result.error?.code;
 
 
-              if (
+              if(
                 errorCode ===
                   "messaging/registration-token-not-registered" ||
+
                 errorCode ===
                   "messaging/invalid-registration-token"
-              ) {
+              ){
 
                 const item =
                   chunk[index];
@@ -669,7 +951,8 @@ exports.momentLogBroadcast =
 
                 invalidUpdates[
                   `fcmTokens/${item.uid}/${item.tokenKey}`
-                ] = null;
+                ] =
+                  null;
 
               }
 
@@ -677,11 +960,11 @@ exports.momentLogBroadcast =
           );
 
 
-        if (
+        if(
           Object.keys(
             invalidUpdates
           ).length
-        ) {
+        ){
 
           await db
             .ref()
@@ -690,6 +973,22 @@ exports.momentLogBroadcast =
             );
 
         }
+
+
+        console.log(
+          "Broadcast batch:",
+          {
+            start,
+            count:
+              chunk.length,
+
+            success:
+              response.successCount,
+
+            failure:
+              response.failureCount
+          }
+        );
 
       }
 
@@ -713,20 +1012,25 @@ async function cleanupInvalidTokens(
   uid,
   tokens,
   response
-) {
+){
 
-  const invalidUpdates = {};
+  const invalidUpdates =
+    {};
 
 
   response.responses
     .forEach(
-      (result, index) => {
+      (
+        result,
+        index
+      ) => {
 
-        if (
+        if(
           result.success
-        ) {
+        ){
 
           return;
+
         }
 
 
@@ -734,16 +1038,18 @@ async function cleanupInvalidTokens(
           result.error?.code;
 
 
-        if (
+        if(
           code ===
             "messaging/registration-token-not-registered" ||
+
           code ===
             "messaging/invalid-registration-token"
-        ) {
+        ){
 
           invalidUpdates[
             `fcmTokens/${uid}/${tokens[index].tokenKey}`
-          ] = null;
+          ] =
+            null;
 
         }
 
@@ -751,11 +1057,11 @@ async function cleanupInvalidTokens(
     );
 
 
-  if (
+  if(
     Object.keys(
       invalidUpdates
     ).length
-  ) {
+  ){
 
     await db
       .ref()
