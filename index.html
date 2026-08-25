@@ -1322,15 +1322,15 @@ id="toast"
 class="toast"
 ></div>
 
-
 <script type="module">
 
 import {
   GoogleAuthProvider,
-  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signOut,
   onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
+} from "https:\u002F\u002Fwww.gstatic.com/firebasejs/12.17.0/firebase-auth.js";
 
 import {
   ref,
@@ -1340,14 +1340,14 @@ import {
   remove,
   onValue,
   runTransaction
-} from "https://www.gstatic.com/firebasejs/12.17.0/firebase-database.js";
+} from "https:\u002F\u002Fwww.gstatic.com/firebasejs/12.17.0/firebase-database.js";
 
 import {
   getMessaging,
   getToken,
   isSupported,
   onMessage
-} from "https://www.gstatic.com/firebasejs/12.17.0/firebase-messaging.js";
+} from "https:\u002F\u002Fwww.gstatic.com/firebasejs/12.17.0/firebase-messaging.js";
 
 import {
   app,
@@ -2696,16 +2696,12 @@ async function loginGoogle(){
       true;
 
     showSetupStatus(
-      "正在開啟 Google 登入…"
+      "正在重新導向 Google 登入…"
     );
 
-    await signInWithPopup(
+    await signInWithRedirect(
       auth,
       googleProvider
-    );
-
-    toast(
-      "Google 登入成功"
     );
 
   }catch(error){
@@ -2722,8 +2718,6 @@ async function loginGoogle(){
     showSetupStatus(
       "尚未登入 Google"
     );
-
-  }finally{
 
     $("googleLogin")
       .disabled =
@@ -3884,68 +3878,213 @@ function renderTimeline(
       .map(
         ([h,users]) => {
 
-          const mine =
+          const userEntries =
+            Object.entries(
+              users || {}
+            )
+            .filter(
+              ([,record]) =>
+                Boolean(
+                  record
+                )
+            )
+            .sort(
+              ([uidA,recordA],[uidB,recordB]) => {
+
+                const timeA =
+                  Number(
+                    recordA?.updatedAt ||
+                    recordA?.savedAt ||
+                    0
+                  );
+
+                const timeB =
+                  Number(
+                    recordB?.updatedAt ||
+                    recordB?.savedAt ||
+                    0
+                  );
+
+                if(
+                  timeA !==
+                  timeB
+                ){
+
+                  return timeA - timeB;
+
+                }
+
+                const nameA =
+                  room?.members?.[
+                    uidA
+                  ]?.displayName ||
+                  recordA?.authorName ||
+                  "";
+
+                const nameB =
+                  room?.members?.[
+                    uidB
+                  ]?.displayName ||
+                  recordB?.authorName ||
+                  "";
+
+                return String(
+                  nameA
+                ).localeCompare(
+                  String(nameB),
+                  "zh-Hant"
+                );
+
+              }
+            );
+
+
+          const recordsHtml =
+            userEntries
+              .map(
+                ([uid,record]) => {
+
+                  const memberName =
+                    room?.members?.[
+                      uid
+                    ]?.displayName ||
+                    record?.authorName ||
+                    "未命名";
+
+                  let media =
+                    "";
+
+
+                  if(
+                    record?.media?.downloadURL
+                  ){
+
+                    const type =
+                      record.media.contentType ||
+                      "";
+
+
+                    if(
+                      type.startsWith(
+                        "image/"
+                      )
+                    ){
+
+                      media =
+                        `
+                          <div class="media">
+                            <img
+                              src="${escapeHtml(
+                                record.media.downloadURL
+                              )}"
+                              alt="圖片"
+                              loading="lazy"
+                            >
+                          </div>
+                        `;
+
+                    }else if(
+                      type.startsWith(
+                        "video/"
+                      )
+                    ){
+
+                      media =
+                        `
+                          <div class="media">
+                            <video
+                              src="${escapeHtml(
+                                record.media.downloadURL
+                              )}"
+                              controls
+                              playsinline
+                              preload="metadata"
+                            ></video>
+                          </div>
+                        `;
+
+                    }
+
+                  }
+
+
+                  const isMine =
+                    uid ===
+                    user.uid;
+
+
+                  return `
+                    <div
+                      style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)"
+                    >
+
+                      <div
+                        style="display:flex;justify-content:space-between;align-items:center;gap:8px"
+                      >
+
+                        <b>
+                          👤 ${escapeHtml(
+                            memberName
+                          )}
+                        </b>
+
+                        ${
+                          isMine
+                            ? `
+                              <span class="pill done">
+                                ✅ 你
+                              </span>
+                            `
+                            : ""
+                        }
+
+                      </div>
+
+                      ${
+                        record?.text
+                          ? `
+                            <div class="caption">
+                              ${escapeHtml(
+                                record.text
+                              )}
+                            </div>
+                          `
+                          : ""
+                      }
+
+                      ${media}
+
+                      ${
+                        isMine
+                          ? `
+                            <div style="margin-top:9px">
+
+                              <button
+                                class="btn primary"
+                                data-hour="${h}"
+                                type="button"
+                              >
+                                編輯紀錄
+                              </button>
+
+                            </div>
+                          `
+                          : ""
+                      }
+
+                    </div>
+                  `;
+
+                }
+              )
+              .join("");
+
+
+          const currentUserRecord =
             users?.[
               user.uid
             ] ||
             null;
-
-
-          let media =
-            "";
-
-
-          if(
-            mine?.media?.downloadURL
-          ){
-
-            const type =
-              mine.media.contentType ||
-              "";
-
-
-            if(
-              type.startsWith(
-                "image/"
-              )
-            ){
-
-              media =
-                `
-                  <div class="media">
-                    <img
-                      src="${escapeHtml(
-                        mine.media.downloadURL
-                      )}"
-                      alt="圖片"
-                      loading="lazy"
-                    >
-                  </div>
-                `;
-
-            }else if(
-              type.startsWith(
-                "video/"
-              )
-            ){
-
-              media =
-                `
-                  <div class="media">
-                    <video
-                      src="${escapeHtml(
-                        mine.media.downloadURL
-                      )}"
-                      controls
-                      playsinline
-                      preload="metadata"
-                    ></video>
-                  </div>
-                `;
-
-            }
-
-          }
 
 
           return `
@@ -3961,8 +4100,8 @@ function renderTimeline(
 
                   <b>
                     ${
-                      mine
-                        ? "📌 已記錄"
+                      userEntries.length
+                        ? `📌 ${userEntries.length} 人已記錄`
                         : "尚未紀錄"
                     }
                   </b>
@@ -3970,7 +4109,7 @@ function renderTimeline(
                 </div>
 
                 ${
-                  mine
+                  currentUserRecord
                     ? `
                       <div class="pill done">
                         ✅ 你已完成
@@ -3980,38 +4119,32 @@ function renderTimeline(
                 }
 
                 ${
-                  mine?.text
+                  userEntries.length
+                    ? recordsHtml
+                    : `
+                      <div class="muted" style="margin-top:8px">
+                        這個時段目前還沒有成員紀錄。
+                      </div>
+                    `
+                }
+
+                ${
+                  !currentUserRecord
                     ? `
-                      <div class="caption">
-                        ${escapeHtml(
-                          mine.text
-                        )}
+                      <div style="margin-top:9px">
+
+                        <button
+                          class="btn"
+                          data-hour="${h}"
+                          type="button"
+                        >
+                          立即紀錄
+                        </button>
+
                       </div>
                     `
                     : ""
                 }
-
-                ${media}
-
-                <div style="margin-top:9px">
-
-                  <button
-                    class="btn ${
-                      mine
-                        ? "primary"
-                        : ""
-                    }"
-                    data-hour="${h}"
-                    type="button"
-                  >
-                    ${
-                      mine
-                        ? "編輯紀錄"
-                        : "立即紀錄"
-                    }
-                  </button>
-
-                </div>
 
               </div>
 
@@ -4514,6 +4647,20 @@ async function saveRecord(){
       saveFile
     ){
 
+      if(
+        saveFile.size >
+        3 *
+        1024 *
+        1024
+      ){
+
+        throw new Error(
+          "免綁卡模式限制：檔案不能超過 3MB"
+        );
+
+      }
+
+
       const base64Data =
         await new Promise(
           (resolve, reject) => {
@@ -4799,10 +4946,6 @@ async function removeMedia(){
 }
 
 
-/* =========================================================
-   Notification / FCM
-========================================================= */
-
 function localNotificationsEnabled(){
 
   return (
@@ -5058,7 +5201,6 @@ async function registerFCMToken(){
       {
 
         token:
-
           token,
 
         createdAt:
@@ -5665,10 +5807,6 @@ async function toggleNotification(){
 }
 
 
-/* =========================================================
-   Invite
-========================================================= */
-
 async function invite(){
 
   const text =
@@ -5696,11 +5834,6 @@ async function invite(){
 
 }
 
-
-/* =========================================================
-   Leave Room
-   不刪除房間／紀錄／媒體
-========================================================= */
 
 async function leaveRoom(){
 
@@ -6031,10 +6164,6 @@ function changeDate(
 }
 
 
-/* =========================================================
-   Buttons
-========================================================= */
-
 $("googleLogin")
   .onclick =
   loginGoogle;
@@ -6343,10 +6472,6 @@ applyTheme();
 renderRecentRooms();
 
 
-/* =========================================================
-   Clock / Midnight Handling
-========================================================= */
-
 setInterval(
   () => {
 
@@ -6463,10 +6588,6 @@ setInterval(
   1000
 );
 
-
-/* =========================================================
-   Firebase Auth
-========================================================= */
 
 onAuthStateChanged(
   auth,
@@ -6624,6 +6745,26 @@ onAuthStateChanged(
 
   }
 );
+
+
+try{
+
+  await getRedirectResult(
+    auth
+  );
+
+}catch(error){
+
+  console.error(
+    "Google redirect result:",
+    error
+  );
+
+  toast(
+    "Google 登入失敗："+friendlyError(error)
+  );
+
+}
 
 </script>
 
